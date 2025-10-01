@@ -103,7 +103,57 @@
       text-align: center;
       font-size: 14px;
     }
+
+    /* BOTÓN FLOTANTE WHATSAPP */
+    .whatsapp-float {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25d366;
+      color: #fff;
+      border-radius: 50px;
+      text-align: center;
+      font-size: 35px;
+      box-shadow: 2px 2px 5px #999;
+      z-index: 100;
+      cursor: pointer;
+    }
+
+    .whatsapp-float i {
+      margin-top: 12px;
+    }
+
+    .whatsapp-float:hover {
+      background-color: #1ebe5b;
+    }
+
+    /* Tooltip */
+    .whatsapp-float::after {
+      content: "¿Necesitas ayuda? Escríbenos en WhatsApp";
+      position: absolute;
+      right: 70px;
+      bottom: 15px;
+      background: #333;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+    }
+
+    .whatsapp-float:hover::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
+  <!-- Icono de WhatsApp desde Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <header>
@@ -122,7 +172,6 @@
   <div class="container" id="inicio">
     <h2>Bienvenido</h2>
     <p>Deléitate con nuestros chocolates artesanales elaborados con el mejor cacao peruano.</p>
-    <!-- BOTÓN DIRECTO A WHATSAPP -->
     <a href="https://wa.me/51999999999?text=Hola%20quiero%20hacer%20un%20pedido%20de%20chocolates%20Miski%20Chukulati" 
        class="btn" target="_blank">🍫 Hacer un pedido</a>
   </div>
@@ -161,12 +210,18 @@
 
   <div class="container" id="contacto">
     <h2>Contacto</h2>
-    <p>📞 WhatsApp: <a href="https://wa.me/51999999999" target="_blank">+51 999 999 999</a></p>
+    <p>📞 WhatsApp: <a href="https://wa.me/51986358009" target="_blank">+51 986 358 009</a></p>
     <p>📧 Correo: <a href="mailto:miski.chukulati@gmail.com">miski.chukulati@gmail.com</a></p>
   </div>
 
   <footer>
     <p>© 2025 Miski Chukulati - Todos los derechos reservados</p>
   </footer>
+
+  <!-- BOTÓN FLOTANTE WHATSAPP -->
+  <a href="https://wa.me/51999999999?text=Hola%20quiero%20hacer%20un%20pedido%20de%20chocolates%20Miski%20Chukulati" 
+     class="whatsapp-float" target="_blank">
+     <i class="fab fa-whatsapp"></i>
+  </a>
 </body>
 </html>
