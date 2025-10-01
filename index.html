@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -7,195 +7,71 @@
   <style>
     body {
       font-family: 'Georgia', serif;
-      background: #3e1f0d;
+      background: #f7e7ce;
       margin: 0;
       padding: 0;
-      color: #4b2e1e;
+      color: #4b2e2e;
     }
 
     .container {
-      max-width: 600px;
+      max-width: 800px;
       margin: 40px auto;
-      background: #fff8ec;
+      background: #fff8e1;
       padding: 30px;
       border-radius: 15px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       text-align: center;
     }
 
-    .logo {
-      max-width: 180px;
+    .logo img {
+      max-width: 200px;
       margin-bottom: 20px;
     }
 
     h1 {
-      color: #6b3e1d;
-      font-size: 26px;
-      margin-bottom: 20px;
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #3e2723;
     }
 
-    label {
-      display: block;
-      font-weight: bold;
-      margin-top: 15px;
-      text-align: left;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 8px;
-      border: 1px solid #c8a97e;
-      font-size: 16px;
-    }
-
-    button {
-      margin-top: 25px;
-      background: linear-gradient(90deg, #d4a017, #e6b800);
-      border: none;
-      padding: 12px 25px;
-      color: white;
+    p {
       font-size: 18px;
-      font-weight: bold;
-      border-radius: 30px;
-      cursor: pointer;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
-      transition: all 0.3s ease;
+      margin-bottom: 25px;
     }
 
-    button:hover {
-      background: linear-gradient(90deg, #e6b800, #ffd633);
-      box-shadow: 0px 6px 15px rgba(255, 215, 0, 0.6);
-    }
-
-    button:active {
-      transform: scale(0.97);
-      box-shadow: 0px 2px 6px rgba(0,0,0,0.4);
-    }
-
-    /* Mensaje de confirmación */
-    .mensaje {
-      margin-top: 20px;
+    .btn {
+      display: inline-block;
+      background: #6d4c41;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
       font-size: 16px;
-      font-weight: bold;
-      display: none;
+      transition: background 0.3s;
     }
-    .exito {
-      color: green;
+
+    .btn:hover {
+      background: #4e342e;
     }
-    .error {
-      color: red;
+
+    footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #6d4c41;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="Miski Chukulati Logo.png.png" alt="Miski Chukulati" class="logo">
-    <h1>Formulario de Pedidos</h1>
-
-    <form id="pedidoForm">
-      <label for="nombre">Nombre completo:</label>
-      <input type="text" id="nombre" name="nombre" required>
-
-      <label for="direccion">Dirección:</label>
-      <input type="text" id="direccion" name="direccion" required>
-
-      <label for="email">Correo electrónico:</label>
-      <input type="email" id="email" name="email" required>
-
-      <label for="producto">Producto:</label>
-      <select id="producto" name="producto">
-        <option value="Tableta Cacao 70%">Tableta Cacao 70% — S/ 32.00</option>
-        <option value="Tableta Cacao con Leche">Tableta Cacao con Leche — S/ 28.00</option>
-        <option value="Bombones Rellenos">Bombones Rellenos — S/ 35.00</option>
-        <option value="Cacao en Polvo">Cacao en Polvo — S/ 25.00</option>
-      </select>
-
-      <label for="cantidad">Cantidad:</label>
-      <input type="number" id="cantidad" name="cantidad" min="1" value="1" required>
-
-      <label for="precio">Precio unitario (S/):</label>
-      <input type="number" id="precio" name="precio" readonly value="32">
-
-      <label for="total">Total (S/):</label>
-      <input type="number" id="total" name="total" readonly value="32">
-
-      <label for="mensaje">Mensaje adicional:</label>
-      <textarea id="mensaje" name="mensaje"></textarea>
-
-      <button type="submit">✨ Enviar Pedido ✨</button>
-    </form>
-
-    <!-- Mensaje dinámico -->
-    <p id="estado" class="mensaje"></p>
+    <div class="logo">
+      <img src="Miski Chukulati Logo.png.png" alt="Logo Miski Chukulati">
+    </div>
+    <h1>Bienvenido a Miski Chukulati</h1>
+    <p>Deléitate con nuestros chocolates artesanales, hechos con amor y tradición.</p>
+    <a href="#" class="btn">Hacer un pedido</a>
+    <footer>
+      <p>© 2025 Miski Chukulati - Todos los derechos reservados</p>
+    </footer>
   </div>
-
-  <script>
-    // Precios automáticos según producto
-    const precios = {
-      "Tableta Cacao 70%": 32,
-      "Tableta Cacao con Leche": 28,
-      "Bombones Rellenos": 35,
-      "Cacao en Polvo": 25
-    };
-
-    const productoSelect = document.getElementById("producto");
-    const precioInput = document.getElementById("precio");
-    const cantidadInput = document.getElementById("cantidad");
-    const totalInput = document.getElementById("total");
-
-    // Actualiza precio y total
-    function actualizarTotal() {
-      const valor = productoSelect.value;
-      const precio = precios[valor] || 0;
-      const cantidad = parseInt(cantidadInput.value) || 1;
-      precioInput.value = precio;
-      totalInput.value = precio * cantidad;
-    }
-
-    productoSelect.addEventListener("change", actualizarTotal);
-    cantidadInput.addEventListener("input", actualizarTotal);
-
-    // Enviar pedido al Google Apps Script
-    document.getElementById("pedidoForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const data = {
-        nombre: document.getElementById("nombre").value,
-        direccion: document.getElementById("direccion").value,
-        email: document.getElementById("email").value,
-        producto: document.getElementById("producto").value,
-        cantidad: document.getElementById("cantidad").value,
-        precio: document.getElementById("precio").value,
-        total: document.getElementById("total").value,
-        mensaje: document.getElementById("mensaje").value
-      };
-
-      fetch("https://script.google.com/macros/s/AKfycbxGV-936oL7Kk3DAQGEpR8-3pTZl9mEVOQG5OEBrxpMKHCYlHxHiJbQJdHmQKOBS590xQ/exec", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(res => res.text())
-      .then(res => {
-        document.getElementById("estado").innerText = "✅ Pedido enviado con éxito!";
-        document.getElementById("estado").className = "mensaje exito";
-        document.getElementById("estado").style.display = "block";
-        document.getElementById("pedidoForm").reset();
-        actualizarTotal();
-      })
-      .catch(err => {
-        document.getElementById("estado").innerText = "❌ Error al enviar: " + err.message;
-        document.getElementById("estado").className = "mensaje error";
-        document.getElementById("estado").style.display = "block";
-      });
-    });
-
-    // Inicializa total
-    actualizarTotal();
-  </script>
 </body>
 </html>
