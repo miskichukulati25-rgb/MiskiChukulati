@@ -1,120 +1,145 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Miski Chukulati - Pedido</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedido - Miski Chukulati</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #fff8f0;
+      font-family: Arial, sans-serif;
+      background: #f9f5f2;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
     }
-    .btn-pedido {
-      background-color: #d97706; /* naranja cacao */
-      color: white;
-      font-weight: 600;
-      border-radius: 0.75rem;
-      padding: 0.75rem 1.5rem;
-      transition: 0.3s;
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
     }
-    .btn-pedido:hover {
-      background-color: #b45309; /* tono más oscuro */
-      transform: scale(1.05);
-    }
-    .status-ok {
-      margin-top: 1rem;
-      color: #166534; /* verde elegante */
-      font-size: 1.1rem;
-      font-weight: 600;
-      font-family: "Georgia", serif;
+    h2 {
       text-align: center;
-      opacity: 0;
-      transition: opacity 0.8s ease-in-out;
+      color: #7B4A2B;
     }
-    .status-ok.show {
-      opacity: 1;
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #7B4A2B;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #5c3720;
+    }
+    #mensaje {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      display: none;
+    }
+    #mensaje.exito {
+      background: #e6f9f0;
+      color: #2d7a46;
+      border: 1px solid #2d7a46;
+    }
+    #mensaje.error {
+      background: #fdecea;
+      color: #b71c1c;
+      border: 1px solid #b71c1c;
     }
   </style>
 </head>
-<body class="flex justify-center items-center min-h-screen">
+<body>
 
-  <div class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-lg">
-    <h1 class="text-3xl font-bold text-center text-[#7c2d12] mb-6">
-      🍫 Miski Chukulati
-    </h1>
-    <form id="pedidoForm" class="space-y-4">
-      <!-- DNI -->
-      <div>
-        <label class="block mb-1">N° DNI</label>
-        <input type="text" id="dni" class="w-full border rounded-lg p-2" required />
-      </div>
-      <!-- Nombre -->
-      <div>
-        <label class="block mb-1">Nombre Completo</label>
-        <input type="text" id="nombre" class="w-full border rounded-lg p-2" required />
-      </div>
-      <!-- Producto -->
-      <div>
-        <label class="block mb-1">Producto</label>
-        <select id="producto" class="w-full border rounded-lg p-2" required>
-          <option value="">Seleccionar chocolate...</option>
-          <option>Chocolate Blanco</option>
-          <option>Chocolate con Leche</option>
-          <option>Chocolate Bitter</option>
-        </select>
-      </div>
-      <!-- Cantidad -->
-      <div>
-        <label class="block mb-1">Cantidad</label>
-        <input type="number" id="cantidad" min="1" value="1" class="w-full border rounded-lg p-2" required />
-      </div>
-      <!-- Método de Pago -->
-      <div>
-        <label class="block mb-1">Método de Pago</label>
-        <select id="pago" class="w-full border rounded-lg p-2" required>
-          <option value="">Seleccionar método...</option>
-          <option>Transferencia</option>
-          <option>Yape / Plin</option>
-          <option>Contra Entrega</option>
-        </select>
-      </div>
-      <!-- Encargado de Envío -->
-      <div>
-        <label class="block mb-1">Encargado de Envío</label>
-        <select id="encargado" class="w-full border rounded-lg p-2" required>
-          <option value="">Seleccionar encargado...</option>
-          <option>Carlos Mendoza</option>
-          <option>Ana Torres</option>
-        </select>
-      </div>
-      <!-- Calificación -->
-      <div>
-        <label class="block mb-1">Calificación del Servicio</label>
-        <div class="flex space-x-1 text-2xl cursor-pointer" id="rating">
-          ★★★★★
-        </div>
-        <input type="hidden" id="calificacion" value="5" />
-      </div>
-      <!-- Botón -->
-      <div class="text-center">
-        <button type="submit" class="btn-pedido">📦 Registrar Pedido</button>
-      </div>
-    </form>
-    <div id="statusMessage" class="status-ok"></div>
-  </div>
+  <form name="pedidoForm">
+    <h2>Haz tu Pedido 🍫</h2>
+
+    <label>DNI:</label>
+    <input type="text" name="dni" required>
+
+    <label>Nombre completo:</label>
+    <input type="text" name="nombre" required>
+
+    <label>Correo / Teléfono:</label>
+    <input type="text" name="contacto" required>
+
+    <label>Producto:</label>
+    <select name="producto" required>
+      <option value="Tableta 70% cacao">Tableta 70% cacao</option>
+      <option value="Tableta 85% cacao">Tableta 85% cacao</option>
+      <option value="Trufas artesanales">Trufas artesanales</option>
+      <option value="Bombones surtidos">Bombones surtidos</option>
+      <option value="Cacao en polvo 250g">Cacao en polvo 250g</option>
+      <option value="Cacao en polvo 500g">Cacao en polvo 500g</option>
+      <option value="Cacao nibs 200g">Cacao nibs 200g</option>
+    </select>
+
+    <label>Cantidad:</label>
+    <input type="number" name="cantidad" required>
+
+    <label>Precio Unitario (S/.):</label>
+    <input type="number" name="precio" required>
+
+    <label>Método de pago:</label>
+    <select name="metodo" required>
+      <option value="Yape">Yape</option>
+      <option value="Plin">Plin</option>
+      <option value="Tarjeta">Tarjeta</option>
+      <option value="Efectivo">Efectivo</option>
+    </select>
+
+    <label>Encargado de envío:</label>
+    <input type="text" name="courier">
+
+    <button type="submit">Enviar Pedido</button>
+
+    <div id="mensaje"></div>
+  </form>
 
   <script>
-    document.getElementById("pedidoForm").addEventListener("submit", function(e) {
-      e.preventDefault();
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzRygkW0HGZsyTe6Cu3qGu2B4IqzrQRb8xd_lTOxBXcSh6Yf04BW9D_oZaXCg7E-r5Q/exec";
+    const form = document.forms['pedidoForm'];
+    const mensaje = document.getElementById("mensaje");
 
-      // Simulación de registro en Google Sheets
-      setTimeout(() => {
-        const status = document.getElementById("statusMessage");
-        status.innerHTML = "✅ Pedido recibido, ¡muchas gracias y bendiciones!";
-        status.classList.add("show");
-      }, 800);
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => response.text())
+        .then(msg => {
+          mensaje.style.display = "block";
+          mensaje.className = "exito";
+          mensaje.innerHTML = "✅ " + msg;
+          form.reset();
+        })
+        .catch(error => {
+          mensaje.style.display = "block";
+          mensaje.className = "error";
+          mensaje.innerHTML = "❌ Error al enviar el pedido: " + error.message;
+        });
     });
   </script>
+
 </body>
 </html>
