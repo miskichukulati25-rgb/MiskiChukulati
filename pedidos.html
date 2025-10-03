@@ -16,16 +16,18 @@
     }
     form {
       background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       text-align: center;
     }
     h2 {
       color: #6b3e2e;
       margin-bottom: 20px;
+      font-size: 22px;
+      font-weight: bold;
     }
     label {
       display: block;
@@ -47,6 +49,9 @@
       color: white;
       border: none;
       cursor: pointer;
+      transition: background 0.3s;
+      font-size: 15px;
+      font-weight: bold;
     }
     button:hover {
       background: #4a2c20;
@@ -68,7 +73,7 @@
       color: #b71c1c;
       border: 1px solid #b71c1c;
     }
-    /* Logo */
+    /* Logo con borde dorado */
     .logo {
       width: 120px;
       height: 120px;
@@ -76,7 +81,8 @@
       object-fit: cover;
       display: block;
       margin: 0 auto 15px;
-      background: #6b3e2e;
+      background: #6b3e2e; /* cacao */
+      border: 3px solid #d4af37; /* dorado */
       padding: 5px;
     }
   </style>
@@ -135,7 +141,7 @@
     const total = document.getElementById("total");
     const mensaje = document.getElementById("mensaje");
 
-    // Actualizar precio y total
+    // Actualizar precio y total automáticamente
     producto.addEventListener("change", () => {
       const precioUnit = producto.options[producto.selectedIndex].dataset.precio || 0;
       precio.value = precioUnit;
