@@ -20,11 +20,17 @@
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
     }
     h2 {
       text-align: center;
       color: #7B4A2B;
+      margin-bottom: 10px;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 15px auto;
+      width: 120px;
     }
     label {
       font-weight: bold;
@@ -37,6 +43,9 @@
       margin-top: 5px;
       border: 1px solid #ccc;
       border-radius: 8px;
+    }
+    input[readonly] {
+      background: #f3f3f3;
     }
     button {
       margin-top: 20px;
@@ -74,6 +83,8 @@
 <body>
 
   <form name="pedidoForm">
+    <!-- Logo -->
+    <img src="Logo.png" alt="Miski Chukulati" class="logo">
     <h2>Haz tu Pedido 🍫</h2>
 
     <label>DNI:</label>
@@ -86,21 +97,24 @@
     <input type="text" name="contacto" required>
 
     <label>Producto:</label>
-    <select name="producto" required>
-      <option value="Tableta 70% cacao">Tableta 70% cacao</option>
-      <option value="Tableta 85% cacao">Tableta 85% cacao</option>
-      <option value="Trufas artesanales">Trufas artesanales</option>
-      <option value="Bombones surtidos">Bombones surtidos</option>
-      <option value="Cacao en polvo 250g">Cacao en polvo 250g</option>
-      <option value="Cacao en polvo 500g">Cacao en polvo 500g</option>
-      <option value="Cacao nibs 200g">Cacao nibs 200g</option>
+    <select name="producto" id="producto" required>
+      <option value="Tableta 70% cacao" data-precio="8">Tableta 70% cacao</option>
+      <option value="Tableta 85% cacao" data-precio="9">Tableta 85% cacao</option>
+      <option value="Trufas artesanales" data-precio="15">Trufas artesanales</option>
+      <option value="Bombones surtidos" data-precio="20">Bombones surtidos</option>
+      <option value="Cacao en polvo 250g" data-precio="12">Cacao en polvo 250g</option>
+      <option value="Cacao en polvo 500g" data-precio="22">Cacao en polvo 500g</option>
+      <option value="Cacao nibs 200g" data-precio="18">Cacao nibs 200g</option>
     </select>
 
     <label>Cantidad:</label>
-    <input type="number" name="cantidad" required>
+    <input type="number" name="cantidad" id="cantidad" value="1" min="1" required>
 
     <label>Precio Unitario (S/.):</label>
-    <input type="number" name="precio" required>
+    <input type="number" name="precio" id="precio" readonly>
+
+    <label>Total (S/.):</label>
+    <input type="number" name="total" id="total" readonly>
 
     <label>Método de pago:</label>
     <select name="metodo" required>
@@ -123,6 +137,27 @@
     const form = document.forms['pedidoForm'];
     const mensaje = document.getElementById("mensaje");
 
+    const productoSelect = document.getElementById("producto");
+    const precioInput = document.getElementById("precio");
+    const cantidadInput = document.getElementById("cantidad");
+    const totalInput = document.getElementById("total");
+
+    // Función para actualizar precio y total
+    function actualizarTotales() {
+      const selected = productoSelect.options[productoSelect.selectedIndex];
+      const precio = parseFloat(selected.getAttribute("data-precio")) || 0;
+      const cantidad = parseInt(cantidadInput.value) || 0;
+      precioInput.value = precio;
+      totalInput.value = precio * cantidad;
+    }
+
+    productoSelect.addEventListener("change", actualizarTotales);
+    cantidadInput.addEventListener("input", actualizarTotales);
+
+    // Asignar precio inicial
+    window.onload = actualizarTotales;
+
+    // Enviar al Apps Script
     form.addEventListener('submit', e => {
       e.preventDefault();
       fetch(scriptURL, { method: 'POST', body: new FormData(form)})
@@ -132,6 +167,7 @@
           mensaje.className = "exito";
           mensaje.innerHTML = "✅ " + msg;
           form.reset();
+          actualizarTotales();
         })
         .catch(error => {
           mensaje.style.display = "block";
