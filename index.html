@@ -3,178 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pedido - Miski Chukulati</title>
+  <title>Miski Chukulati</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9f5f2;
-      color: #333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 30px;
+      background-color: #faf4ef;
+      margin: 0;
+      padding: 0;
     }
-    form {
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
       background: #fff;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-      width: 100%;
-      max-width: 440px;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       text-align: center;
     }
-    h2 {
-      color: #6b3e2e;
-      margin-bottom: 20px;
-      font-size: 22px;
-      font-weight: bold;
-    }
-    label {
-      display: block;
-      margin: 10px 0 5px;
-      text-align: left;
-      color: #4a2c20;
-      font-weight: bold;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-    button {
-      background: #6b3e2e;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s;
-      font-size: 15px;
-      font-weight: bold;
-    }
-    button:hover {
-      background: #4a2c20;
-    }
-    #mensaje {
-      margin-top: 15px;
-      font-size: 14px;
-      padding: 10px;
-      border-radius: 5px;
-      display: none;
-    }
-    #mensaje.success {
-      background: #e6ffed;
-      color: #256029;
-      border: 1px solid #256029;
-    }
-    #mensaje.error {
-      background: #fdecea;
-      color: #b71c1c;
-      border: 1px solid #b71c1c;
-    }
-    /* Logo con borde dorado */
+
     .logo {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
+      max-width: 150px;
+      margin: 0 auto 20px auto;
       display: block;
-      margin: 0 auto 15px;
-      background: #6b3e2e; /* cacao */
-      border: 3px solid #d4af37; /* dorado */
-      padding: 5px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      color: #5a3825; /* tono cacao */
+    }
+
+    p {
+      color: #555;
+      font-size: 16px;
+      margin-bottom: 25px;
+    }
+
+    a.boton {
+      display: inline-block;
+      padding: 12px 25px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(135deg, #d4af37, #a87d2d);
+      border-radius: 8px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    a.boton:hover {
+      background: linear-gradient(135deg, #a87d2d, #d4af37);
+      transform: scale(1.05);
     }
   </style>
 </head>
 <body>
-  <form name="pedidoForm" id="pedidoForm">
-    <!-- Logo -->
+  <div class="container">
     <img src="Logo.png" alt="Miski Chukulati" class="logo">
-    <h2>Haz tu Pedido</h2>
-
-    <label>DNI:</label>
-    <input type="text" name="dni" required>
-
-    <label>Nombre completo:</label>
-    <input type="text" name="nombre" required>
-
-    <label>Correo / Teléfono:</label>
-    <input type="text" name="contacto" required>
-
-    <label>Producto:</label>
-    <select name="producto" id="producto" required>
-      <option value="">Seleccione...</option>
-      <option value="Tableta 70% cacao" data-precio="8">Tableta 70% cacao</option>
-      <option value="Tableta 85% cacao" data-precio="9">Tableta 85% cacao</option>
-      <option value="Bombones surtidos" data-precio="15">Bombones surtidos</option>
-    </select>
-
-    <label>Cantidad:</label>
-    <input type="number" name="cantidad" id="cantidad" min="1" value="1" required>
-
-    <label>Precio Unitario (S/.):</label>
-    <input type="text" name="precio" id="precio" readonly>
-
-    <label>Total (S/.):</label>
-    <input type="text" name="total" id="total" readonly>
-
-    <label>Método de pago:</label>
-    <select name="metodo_pago" required>
-      <option value="Yape">Yape</option>
-      <option value="Plin">Plin</option>
-      <option value="Efectivo">Efectivo</option>
-    </select>
-
-    <label>Encargado de envío:</label>
-    <input type="text" name="courier" required>
-
-    <button type="submit">Enviar Pedido</button>
-    <div id="mensaje"></div>
-  </form>
-
-  <script>
-    const form = document.getElementById("pedidoForm");
-    const producto = document.getElementById("producto");
-    const cantidad = document.getElementById("cantidad");
-    const precio = document.getElementById("precio");
-    const total = document.getElementById("total");
-    const mensaje = document.getElementById("mensaje");
-
-    // Actualizar precio y total automáticamente
-    producto.addEventListener("change", () => {
-      const precioUnit = producto.options[producto.selectedIndex].dataset.precio || 0;
-      precio.value = precioUnit;
-      total.value = precioUnit * cantidad.value;
-    });
-
-    cantidad.addEventListener("input", () => {
-      const precioUnit = producto.options[producto.selectedIndex].dataset.precio || 0;
-      total.value = precioUnit * cantidad.value;
-    });
-
-    // Enviar a Google Apps Script
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const data = new FormData(form);
-      try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbzRygkW0HGZsyTe6Cu3qGu2B4IqzrQRb8xd_lTOxBXcSh6Yf04BW9D_oZaXCg7E-r5Q/exec", {
-          method: "POST",
-          body: data
-        });
-        const result = await response.text();
-        mensaje.style.display = "block";
-        mensaje.className = "success";
-        mensaje.textContent = "✅ Pedido enviado correctamente.";
-        form.reset();
-        precio.value = "";
-        total.value = "";
-      } catch (error) {
-        mensaje.style.display = "block";
-        mensaje.className = "error";
-        mensaje.textContent = "❌ Error al enviar el pedido. Inténtelo nuevamente.";
-      }
-    });
-  </script>
+    <h1>Bienvenido a Miski Chukulati 🍫</h1>
+    <p>El sabor que une a la familia. Haz tu pedido fácil y rápido con nuestro formulario en línea.</p>
+    <a href="pedidos.html" class="boton">Hacer un Pedido</a>
+  </div>
 </body>
 </html>
