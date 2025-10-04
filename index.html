@@ -7,85 +7,70 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #faf4ef;
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .container {
-      width: 90%;
-      max-width: 500px;
-      background: #fff;
-      padding: 30px 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background-color: #fdf6f0;
+      color: #3e2723;
       text-align: center;
     }
-
-    .logo {
-      width: 120px;
-      height: auto;
-      margin: 0 auto 20px auto;
+    header {
+      background-color: #4e342e;
+      color: white;
+      padding: 20px;
+    }
+    header img.logo {
       display: block;
+      margin: 0 auto 10px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%; /* siempre redondo */
+      object-fit: cover;
     }
-
-    h1 {
-      font-size: 26px;
-      margin-bottom: 15px;
-      color: #5a3825; /* cacao */
+    header h1 {
+      margin: 0;
+      font-size: 2em;
     }
-
-    p {
-      color: #555;
-      font-size: 16px;
-      margin-bottom: 25px;
-      line-height: 1.5;
+    main {
+      padding: 20px;
     }
-
     a.boton {
       display: inline-block;
-      width: 100%;
-      max-width: 250px;
-      padding: 15px 20px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #fff;
-      background: linear-gradient(135deg, #d4af37, #a87d2d);
-      border-radius: 10px;
+      margin-top: 20px;
+      padding: 12px 25px;
+      background-color: #6d4c41;
+      color: white;
       text-decoration: none;
-      transition: 0.3s;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s;
     }
-
     a.boton:hover {
-      background: linear-gradient(135deg, #a87d2d, #d4af37);
-      transform: scale(1.05);
+      background-color: #3e2723;
     }
-
-    /* Responsive */
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 22px;
-      }
-      p {
-        font-size: 14px;
-      }
-      a.boton {
-        font-size: 16px;
-        padding: 12px;
-      }
+    footer {
+      margin-top: 40px;
+      padding: 10px;
+      background: #4e342e;
+      color: white;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <header>
+    <!-- Logo redondo -->
     <img src="Logo.png" alt="Miski Chukulati" class="logo">
-    <h1>Bienvenido a Miski Chukulati 🍫</h1>
-    <p>El sabor que une a la familia. Haz tu pedido fácil y rápido con nuestro formulario en línea.</p>
-    <a href="pedidos.html" class="boton">Hacer un Pedido</a>
-  </div>
+    <h1>Bienvenidos a Miski Chukulati</h1>
+    <p>El sabor que une a la familia 🍫</p>
+  </header>
+
+  <main>
+    <h2>Haz tu pedido en línea</h2>
+    <p>Selecciona tus productos favoritos y recíbelos en casa.</p>
+    <a href="pedidos.html" class="boton">Ir a Miski Pedidos</a>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Miski Chukulati - Todos los derechos reservados</p>
+  </footer>
 </body>
 </html>
