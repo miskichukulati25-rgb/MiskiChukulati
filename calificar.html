@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Califica tu experiencia 🍫</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f7f3ef;
+      text-align: center;
+      color: #4b2e05;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #7b3f00;
+      color: #fff;
+      padding: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .container {
+      margin-top: 2rem;
+    }
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      font-size: 2rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .star {
+      color: #d3bfa7;
+      transition: color 0.2s;
+    }
+    .star.selected {
+      color: #7b3f00;
+    }
+    button {
+      margin-top: 1.5rem;
+      background-color: #7b3f00;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #5a2d00;
+    }
+  </style>
+</head>
+<body>
+  <header>Califica tu experiencia – Miski Chukulati 🍫</header>
+
+  <div class="container">
+    <p id="pedidoID">Cargando tu pedido...</p>
+    <div class="stars" id="starsContainer">
+      <span class="star" data-value="1">★</span>
+      <span class="star" data-value="2">★</span>
+      <span class="star" data-value="3">★</span>
+      <span class="star" data-value="4">★</span>
+      <span class="star" data-value="5">★</span>
+    </div>
+    <button onclick="enviarCalificacion()">Enviar Calificación</button>
+  </div>
+
+  <script>
+  let selected = 0;
+  const stars = document.querySelectorAll(".star");
+  const pedidoID = new URLSearchParams(window.location.search).get("id");
+  document.getElementById("pedidoID").innerText = "Pedido: " + pedidoID;
+
+  stars.forEach(star => {
+    star.addEventListener("click", () => {
+      selected = parseInt(star.dataset.value);
+      stars.forEach(s => s.classList.remove("selected"));
+      for (let i = 0; i < selected; i++) stars[i].classList.add("selected");
+    });
+  });
+
+  async function enviarCalificacion() {
+    if (!selected) {
+      alert("Selecciona una calificación antes de enviar.");
+      return;
+    }
+    try {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbydKZ7RyM4bhAuxq2UDi7zAG_WNFo91tmB0pix68M8e2WEGvbVmHj0B7U_e1v3KJnZs/exec", {
+        method: "POST",
+        body: JSON.stringify({ idPedido: pedidoID, calificacion: selected }),
+        headers: { "Content-Type": "application/json" }
+      });
+      if (res.ok) {
+        alert("¡Gracias por tu calificación! 💛");
+        window.location.href = "https://miskichukulati25-rgb.github.io/MiskiChukulati/";
+      } else {
+        alert("No se pudo registrar la calificación. Intenta más tarde.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error de conexión.");
+    }
+  }
+  </script>
+</body>
+</html>
