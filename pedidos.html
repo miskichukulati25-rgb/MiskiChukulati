@@ -80,13 +80,6 @@
       background-color: #8b5a2b;
     }
 
-    footer {
-      margin-top: 30px;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #5c2e00;
-    }
-
     .secondary-btn {
       background-color: #bfa78a;
       color: #4b2e05;
@@ -95,6 +88,13 @@
 
     .secondary-btn:hover {
       background-color: #a68863;
+    }
+
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #5c2e00;
     }
   </style>
 </head>
@@ -142,6 +142,9 @@
     const submitBtn = document.getElementById("submitBtn");
     const trackBtn = document.getElementById("trackBtn");
 
+    // URL de tu Apps Script (versión activa)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwBKHKDBjipPFAv85hxZ0pTJKltegD3ffapeJwa6Xbiq8ZSUBmE5o00zE5VlpzBA5HK/exec";
+
     // Enviar pedido
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -159,14 +162,11 @@
       };
 
       try {
-        const response = await fetch(
-          "https://script.google.com/macros/s/AKfycbydKZ7RyM4bhAuxq2UDi7zAG_WNFo91tmB0pix68M8e2WEGvbVmHj0B7U_e1v3KJnZs/exec",
-          {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-Type": "application/json" }
-          }
-        );
+        const response = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/json" }
+        });
 
         const result = await response.json();
 
@@ -175,7 +175,7 @@
             "✅ ¡Gracias por tu pedido, " + data.fullName + "!\n\n" +
             "🧾 ID de Pedido: " + result.idPedido + "\n" +
             "📦 Estado: Recibido\n\n" +
-            "Tu comprobante PDF se está generando y pronto podrás descargarlo.\n\n" +
+            "Tu comprobante PDF se está generando.\n\n" +
             "Atentamente,\nMiski Chukulati 🍫"
           );
           form.reset();
@@ -191,19 +191,16 @@
       }
     });
 
-    // Consultar estado de pedido
+    // Consultar estado del pedido
     trackBtn.addEventListener("click", async () => {
       const idPedido = prompt("🔎 Ingresa tu ID de pedido para consultar el estado:");
-
       if (!idPedido) return;
 
       try {
-        const response = await fetch(
-          "https://script.google.com/macros/s/AKfycbydKZ7RyM4bhAuxq2UDi7zAG_WNFo91tmB0pix68M8e2WEGvbVmHj0B7U_e1v3KJnZs/exec?idPedido=" + idPedido
-        );
+        const response = await fetch(`${SCRIPT_URL}?idPedido=${idPedido}`);
         const result = await response.json();
 
-        if (result.status === "ok" && result.estado) {
+        if (result.status === "ok") {
           alert("📦 Estado actual de tu pedido " + idPedido + ": " + result.estado);
         } else {
           alert("❌ No se encontró el pedido o hubo un error al consultar.");
