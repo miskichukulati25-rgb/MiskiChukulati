@@ -1,106 +1,63 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Miski Tracking</title>
-  <link rel="icon" type="image/png" href="logo.png" />
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background-color: #f8f4f0;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      color: #4b2e05;
-    }
-    header {
-      background-color: #7b3f00;
-      color: #fff;
-      padding: 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    main {
-      margin-top: 2rem;
-    }
-    input {
-      padding: 10px;
-      width: 250px;
-      border: 2px solid #7b3f00;
-      border-radius: 10px;
-      outline: none;
-    }
-    button {
-      background-color: #7b3f00;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-    button:hover {
-      background-color: #5a2d00;
-    }
-    .resultado {
-      margin-top: 2rem;
-      background-color: #fff;
-      padding: 1rem;
-      border-radius: 15px;
-      width: 80%;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .estado {
-      font-weight: bold;
-      color: #7b3f00;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguimiento de Pedido - Miski Chukulati</title>
+<style>
+body {
+  font-family: Poppins, sans-serif;
+  background: #fff8f2;
+  text-align: center;
+  padding: 30px;
+}
+input {
+  padding: 10px;
+  width: 250px;
+  border-radius: 8px;
+  border: 1px solid #c6a984;
+}
+button {
+  background: #5d2a07;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.result {
+  margin-top: 20px;
+}
+</style>
 </head>
 <body>
-  <header>📦 Seguimiento de Pedido – Miski Chukulati 🍫</header>
-  <main>
-    <p>Ingresa tu número de pedido:</p>
-    <input type="text" id="pedidoID" placeholder="Ejemplo: P20251004102345" />
-    <button onclick="consultarPedido()">Consultar</button>
+<h1>🔍 Seguimiento de tu pedido</h1>
+<p>Ingresa tu código de pedido (Ej: P20251004123045)</p>
+<input type="text" id="pedidoID" placeholder="ID del pedido">
+<button onclick="consultar()">Consultar</button>
+<div class="result" id="resultado"></div>
 
-    <div class="resultado" id="resultado"></div>
-  </main>
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbyXgSQVrT_ok6maLRBzVjXAePQk6RBTWOKbZvx64UYX4C6DCdyvR5q2Iw5BDrymeRRa/exec";
 
-  <script>
-  async function consultarPedido() {
-    const pedidoID = document.getElementById("pedidoID").value.trim();
-    const resultadoDiv = document.getElementById("resultado");
-
-    if (!pedidoID) {
-      resultadoDiv.innerHTML = "<p>⚠️ Ingresa un ID de pedido válido.</p>";
-      return;
-    }
-
-    try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbydKZ7RyM4bhAuxq2UDi7zAG_WNFo91tmB0pix68M8e2WEGvbVmHj0B7U_e1v3KJnZs/exec?pedidoID=" + pedidoID);
-      const data = await res.json();
-
-      if (data.error) {
-        resultadoDiv.innerHTML = "<p>❌ Pedido no encontrado.</p>";
-      } else {
-        resultadoDiv.innerHTML = `
-          <h3>📄 Detalle del Pedido</h3>
-          <p><strong>Cliente:</strong> ${data.cliente}</p>
-          <p><strong>Producto:</strong> ${data.producto}</p>
-          <p><strong>Cantidad:</strong> ${data.cantidad}</p>
-          <p><strong>Fecha:</strong> ${data.fecha}</p>
-          <p><strong>Estado:</strong> <span class="estado">${data.estado}</span></p>
-        `;
-      }
-    } catch (error) {
-      resultadoDiv.innerHTML = "<p>⚠️ Error al consultar el pedido. Intenta más tarde.</p>";
-      console.error(error);
-    }
+async function consultar() {
+  const id = document.getElementById("pedidoID").value.trim();
+  if (!id) return alert("Ingresa un ID de pedido");
+  const res = await fetch(scriptURL + "?pedidoID=" + id);
+  const data = await res.json();
+  const div = document.getElementById("resultado");
+  if (data.error) {
+    div.innerHTML = "<p>❌ " + data.error + "</p>";
+  } else {
+    div.innerHTML = `
+      <h3>Pedido de ${data.cliente}</h3>
+      <p>Producto: ${data.producto}</p>
+      <p>Cantidad: ${data.cantidad}</p>
+      <p>Estado: <b>${data.estado}</b></p>
+      <p><a href="${data.linkPdf}" target="_blank">📄 Ver comprobante PDF</a></p>
+    `;
   }
-  </script>
+}
+</script>
 </body>
 </html>
