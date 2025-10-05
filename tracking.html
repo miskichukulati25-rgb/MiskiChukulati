@@ -1,63 +1,149 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seguimiento de Pedido - Miski Chukulati</title>
-<style>
-body {
-  font-family: Poppins, sans-serif;
-  background: #fff8f2;
-  text-align: center;
-  padding: 30px;
-}
-input {
-  padding: 10px;
-  width: 250px;
-  border-radius: 8px;
-  border: 1px solid #c6a984;
-}
-button {
-  background: #5d2a07;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.result {
-  margin-top: 20px;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Miski Pedidos - Miski Chukulati 🍫</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #f9f4f0;
+      color: #3e2723;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .logo {
+      width: 120px;
+      margin: 0 auto 15px;
+      display: block;
+    }
+    h2 {
+      color: #4e342e;
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 12px;
+      text-align: left;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      background: #5d4037;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover { background: #3e2723; }
+    #mensaje {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      display: none;
+    }
+    #mensaje.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; display: block; }
+    #mensaje.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; display: block; }
+  </style>
 </head>
 <body>
-<h1>🔍 Seguimiento de tu pedido</h1>
-<p>Ingresa tu código de pedido (Ej: P20251004123045)</p>
-<input type="text" id="pedidoID" placeholder="ID del pedido">
-<button onclick="consultar()">Consultar</button>
-<div class="result" id="resultado"></div>
+  <form id="pedidoForm">
+    <img src="logo.png" alt="Miski Chukulati" class="logo">
+    <h2>Miski Pedidos 🍫</h2>
 
-<script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbyXgSQVrT_ok6maLRBzVjXAePQk6RBTWOKbZvx64UYX4C6DCdyvR5q2Iw5BDrymeRRa/exec";
+    <label>Nombre completo:</label>
+    <input type="text" name="nombre" required>
 
-async function consultar() {
-  const id = document.getElementById("pedidoID").value.trim();
-  if (!id) return alert("Ingresa un ID de pedido");
-  const res = await fetch(scriptURL + "?pedidoID=" + id);
-  const data = await res.json();
-  const div = document.getElementById("resultado");
-  if (data.error) {
-    div.innerHTML = "<p>❌ " + data.error + "</p>";
-  } else {
-    div.innerHTML = `
-      <h3>Pedido de ${data.cliente}</h3>
-      <p>Producto: ${data.producto}</p>
-      <p>Cantidad: ${data.cantidad}</p>
-      <p>Estado: <b>${data.estado}</b></p>
-      <p><a href="${data.linkPdf}" target="_blank">📄 Ver comprobante PDF</a></p>
-    `;
-  }
-}
-</script>
+    <label>Correo electrónico:</label>
+    <input type="email" name="correo" required>
+
+    <label>Teléfono:</label>
+    <input type="text" name="telefono" required>
+
+    <label>Producto:</label>
+    <select name="producto" id="producto" required>
+      <option value="">Seleccione...</option>
+      <option value="Tableta 70% cacao" data-precio="8">Tableta 70% cacao</option>
+      <option value="Tableta 85% cacao" data-precio="9">Tableta 85% cacao</option>
+      <option value="Bombones surtidos" data-precio="15">Bombones surtidos</option>
+    </select>
+
+    <label>Cantidad:</label>
+    <input type="number" name="cantidad" id="cantidad" value="1" min="1" required>
+
+    <label>Dirección:</label>
+    <input type="text" name="direccion" required>
+
+    <label>Comentarios:</label>
+    <input type="text" name="comentarios" placeholder="Ej: sin azúcar, entrega rápida...">
+
+    <label>Precio Unitario (S/):</label>
+    <input type="text" id="precio" readonly>
+
+    <label>Total (S/):</label>
+    <input type="text" id="total" readonly>
+
+    <button type="submit">Enviar Pedido</button>
+    <div id="mensaje"></div>
+  </form>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyXgSQVrT_ok6maLRBzVjXAePQk6RBTWOKbZvx64UYX4C6DCdyvR5q2Iw5BDrymeRRa/exec";
+    const form = document.getElementById("pedidoForm");
+    const productoSelect = document.getElementById("producto");
+    const cantidadInput = document.getElementById("cantidad");
+    const precioInput = document.getElementById("precio");
+    const totalInput = document.getElementById("total");
+
+    function actualizarPrecio() {
+      const option = productoSelect.options[productoSelect.selectedIndex];
+      const precio = parseFloat(option.dataset.precio || 0);
+      const cantidad = parseInt(cantidadInput.value || 1);
+      precioInput.value = precio.toFixed(2);
+      totalInput.value = (precio * cantidad).toFixed(2);
+    }
+
+    productoSelect.addEventListener("change", actualizarPrecio);
+    cantidadInput.addEventListener("input", actualizarPrecio);
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      try {
+        const response = await fetch(scriptURL, { method: "POST", body: JSON.stringify(data) });
+        const result = await response.json();
+        if (result.success) {
+          document.getElementById("mensaje").textContent = "✅ Pedido registrado correctamente.";
+          document.getElementById("mensaje").className = "success";
+          form.reset();
+        } else throw new Error("Error al registrar pedido.");
+      } catch (err) {
+        document.getElementById("mensaje").textContent = "❌ Error al enviar el pedido.";
+        document.getElementById("mensaje").className = "error";
+      }
+    });
+  </script>
 </body>
 </html>
