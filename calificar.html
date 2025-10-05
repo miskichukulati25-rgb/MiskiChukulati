@@ -1,38 +1,93 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Califica tu experiencia - Miski Chukulati 🍫</title>
-<style>
-  body { font-family: "Poppins", sans-serif; background: #f9f4f0; color: #3e2723; text-align: center; padding: 30px; }
-  button { background: #5d4037; color: white; border: none; padding: 10px 15px; border-radius: 6px; margin: 5px; cursor: pointer; }
-  button:hover { background: #3e2723; }
-  .stars { margin-top: 20px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Califica tu experiencia - Miski Chukulati</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #f8f3ef;
+      color: #3e2723;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 { color: #4e342e; margin-bottom: 10px; }
+    .stars { display: flex; justify-content: center; margin: 15px 0; }
+    .star {
+      font-size: 30px;
+      cursor: pointer;
+      color: #ccc;
+      transition: color 0.2s;
+    }
+    .star.active { color: #ffb300; }
+    button {
+      padding: 10px 20px;
+      border: none;
+      background: #5d4037;
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background: #3e2723; }
+    p { margin-top: 10px; }
+  </style>
 </head>
 <body>
-  <h2>⭐ ¡Califica tu experiencia con Miski Chukulati!</h2>
-  <p>Tu opinión nos ayuda a mejorar 🍫</p>
-  <div class="stars">
-    <button onclick="enviar(1)">⭐</button>
-    <button onclick="enviar(2)">⭐⭐</button>
-    <button onclick="enviar(3)">⭐⭐⭐</button>
-    <button onclick="enviar(4)">⭐⭐⭐⭐</button>
-    <button onclick="enviar(5)">⭐⭐⭐⭐⭐</button>
+  <div class="card">
+    <img src="logo.png" alt="Miski Chukulati" width="100" style="border-radius:50%;">
+    <h2>Califica tu experiencia</h2>
+    <div class="stars" id="stars">
+      <span class="star" data-value="1">★</span>
+      <span class="star" data-value="2">★</span>
+      <span class="star" data-value="3">★</span>
+      <span class="star" data-value="4">★</span>
+      <span class="star" data-value="5">★</span>
+    </div>
+    <button onclick="enviarCalificacion()">Enviar</button>
+    <p id="mensaje"></p>
   </div>
-  <p id="mensaje"></p>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyXgSQVrT_ok6maLRBzVjXAePQk6RBTWOKbZvx64UYX4C6DCdyvR5q2Iw5BDrymeRRa/exec";
-    const idPedido = new URLSearchParams(window.location.search).get("id");
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyPkjKHLjC7lbsOWGyloDsCUukDdwZt_eoKsJH5LcT7tdX16FPSCZLZMY7qtenmT_y0/exec";
+    const urlParams = new URLSearchParams(window.location.search);
+    const idPedido = urlParams.get("id");
+    let calificacion = 0;
 
-    async function enviar(calificacion) {
+    document.querySelectorAll(".star").forEach(star => {
+      star.addEventListener("click", () => {
+        calificacion = star.dataset.value;
+        document.querySelectorAll(".star").forEach(s => s.classList.remove("active"));
+        star.classList.add("active");
+        let prev = star.previousElementSibling;
+        while (prev) { prev.classList.add("active"); prev = prev.previousElementSibling; }
+      });
+    });
+
+    async function enviarCalificacion() {
+      if (!idPedido || !calificacion) {
+        alert("Por favor, selecciona una calificación.");
+        return;
+      }
       try {
-        await google.script.run.registrarCalificacion(idPedido, calificacion);
-        document.getElementById("mensaje").innerText = "¡Gracias por tu calificación!";
+        await fetch(scriptURL + "?action=calificar&id=" + idPedido + "&valor=" + calificacion);
+        document.getElementById("mensaje").textContent = "✅ ¡Gracias por calificar!";
       } catch (err) {
-        document.getElementById("mensaje").innerText = "Error al enviar la calificación.";
+        document.getElementById("mensaje").textContent = "❌ Error al enviar la calificación.";
       }
     }
   </script>
