@@ -1,216 +1,115 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Miski Pedidos 🍫</title>
-  <link rel="icon" type="image/png" href="logo.png" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedidos - Miski Chukulati 🍫</title>
   <style>
     body {
-      font-family: "Poppins", sans-serif;
-      background-color: #f9f4ee;
-      color: #4b2e05;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background: #fff8f2;
       margin: 0;
-      padding: 30px 15px;
+      padding: 0;
     }
-
-    header {
+    .container {
+      max-width: 480px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 24px;
       text-align: center;
-      margin-bottom: 25px;
     }
-
-    header img {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #4b2e05;
-      background-color: #6b3e26;
-      padding: 5px;
-    }
-
     h1 {
-      margin-top: 15px;
-      color: #5c2e00;
-      font-size: 1.9rem;
-      letter-spacing: 1px;
+      color: #5d2a07;
+      margin-bottom: 8px;
     }
-
-    form {
-      background: #fff;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      width: 100%;
-      max-width: 400px;
+    p {
+      color: #7a4c27;
+      margin-bottom: 20px;
     }
-
-    input, select, button {
+    input, textarea, select, button {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid #bfa78a;
-      border-radius: 10px;
-      font-size: 1rem;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #c6a984;
+      border-radius: 8px;
+      font-size: 14px;
       box-sizing: border-box;
     }
-
-    input:focus, select:focus {
-      outline: none;
-      border-color: #8b5a2b;
-      box-shadow: 0 0 6px rgba(139, 90, 43, 0.3);
-    }
-
     button {
-      background-color: #6b3e26;
+      background: #5d2a07;
       color: #fff;
-      border: none;
-      font-weight: 600;
+      font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
+      transition: background 0.3s;
     }
-
     button:hover {
-      background-color: #8b5a2b;
+      background: #7b3f00;
     }
-
-    .secondary-btn {
-      background-color: #bfa78a;
-      color: #4b2e05;
-      margin-top: 10px;
-    }
-
-    .secondary-btn:hover {
-      background-color: #a68863;
-    }
-
-    footer {
-      margin-top: 30px;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #5c2e00;
+    .logo {
+      width: 120px;
+      margin-bottom: 12px;
     }
   </style>
 </head>
-
 <body>
-  <header>
-    <img src="logo.png" alt="Logo Miski Chukulati">
+  <div class="container">
+    <img src="https://raw.githubusercontent.com/MiskiChukulati25-RGB/MiskiChukulati/main/logo.png" alt="Miski Chukulati" class="logo">
     <h1>Miski Pedidos 🍫</h1>
-  </header>
+    <p>Llena tus datos para recibir tu pedido y constancia PDF</p>
 
-  <form id="pedidoForm">
-    <input type="text" name="dni" id="dni" placeholder="DNI" required>
-    <input type="text" name="fullName" id="fullName" placeholder="Nombre completo" required>
+    <form id="pedidoForm">
+      <input type="text" name="nombre" placeholder="Tu nombre completo" required>
+      <input type="email" name="correo" placeholder="Correo electrónico" required>
+      <input type="text" name="telefono" placeholder="Número de contacto" required>
+      <input type="text" name="direccion" placeholder="Dirección de entrega" required>
 
-    <select name="product" id="product" required>
-      <option value="">Selecciona un producto</option>
-      <option value="Tableta 70% cacao">Tableta 70% cacao</option>
-      <option value="Tableta 85% cacao">Tableta 85% cacao</option>
-      <option value="Bombones surtidos">Bombones surtidos</option>
-    </select>
+      <select name="producto" required>
+        <option value="">Selecciona un producto</option>
+        <option value="Dark Chocolate Bar">Dark Chocolate Bar</option>
+        <option value="ChocoNibs">ChocoNibs</option>
+        <option value="ChocoBites">ChocoBites</option>
+      </select>
 
-    <input type="number" name="quantity" id="quantity" placeholder="Cantidad" min="1" required>
+      <input type="number" name="cantidad" placeholder="Cantidad" min="1" required>
+      <textarea name="comentarios" rows="3" placeholder="Comentarios adicionales (opcional)"></textarea>
 
-    <select name="paymentMethod" id="paymentMethod" required>
-      <option value="">Método de pago</option>
-      <option value="Yape">Yape</option>
-      <option value="Plin">Plin</option>
-      <option value="Transferencia">Transferencia</option>
-    </select>
+      <button type="submit">Enviar pedido</button>
+    </form>
 
-    <input type="text" name="shipper" id="shipper" placeholder="Encargado del envío" required>
-
-    <button type="submit" id="submitBtn">Enviar Pedido</button>
-  </form>
-
-  <button class="secondary-btn" id="trackBtn">Ver estado de mi pedido 📦</button>
-
-  <footer>
-    © 2025 Miski Chukulati · Todos los derechos reservados
-  </footer>
+    <p id="msg" style="margin-top:15px;"></p>
+  </div>
 
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("pedidoForm");
-    const submitBtn = document.getElementById("submitBtn");
-    const trackBtn = document.getElementById("trackBtn");
+    // ✅ Enlace real de tu Apps Script
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyXgSQVrT_ok6maLRBzVjXAePQk6RBTWOKbZvx64UYX4C6DCdyvR5q2Iw5BDrymeRRa/exec";
 
-    // URL de tu Apps Script (versión activa)
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwBKHKDBjipPFAv85hxZ0pTJKltegD3ffapeJwa6Xbiq8ZSUBmE5o00zE5VlpzBA5HK/exec";
-
-    // Enviar pedido
-    form.addEventListener("submit", async (e) => {
+    document.getElementById("pedidoForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Procesando pedido...";
-
-      const data = {
-        dni: form.dni.value.trim(),
-        fullName: form.fullName.value.trim(),
-        product: form.product.value,
-        quantity: form.quantity.value,
-        paymentMethod: form.paymentMethod.value,
-        shipper: form.shipper.value
-      };
+      const form = e.target;
+      const data = Object.fromEntries(new FormData(form).entries());
+      const msg = document.getElementById("msg");
+      msg.textContent = "⏳ Enviando pedido...";
 
       try {
-        const response = await fetch(SCRIPT_URL, {
+        const response = await fetch(scriptURL, {
           method: "POST",
-          body: JSON.stringify(data),
-          headers: { "Content-Type": "application/json" }
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
         });
-
         const result = await response.json();
 
-        if (result.status === "ok") {
-          alert(
-            "✅ ¡Gracias por tu pedido, " + data.fullName + "!\n\n" +
-            "🧾 ID de Pedido: " + result.idPedido + "\n" +
-            "📦 Estado: Recibido\n\n" +
-            "Tu comprobante PDF se está generando.\n\n" +
-            "Atentamente,\nMiski Chukulati 🍫"
-          );
+        if (result.success) {
+          msg.innerHTML = "✅ Pedido registrado correctamente.<br>ID: <b>" + result.idPedido + "</b><br>Tu comprobante PDF se generará en breve.";
           form.reset();
         } else {
-          alert("❌ Error al registrar tu pedido. Inténtalo nuevamente.");
+          msg.textContent = "⚠️ Error al registrar pedido: " + (result.error || "Inténtalo nuevamente");
         }
       } catch (err) {
-        console.error(err);
-        alert("⚠️ No se pudo conectar con el servidor. Verifica tu conexión.");
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Enviar Pedido";
+        msg.textContent = "❌ Error de conexión: " + err.message;
       }
     });
-
-    // Consultar estado del pedido
-    trackBtn.addEventListener("click", async () => {
-      const idPedido = prompt("🔎 Ingresa tu ID de pedido para consultar el estado:");
-      if (!idPedido) return;
-
-      try {
-        const response = await fetch(`${SCRIPT_URL}?idPedido=${idPedido}`);
-        const result = await response.json();
-
-        if (result.status === "ok") {
-          alert("📦 Estado actual de tu pedido " + idPedido + ": " + result.estado);
-        } else {
-          alert("❌ No se encontró el pedido o hubo un error al consultar.");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("⚠️ Error al consultar el estado del pedido.");
-      }
-    });
-  });
   </script>
 </body>
 </html>
