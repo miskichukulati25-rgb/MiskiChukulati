@@ -2,110 +2,46 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seguimiento de Pedido - Miski Chukulati</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: #f8f3ef;
-      color: #3e2723;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      padding: 20px;
-    }
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 420px;
-      text-align: center;
-    }
-    h2 {
-      color: #4e342e;
-      margin-bottom: 10px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #5d4037;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #3e2723;
-    }
-    .resultado {
-      margin-top: 20px;
-      background: #f1e3d3;
-      border-radius: 10px;
-      padding: 15px;
-      display: none;
-    }
-    .status {
-      font-weight: bold;
-      font-size: 18px;
-      margin-top: 10px;
-    }
+    body{font-family:"Poppins",Arial,sans-serif;background:#f8f3ef;color:#3e2723;padding:24px}
+    .container{max-width:700px;margin:20px auto;background:#fff;padding:22px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.06)}
+    h2{text-align:center;color:#4e342e}
+    input{width:100%;padding:10px;border-radius:8px;border:1px solid #e0d7d3}
+    button{margin-top:12px;padding:10px;width:100%;background:#6b3e26;color:#fff;border:none;border-radius:8px;cursor:pointer}
+    .result{margin-top:16px;padding:12px;background:#faf6f2;border-radius:8px}
+    a.btn{display:inline-block;padding:10px 14px;background:#6b3e26;color:#fff;border-radius:8px;text-decoration:none;margin-top:10px}
   </style>
 </head>
 <body>
-  <div class="card">
-    <img src="logo.png" alt="Miski Chukulati" width="100" style="border-radius:50%;">
+  <div class="container">
     <h2>Seguimiento de Pedido</h2>
-    <input type="text" id="pedidoID" placeholder="Ingrese su código de pedido (Ej: P20251004120045)">
-    <button onclick="consultarPedido()">Consultar</button>
-
-    <div id="resultado" class="resultado">
-      <p><strong>Cliente:</strong> <span id="cliente"></span></p>
-      <p><strong>Producto:</strong> <span id="producto"></span></p>
-      <p><strong>Cantidad:</strong> <span id="cantidad"></span></p>
-      <p class="status">Estado: <span id="estado"></span></p>
-      <p><a id="pdfLink" href="#" target="_blank">📄 Ver comprobante</a></p>
-    </div>
+    <label for="idPedido">ID de pedido (Ej: P20251005123045) o DNI:</label>
+    <input id="idPedido" placeholder="Ingresa ID o DNI">
+    <button onclick="buscar()">Buscar pedido</button>
+    <div id="resultado" class="result" style="display:none"></div>
   </div>
 
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyPkjKHLjC7lbsOWGyloDsCUukDdwZt_eoKsJH5LcT7tdX16FPSCZLZMY7qtenmT_y0/exec";
-
-    async function consultarPedido() {
-      const pedidoID = document.getElementById("pedidoID").value.trim();
-      if (!pedidoID) return alert("Por favor, ingrese su código de pedido.");
-
-      try {
-        const response = await fetch(${scriptURL}?pedidoID=${pedidoID});
-        const data = await response.json();
-
-        if (data.error) {
-          alert("❌ Pedido no encontrado. Verifique el código e intente nuevamente.");
-          return;
-        }
-
-        document.getElementById("resultado").style.display = "block";
-        document.getElementById("cliente").textContent = data.cliente;
-        document.getElementById("producto").textContent = data.producto;
-        document.getElementById("cantidad").textContent = data.cantidad;
-        document.getElementById("estado").textContent = data.estado;
-        document.getElementById("pdfLink").href = data.link;
-      } catch (err) {
-        alert("Error al consultar el pedido. Intente nuevamente.");
-        console.error(err);
-      }
+<script>
+  const webApp = "https://script.google.com/macros/s/AKfycbxCfLo3-45HrYp8S4qpQSdwvCQW4Q6Uzg_Q_du64qu5GJ-F9ijny1hLd3Llwmda_zkXSQ/exec";
+  async function buscar(){
+    const q = document.getElementById('idPedido').value.trim();
+    if(!q) return alert('Ingresa ID o DNI');
+    const isId = q.startsWith('P');
+    const url = `${webApp}?action=trackOrder&${isId? 'idPedido=' + encodeURIComponent(q) : 'dni=' + encodeURIComponent(q)}`;
+    try {
+      const r = await fetch(url);
+      const html = await r.text();
+      // doGet returns an HTML page rendered by Apps Script — abrir en nueva pestaña es mejor:
+      // Abrir la página servida por el WebApp (seguimiento)
+      window.open(url, '_blank');
+    } catch (err) {
+      document.getElementById('resultado').style.display = 'block';
+      document.getElementById('resultado').textContent = 'Error al consultar. Intenta de nuevo.';
+      console.error(err);
     }
-  </script>
+  }
+</script>
 </body>
 </html>
