@@ -1,47 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Seguimiento de Pedido - Miski Chukulati</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-    body{font-family:"Poppins",Arial,sans-serif;background:#f8f3ef;color:#3e2723;padding:24px}
-    .container{max-width:700px;margin:20px auto;background:#fff;padding:22px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.06)}
-    h2{text-align:center;color:#4e342e}
-    input{width:100%;padding:10px;border-radius:8px;border:1px solid #e0d7d3}
-    button{margin-top:12px;padding:10px;width:100%;background:#6b3e26;color:#fff;border:none;border-radius:8px;cursor:pointer}
-    .result{margin-top:16px;padding:12px;background:#faf6f2;border-radius:8px}
-    a.btn{display:inline-block;padding:10px 14px;background:#6b3e26;color:#fff;border-radius:8px;text-decoration:none;margin-top:10px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Seguimiento de Pedido | Miski Chukulati</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Poppins',sans-serif;background:#fff8f0;color:#5c4033;margin:0;}
+.container{max-width:700px;margin:60px auto;background:#fff;padding:30px 40px;border-radius:12px;box-shadow:0 0 15px rgba(92,64,51,0.1);}
+h1{text-align:center;color:#5c4033;}
+input{width:70%;padding:10px;border:1px solid #d4c5b2;border-radius:6px;}
+button{background:#c7a86d;color:#5c4033;border:none;padding:10px 20px;border-radius:30px;cursor:pointer;margin-left:10px;}
+button:hover{transform:scale(1.05);}
+.result{margin-top:25px;}
+a.pdf{display:inline-block;margin-top:15px;padding:10px 20px;background:#5c4033;color:#fff;border-radius:6px;text-decoration:none;}
+footer{text-align:center;margin-top:40px;font-size:.9rem;}
+</style>
 </head>
 <body>
-  <div class="container">
-    <h2>Seguimiento de Pedido</h2>
-    <label for="idPedido">ID de pedido (Ej: P20251005123045) o DNI:</label>
-    <input id="idPedido" placeholder="Ingresa ID o DNI">
-    <button onclick="buscar()">Buscar pedido</button>
-    <div id="resultado" class="result" style="display:none"></div>
-  </div>
+<div class="container">
+  <h1>Seguimiento de Pedido</h1>
+  <p>Ingresa tu ID de pedido o DNI para consultar el estado y descargar tu comprobante.</p>
+  <input id="codigo" placeholder="Ejemplo: P20251006123456 o 12345678">
+  <button onclick="buscar()">Buscar</button>
+  <div class="result" id="result"></div>
+</div>
+<footer>
+  <p><strong>Números 6:24</strong> “Jehová te bendiga y te guarde”</p>
+</footer>
 
 <script>
-  const webApp = "https://script.google.com/macros/s/AKfycbxCfLo3-45HrYp8S4qpQSdwvCQW4Q6Uzg_Q_du64qu5GJ-F9ijny1hLd3Llwmda_zkXSQ/exec";
-  async function buscar(){
-    const q = document.getElementById('idPedido').value.trim();
-    if(!q) return alert('Ingresa ID o DNI');
-    const isId = q.startsWith('P');
-    const url = `${webApp}?action=trackOrder&${isId? 'idPedido=' + encodeURIComponent(q) : 'dni=' + encodeURIComponent(q)}`;
-    try {
-      const r = await fetch(url);
-      const html = await r.text();
-      // doGet returns an HTML page rendered by Apps Script — abrir en nueva pestaña es mejor:
-      // Abrir la página servida por el WebApp (seguimiento)
-      window.open(url, '_blank');
-    } catch (err) {
-      document.getElementById('resultado').style.display = 'block';
-      document.getElementById('resultado').textContent = 'Error al consultar. Intenta de nuevo.';
-      console.error(err);
-    }
-  }
+const api="https://script.google.com/macros/s/AKfycbwCeQp2C4YJHqjZ8BS6Ke-99wQKdSj0vFCisJ5iYmn4RYKmRTkLKCA3FlKKFGcuzl78ww/exec";
+function buscar(){
+  const c=document.getElementById("codigo").value.trim();
+  if(!c){alert("Ingresa un ID o DNI");return;}
+  const url=`${api}?action=trackOrder&${c.startsWith('P')?'idPedido':'dni'}=${c}`;
+  fetch(url).then(r=>r.json()).then(d=>{
+    if(d.error){result.innerHTML=`<p style="color:red">${d.error}</p>`;return;}
+    result.innerHTML=`
+      <p><strong>Cliente:</strong> ${d.cliente}</p>
+      <p><strong>Producto:</strong> ${d.producto}</p>
+      <p><strong>Cantidad:</strong> ${d.cantidad}</p>
+      <p><strong>Estado:</strong> ${d.estado}</p>
+      ${d.link?`<a href="${d.link}" target="_blank" class="pdf">Descargar PDF</a>`:""}`;
+  }).catch(()=>result.innerHTML='<p style="color:red">Error de conexión</p>');
+}
 </script>
 </body>
 </html>
