@@ -1,127 +1,84 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Miski Chukulati 🍫</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, #3b2314, #5c3b1e, #7b4c22);
-      background-size: 400% 400%;
-      animation: backgroundShift 15s ease infinite;
-      color: #fff;
-      text-align: center;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    @keyframes backgroundShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .logo {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      box-shadow: 0 0 20px rgba(212,175,55,0.4);
-      opacity: 0;
-      transform: scale(0.8);
-      animation: fadeInLogo 2s ease forwards;
-    }
-
-    @keyframes fadeInLogo {
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    h1 {
-      font-size: 2.3rem;
-      margin-top: 25px;
-      color: #f7e7ce;
-      letter-spacing: 1px;
-      opacity: 0;
-      animation: fadeInText 2s ease 1s forwards;
-    }
-
-    p.slogan {
-      font-size: 1.2rem;
-      color: #e0c68b;
-      margin-bottom: 40px;
-      opacity: 0;
-      animation: fadeInText 2s ease 2s forwards;
-    }
-
-    @keyframes fadeInText {
-      to { opacity: 1; }
-    }
-
-    .order-btn {
-      display: inline-block;
-      background: linear-gradient(90deg, #a67c52, #d4af37, #a67c52);
-      background-size: 200% 100%;
-      color: #fff;
-      font-weight: 700;
-      font-size: 1.2rem;
-      padding: 14px 34px;
-      border: none;
-      border-radius: 40px;
-      text-decoration: none;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      animation: goldenGlow 6s linear infinite, fadeInText 2s ease 3s forwards;
-      opacity: 0;
-    }
-
-    .order-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.6);
-    }
-
-    @keyframes goldenGlow {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    footer {
-      position: absolute;
-      bottom: 15px;
-      font-size: 0.9rem;
-      color: #d2b48c;
-      opacity: 0.9;
-    }
-
-    footer span {
-      font-style: italic;
-      color: #f4d67b;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miski Chukulati 🍫 | Inicio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cacao:#5c4033;
+  --dorado:#c7a86d;
+  --crema:#fff8f0;
+}
+body {
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:var(--crema);
+  color:var(--cacao);
+}
+header {
+  text-align:center;
+  padding:60px 20px 40px;
+}
+header img {
+  width:150px;
+  border-radius:50%;
+  animation:fadeIn 2s ease;
+}
+h1 {
+  font-family:'Playfair Display',serif;
+  font-size:2.5rem;
+  margin-top:15px;
+  color:var(--cacao);
+}
+p.slogan {
+  font-style:italic;
+  color:var(--dorado);
+  font-size:1.1rem;
+}
+button.pedido {
+  background:linear-gradient(90deg,var(--dorado),#e5c99c);
+  color:var(--cacao);
+  border:none;
+  padding:15px 40px;
+  font-size:1.2rem;
+  border-radius:30px;
+  cursor:pointer;
+  transition:transform .3s,box-shadow .3s;
+}
+button.pedido:hover {
+  transform:scale(1.05);
+  box-shadow:0 0 15px rgba(199,168,109,0.6);
+}
+footer {
+  text-align:center;
+  padding:40px 20px;
+  margin-top:80px;
+  border-top:1px solid #e5d6c6;
+  background:var(--crema);
+}
+footer p {
+  margin:5px 0;
+  font-size:.9rem;
+}
+@keyframes fadeIn {
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+</style>
 </head>
 <body>
-  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Miski Chukulati Logo" class="logo">
+<header>
+  <img src="logo.png" alt="Logo Miski Chukulati">
   <h1>Miski Chukulati</h1>
-  <p class="slogan">El sabor que une a la familia 🍫</p>
+  <p class="slogan">“El sabor que une a la familia”</p>
+  <button class="pedido" onclick="window.open('pedidos.html','_blank')">Pídelo aquí 🍫</button>
+</header>
 
-  <a href="https://script.google.com/macros/s/AKfycbxCfLo3-45HrYp8S4qpQSdwvCQW4Q6Uzg_Q_du64qu5GJ-F9ijny1hLd3Llwmda_zkXSQ/exec" 
-     target="_blank"
-     class="order-btn">
-     ¡Pídelo aquí!
-  </a>
-
-  <footer>
-    <span>Dios bendiga y prospere tu camino y el de tu familia</span><br>
-    © Miski Chukulati - 2025
-  </footer>
+<footer>
+  <p><strong>Números 6:24</strong> “Jehová te bendiga y te guarde”</p>
+  <p>Síguenos en Instagram y TikTok @Miski.Chukulati</p>
+</footer>
 </body>
 </html>
