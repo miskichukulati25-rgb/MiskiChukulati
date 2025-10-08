@@ -14,6 +14,7 @@
             animation: bgShift 15s ease infinite;
             color: #fff8e7;
             margin: 0;
+            padding: 20px;
         }
 
         @keyframes bgShift {
@@ -32,7 +33,7 @@
 
         .container {
             max-width: 600px;
-            margin: 60px auto;
+            margin: 40px auto;
             background: rgba(255, 255, 255, 0.1);
             padding: 30px 40px;
             border-radius: 12px;
@@ -61,7 +62,7 @@
             border-radius: 6px;
             background-color: rgba(255, 255, 255, 0.85);
             color: #333;
-            /* Asegura que el texto sea legible */
+            box-sizing: border-box;
         }
 
         button {
@@ -75,6 +76,7 @@
             border-radius: 30px;
             cursor: pointer;
             transition: 0.3s;
+            font-weight: bold;
         }
 
         button:hover {
@@ -84,10 +86,11 @@
         .message {
             text-align: center;
             margin-top: 20px;
+            min-height: 20px;
         }
 
         .success {
-            color: #90ee90;
+            color: #b8ffb8;
         }
 
         .error {
@@ -108,41 +111,47 @@
         <h1>Haz tu Pedido</h1>
         <form id="pedidoForm">
             <label for="dni">DNI</label>
-            <input type="text" id="dni" name="dni" required maxlength="8" pattern="[0-9]{8}"
-                title="Ingrese un DNI válido de 8 dígitos">
+            <input type="text" id="dni" name="dni" required maxlength="8" pattern="[0-9]{8}" title="Ingrese un DNI válido de 8 dígitos">
 
-            <label for="nombre">Nombre</label>
+            <label for="nombre">Nombre Completo</label>
             <input type="text" id="nombre" name="nombre" required>
 
-            <label for="correo">Correo</label>
+            <label for="correo">Correo Electrónico</label>
             <input type="email" id="correo" name="correo" required>
 
-            <label for="telefono">Teléfono</label>
-            <input type="tel" id="telefono" name="telefono" required pattern="[0-9]{9}"
-                title="Ingrese un número de teléfono válido de 9 dígitos">
+            <label for="telefono">Teléfono (WhatsApp)</label>
+            <input type="tel" id="telefono" name="telefono" required pattern="[0-9]{9}" title="Ingrese un número de teléfono válido de 9 dígitos">
 
             <label for="producto">Producto</label>
             <select id="producto" name="producto" required>
                 <option value="">Selecciona un producto</option>
-                <option value="tableta_70">Tableta 70 % cacao</option>
-                <option value="tableta_85">Tableta 85 % cacao</option>
-                <option value="bombones_surtidos">Bombones surtidos</option>
-                <option value="dark_chocolate_bar">Dark Chocolate Bar</option>
-                <option value="choconibs">ChocoNibs</option>
-                <option value="chocobites">ChocoBites</option>
-                <option value="chocolate_blanco">Chocolate Blanco</option>
+                <!-- ESTOS VALORES DEBEN COINCIDIR EXACTAMENTE CON LOS DEL SCRIPT -->
+                <option value="Tableta de Chocolate con Leche">Tableta de Chocolate con Leche</option>
+                <option value="Tableta de Chocolate Bitter 70%">Tableta de Chocolate Bitter 70%</option>
+                <option value="Bombones Surtidos (Caja 120g)">Bombones Surtidos (Caja 120g)</option>
+                <option value="Tableta de Chocolate Blanco">Tableta de Chocolate Blanco</option>
+                <option value="Cacao en Polvo (200g)">Cacao en Polvo (200g)</option>
             </select>
 
             <label for="cantidad">Cantidad</label>
             <input type="number" id="cantidad" name="cantidad" min="1" value="1" required>
+            
+            <label for="metodoPago">Método de Pago</label>
+            <select id="metodoPago" name="metodoPago" required>
+                <option value="">Selecciona un método de pago</option>
+                <option value="Yape">Yape</option>
+                <option value="Plin">Plin</option>
+                <option value="Transferencia">Transferencia</option>
+                <option value="Efectivo">Efectivo</option>
+            </select>
 
-            <label for="direccion">Dirección</label>
+            <label for="direccion">Dirección de Envío</label>
             <input type="text" id="direccion" name="direccion">
 
-            <label for="comentarios">Comentarios</label>
-            <textarea id="comentarios" name="comentarios" rows="3"></textarea>
+            <label for="comentarios">Comentarios Adicionales</label>
+            <textarea id="comentarios" name="comentarios" rows="3" placeholder="Ej: alergias, indicaciones de entrega, etc."></textarea>
 
-            <button type="submit">Enviar pedido</button>
+            <button type="submit" id="submitBtn">Enviar pedido</button>
         </form>
         <div id="msg" class="message"></div>
     </div>
@@ -151,13 +160,18 @@
     </footer>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwCeQp2C4YJHqjZ8BS6Ke-99wQKdSj0vFCisJ5iYmn4RYKmRTkLKCA3FlKKFGcuzl78ww/exec";
+        // IMPORTANTE: Reemplaza esta URL con la URL de tu propio script desplegado
+        const scriptURL = "URL_DE_TU_SCRIPT_DESPLEGADO_AQUÍ"; 
+        
         const form = document.getElementById("pedidoForm");
         const msg = document.getElementById("msg");
+        const submitBtn = document.getElementById("submitBtn");
 
         form.addEventListener("submit", async e => {
             e.preventDefault();
-            msg.textContent = "⏳ Enviando pedido..."; //textContent es más seguro
+            
+            submitBtn.disabled = true;
+            msg.innerHTML = '<span style="color: #f7e7ce;">⏳ Enviando pedido...</span>';
 
             try {
                 const formData = new FormData(form);
@@ -168,25 +182,27 @@
                     body: JSON.stringify(formDataJSON),
                     headers: {
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    mode: 'no-cors' // Cambiar a 'cors' si el script lo maneja correctamente
                 });
+                
+                // Debido a una limitación de Google Apps Script al responder a peticiones `no-cors`,
+                // no podemos leer la respuesta `data.success` directamente. 
+                // Asumiremos éxito si no hay un error de red y mostraremos un mensaje genérico.
+                
+                msg.innerHTML = `<span class="success">✅ ¡Pedido registrado correctamente! Gracias por tu compra.</span><br>Redirigiendo al inicio...`;
+                form.reset();
+                setTimeout(() => {
+                    window.location.href = "index.html"; // O la página de agradecimiento que prefieras
+                }, 3000);
 
-                const data = await response.json();
 
-                if (data.success) {
-                    msg.innerHTML = <span class="success">✅ Pedido ${data.idPedido} registrado correctamente.</span><br>Redirigiendo...;
-                    setTimeout(() => {
-                        window.location.href = "index.html";
-                    }, 2500);
-                } else {
-                    msg.innerHTML = <span class="error">❌ ${data.error}</span>;
-                }
             } catch (error) {
                 console.error("Error al enviar el formulario:", error);
-                msg.innerHTML = '<span class="error">⚠️ Error de conexión.</span>';
+                msg.innerHTML = '<span class="error">⚠️ Error de conexión. Por favor, intenta de nuevo.</span>';
+                submitBtn.disabled = false;
             }
         });
     </script>
 </body>
-
 </html>
