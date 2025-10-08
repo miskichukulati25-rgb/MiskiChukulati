@@ -21,13 +21,11 @@
       align-items: center;
       overflow: hidden;
     }
-
     @keyframes backgroundShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
     .logo {
       width: 160px;
       height: 160px;
@@ -37,35 +35,25 @@
       transform: scale(0.8);
       animation: fadeInLogo 2s ease forwards;
     }
-
     @keyframes fadeInLogo {
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+      to { opacity: 1; transform: scale(1); }
     }
-
     h1 {
-      font-size: 2.4rem;
+      font-size: 2.3rem;
       margin-top: 25px;
       color: #f7e7ce;
       letter-spacing: 1px;
       opacity: 0;
       animation: fadeInText 2s ease 1s forwards;
     }
-
     p.slogan {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       color: #e0c68b;
       margin-bottom: 40px;
       opacity: 0;
       animation: fadeInText 2s ease 2s forwards;
     }
-
-    @keyframes fadeInText {
-      to { opacity: 1; }
-    }
-
+    @keyframes fadeInText { to { opacity: 1; } }
     .order-btn {
       display: inline-block;
       background: linear-gradient(90deg, #a67c52, #d4af37, #a67c52);
@@ -83,44 +71,21 @@
       animation: goldenGlow 6s linear infinite, fadeInText 2s ease 3s forwards;
       opacity: 0;
     }
-
     .order-btn:hover {
       transform: scale(1.05);
       box-shadow: 0 6px 18px rgba(212, 175, 55, 0.6);
     }
-
     @keyframes goldenGlow {
       0% { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
-
-    .secondary-btn {
-      display: inline-block;
-      margin-top: 18px;
-      padding: 12px 30px;
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid #d4af37;
-      color: #f8e7b8;
-      border-radius: 30px;
-      text-decoration: none;
-      transition: 0.3s ease;
-      font-weight: 600;
-    }
-    .secondary-btn:hover {
-      background: rgba(212,175,55,0.2);
-      transform: scale(1.05);
-    }
-
     footer {
       position: absolute;
       bottom: 15px;
       font-size: 0.9rem;
       color: #d2b48c;
       opacity: 0.9;
-      text-align: center;
-      width: 100%;
     }
-
     footer span {
       font-style: italic;
       color: #f4d67b;
@@ -128,16 +93,12 @@
   </style>
 </head>
 <body>
-  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Miski Chukulati Logo" class="logo">
-
+  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" 
+       alt="Miski Chukulati Logo" class="logo">
   <h1>Miski Chukulati</h1>
   <p class="slogan">El sabor que une a la familia 🍫</p>
 
-  <!-- Botón principal: dirige al formulario de pedidos -->
   <a href="pedidos.html" class="order-btn">¡Pídelo aquí!</a>
-
-  <!-- Botón secundario: seguimiento de pedidos -->
-  <a href="tracking.html" class="secondary-btn">🔍 Ver estado de pedido</a>
 
   <footer>
     <span>“Jehová te bendiga, y te guarde” – Números 6:24</span><br>
