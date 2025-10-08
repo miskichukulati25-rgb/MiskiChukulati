@@ -1,0 +1,174 @@
+/* MISKI CHUKULATI - Código.gs v4 (Seguimiento en Vivo con Couriers Propios)
+   Copia y pega TODO este archivo para reemplazar el anterior.
+*/
+
+// --- CONFIGURACIÓN ---
+const SPREADSHEET_ID = "1KK-qOTQWIDRVo_vfXmiCi5ee7cPFhoGmLf3zYy8bfUw";
+
+// =========================
+// onOpen: Crea un menú personalizado en la interfaz de Google Sheets.
+// =========================
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('⚙️ Miski Chukulati')
+    .addItem('Asignar Courier y Generar Link de Seguimiento', 'asignarCourierYGenerarLink')
+    .addToUi();
+}
+
+// =========================
+// NUEVA FUNCIÓN AUTOMÁTICA: Asigna el link del courier al pedido seleccionado.
+// =========================
+function asignarCourierYGenerarLink() {
+  const ui = SpreadsheetApp.getUi();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const pedidosSheet = ss.getSheetByName("Pedidos");
+  const couriersSheet = ss.getSheetByName("Couriers");
+  const activeCell = pedidosSheet.getActiveCell();
+  
+  // Validar que se esté en la hoja correcta y haya una fila seleccionada
+  if (activeCell.getSheet().getName() !== "Pedidos" || activeCell.getRow() < 2) {
+    ui.alert("Por favor, selecciona una celda en la fila del pedido al que deseas asignar un courier.");
+    return;
+  }
+  
+  const currentRow = activeCell.getRow();
+  const headers = pedidosSheet.getRange(1, 1, 1, pedidosSheet.getLastColumn()).getValues()[0];
+  const encargadoCol = headers.indexOf("Encargado de Envío") + 1;
+  const estadoCol = headers.indexOf("Estado") + 1;
+  const linkCourierCol = headers.indexOf("Link Courier") + 1;
+
+  if (encargadoCol === 0 || estadoCol === 0 || linkCourierCol === 0) {
+      ui.alert("Error: No se encontraron las columnas 'Encargado de Envío', 'Estado' o 'Link Courier'.");
+      return;
+  }
+
+  const courierName = pedidosSheet.getRange(currentRow, encargadoCol).getValue();
+  if (!courierName) {
+    ui.alert("Primero, selecciona un courier del menú desplegable en la columna 'Encargado de Envío'.");
+    return;
+  }
+
+  // Buscar el link del courier en la hoja "Couriers"
+  const couriersData = couriersSheet.getRange(2, 1, couriersSheet.getLastRow() - 1, 2).getValues();
+  let courierLink = "";
+  for (let i = 0; i < couriersData.length; i++) {
+    if (couriersData[i][0] === courierName) {
+      courierLink = couriersData[i][1];
+      break;
+    }
+  }
+
+  if (courierLink) {
+    // Actualizar la hoja de Pedidos
+    pedidosSheet.getRange(currentRow, estadoCol).setValue("Enviado");
+    pedidosSheet.getRange(currentRow, linkCourierCol).setValue(courierLink);
+    ui.alert(`¡Éxito! El pedido ha sido marcado como "Enviado" y el link de seguimiento de ${courierName} ha sido asignado.`);
+  } else {
+    ui.alert(`Error: No se encontró un link de seguimiento para "${courierName}" en la hoja 'Couriers'.`);
+  }
+}
+
+
+// =========================
+// doPost y doGet (El resto del código sigue siendo el mismo)
+// =========================
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    if (!data || !data.nombre || !data.dni || !data.producto || !data.metodoPago) {
+      return ContentService.createTextOutput(JSON.stringify({ success: false, error: "Faltan datos obligatorios."})).setMimeType(ContentService.MimeType.JSON);
+    }
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    let sheet = ss.getSheetByName("Pedidos");
+    if (!sheet) {
+      sheet = ss.insertSheet("Pedidos");
+      const headers = [
+        "Tracking", "Fecha y Hora", "DNI", "Nombre Completo", "Producto", "Cantidad", 
+        "Precio Unitario", "Total", "Método de Pago", "Encargado de Envío", "Estado", 
+        "Calificación", "Teléfono", "Correo", "Dirección", "Comentarios", 
+        "Link PDF", "WhatsApp Link", "Link Courier"
+      ];
+      sheet.appendRow(headers);
+      sheet.getRange("A1:S1").setFontWeight("bold");
+    }
+    const trackingID = generarTrackingID(sheet);
+    const fila = [
+      trackingID, new Date(), data.dni, data.nombre, data.producto, 
+      Number(data.cantidad || 1), getPrecioUnitario(data.producto), 
+      (getPrecioUnitario(data.producto) * Number(data.cantidad || 1)).toFixed(2), 
+      data.metodoPago, "", "Recibido", "", data.telefono || "", data.correo || "", 
+      data.direccion || "", data.comentarios || "", "", "", ""
+    ];
+    sheet.appendRow(fila);
+    return ContentService.createTextOutput(JSON.stringify({ success: true, trackingID: trackingID })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ success: false, error: err.message })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  try {
+    if (e && e.parameter && e.parameter.action === "trackOrder") {
+      const dni = e.parameter.dni;
+      if (!dni) throw new Error("El DNI es obligatorio.");
+      const order = getOrderDataByDNI(dni);
+      if (order) {
+        const clientData = {
+          trackingID: order["Tracking"],
+          fecha: Utilities.formatDate(new Date(order["Fecha y Hora"]), Session.getScriptTimeZone(), "dd/MM/yyyy"),
+          producto: order["Producto"],
+          estado: order["Estado"],
+          encargado: order["Encargado de Envío"],
+          linkCourier: order["Link Courier"]
+        };
+        return ContentService.createTextOutput(JSON.stringify({ success: true, order: clientData })).setMimeType(ContentService.MimeType.JSON);
+      } else {
+        return ContentService.createTextOutput(JSON.stringify({ success: false, error: "No se encontraron pedidos recientes con ese DNI." })).setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+    return ContentService.createTextOutput(JSON.stringify({ success: true, message: "Miski Chukulati Apps Script activo" })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ success: false, error: err.message })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function getOrderDataByDNI(dni) {
+  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName("Pedidos");
+  if (!sheet) return null;
+  const values = sheet.getDataRange().getValues();
+  const headers = values[0];
+  const headerMap = headers.reduce((obj, header, i) => { obj[header.trim()] = i; return obj; }, {});
+  const dniColumnIndex = headerMap["DNI"];
+  if (dniColumnIndex === undefined) return null;
+  for (let i = values.length - 1; i > 0; i--) {
+    const row = values[i];
+    if (String(row[dniColumnIndex]).trim() === String(dni).trim()) {
+      let orderData = {};
+      for (const header in headerMap) { orderData[header] = row[headerMap[header]]; }
+      return orderData;
+    }
+  }
+  return null;
+}
+
+function generarTrackingID(sheet) {
+  const year = new Date().getFullYear();
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return `MSK-${year}-001`;
+  const lastTracking = sheet.getRange(lastRow, 1).getValue();
+  const lastNum = parseInt(lastTracking.split('-')[2], 10);
+  const newNum = ("000" + (lastNum + 1)).slice(-3);
+  return `MSK-${year}-${newNum}`;
+}
+
+function getPrecioUnitario(nombreProducto) {
+  const precios = {
+    "Tableta de Chocolate con Leche": 9.00,
+    "Tableta de Chocolate Bitter 70%": 11.00,
+    "Bombones Surtidos (Caja 120g)": 20.00,
+    "Tableta de Chocolate Blanco": 10.00,
+    "Cacao en Polvo (200g)": 20.00
+  };
+  return precios[nombreProducto] || 0;
+}
