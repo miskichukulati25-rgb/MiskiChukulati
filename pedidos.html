@@ -80,25 +80,27 @@ footer{text-align:center;margin-top:40px;font-size:.9rem;color:#e0c68b;}
 
 <script>
 const scriptURL = "https://script.google.com/macros/s/AKfycbwCeQp2C4YJHqjZ8BS6Ke-99wQKdSj0vFCisJ5iYmn4RYKmRTkLKCA3FlKKFGcuzl78ww/exec";
-const form=document.getElementById("pedidoForm");
-const msg=document.getElementById("msg");
+const form = document.getElementById("pedidoForm");
+const msg = document.getElementById("msg");
 
-form.addEventListener("submit",e=>{
+form.addEventListener("submit", e => {
   e.preventDefault();
-  msg.innerHTML="⏳ Enviando pedido...";
-  fetch(scriptURL,{
-    method:"POST",
-    body:JSON.stringify(Object.fromEntries(new FormData(form))),
-    headers:{'Content-Type':'application/json'}
+  msg.innerHTML = "⏳ Enviando pedido...";
+  fetch(scriptURL, {
+    method: "POST",
+    body: JSON.stringify(Object.fromEntries(new FormData(form))),
+    headers: { 'Content-Type': 'application/json' }
   })
-  .then(r=>r.json())
-  .then(d=>{
-    if(d.success){
-      msg.innerHTML=<span class="success">✅ Pedido ${d.idPedido} registrado correctamente.</span><br>Redirigiendo...;
-      setTimeout(()=>{window.location.href="index.html";},2500);
-    }else msg.innerHTML=<span class="error">❌ ${d.error}</span>;
+  .then(r => r.json())
+  .then(d => {
+    if (d.success) {
+      msg.innerHTML = <span class="success">✅ Pedido ${d.idPedido} registrado correctamente.</span><br>Redirigiendo...;
+      setTimeout(() => { window.location.href = "index.html"; }, 2500);
+    } else {
+      msg.innerHTML = <span class="error">❌ ${d.error}</span>;
+    }
   })
-  .catch(()=>msg.innerHTML='<span class="error">⚠️ Error de conexión.</span>');
+  .catch(() => msg.innerHTML = '<span class="error">⚠️ Error de conexión.</span>');
 });
 </script>
 </body>
