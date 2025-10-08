@@ -160,7 +160,7 @@
     </footer>
 
     <script>
-        // ¡TU URL YA ESTÁ AQUÍ!
+        // TU URL CORRECTA (La que me compartiste)
         const scriptURL = "https://script.google.com/macros/s/AKfycbxbEcTySgoCEUD-pGOEuC0sUEmSRYs8jZJ6kbfXInclCOTAPnKavMj2NOvL-Et0ROTF/exec"; 
         
         const form = document.getElementById("pedidoForm");
@@ -168,7 +168,7 @@
         const submitBtn = document.getElementById("submitBtn");
 
         form.addEventListener("submit", e => {
-            e.preventDefault();
+            e.preventDefault(); // Evita que la página se recargue
             
             submitBtn.disabled = true;
             msg.innerHTML = '<span style="color: #f7e7ce;">⏳ Enviando pedido...</span>';
@@ -179,11 +179,15 @@
             fetch(scriptURL, {
                 method: 'POST',
                 body: JSON.stringify(data),
+                // ⚠️ ESTA ES LA CLAVE: 'no-cors' permite enviar datos a Google sin bloqueo
+                mode: 'no-cors',
                 headers: {
                   'Content-Type': 'application/json'
                 }
             })
-            .then(response => {
+            .then(() => {
+                // Con 'no-cors' no podemos saber si hubo un error del lado de Google.
+                // Asumimos que si no hubo error de red, todo salió bien.
                 msg.innerHTML = `<span class="success">✅ ¡Pedido registrado correctamente! Gracias por tu compra.</span><br>Redirigiendo...`;
                 form.reset();
                 setTimeout(() => {
@@ -191,8 +195,9 @@
                 }, 3000);
             })
             .catch(error => {
-                console.error("Error al enviar el formulario:", error);
-                msg.innerHTML = '<span class="error">⚠️ Error de conexión. Por favor, revisa tu internet e intenta de nuevo.</span>';
+                // Esto solo se activa si tu internet está caído o Google está caído.
+                console.error("Error de red:", error);
+                msg.innerHTML = '<span class="error">⚠️ No se pudo conectar con el servidor. Revisa tu internet e intenta de nuevo.</span>';
                 submitBtn.disabled = false;
             });
         });
