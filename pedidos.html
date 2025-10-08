@@ -8,40 +8,44 @@
 <style>
 body {
   font-family:'Poppins',sans-serif;
-  background: linear-gradient(135deg, #3b2314, #5c3b1e, #7b4c22);
-  color:#fff8f0;
+  background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);
+  background-size:400% 400%;
+  animation:bgShift 15s ease infinite;
+  color:#fff8e7;
   margin:0;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
+}
+@keyframes bgShift {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 .container {
   max-width:600px;
-  background:#fff8f0;
-  color:#5c4033;
+  margin:60px auto;
+  background:rgba(255,255,255,0.1);
   padding:30px 40px;
   border-radius:12px;
-  box-shadow:0 0 15px rgba(255,255,255,0.2);
+  box-shadow:0 0 15px rgba(255,255,255,0.15);
+  backdrop-filter:blur(6px);
 }
-h1 {text-align:center;color:#5c4033;margin-bottom:15px;}
-label {font-weight:500;display:block;margin-top:15px;}
-input,select,textarea {
+h1{text-align:center;color:#f7e7ce;}
+label{font-weight:500;display:block;margin-top:15px;}
+input,select,textarea{
   width:100%;padding:10px;margin-top:5px;
   border:1px solid #d4c5b2;border-radius:6px;
+  background-color:rgba(255,255,255,0.85);
 }
-button {
+button{
   margin-top:25px;width:100%;
   background:linear-gradient(90deg,#c7a86d,#e5c99c);
-  color:#5c4033;border:none;padding:12px;font-size:1.1rem;
+  color:#3b2314;border:none;padding:12px;font-size:1.1rem;
   border-radius:30px;cursor:pointer;transition:0.3s;
 }
-button:hover {transform:scale(1.05);}
+button:hover{transform:scale(1.05);}
 .message{text-align:center;margin-top:20px;}
-.success{color:green;} 
-.error{color:red;}
-footer{text-align:center;margin-top:40px;font-size:.9rem;color:#f0d4b2;}
+.success{color:#90ee90;}
+.error{color:#ffcccc;}
+footer{text-align:center;margin-top:40px;font-size:.9rem;color:#e0c68b;}
 </style>
 </head>
 <body>
@@ -75,39 +79,26 @@ footer{text-align:center;margin-top:40px;font-size:.9rem;color:#f0d4b2;}
 </footer>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbwCeQp2C4YJHqjZ8BS6Ke-99wQKdSj0vFCisJ5iYmn4RYKmRTkLKCA3FlKKFGcuzl78ww/exec";
-const form = document.getElementById("pedidoForm");
-const msg = document.getElementById("msg");
+const scriptURL="https://script.google.com/macros/s/AKfycbxIa44ZUfWNSpPStGYbYxLQvzLP9vrpnlaFFV9RUHJI828Y8ZzwaN-d6fAPHpG24TN4/exec";
+const form=document.getElementById("pedidoForm");
+const msg=document.getElementById("msg");
 
-form.addEventListener("submit", e => {
+form.addEventListener("submit",e=>{
   e.preventDefault();
-  msg.textContent = "Enviando...";
-  fetch(scriptURL, {
-    method: "POST",
-    body: JSON.stringify(Object.fromEntries(new FormData(form))),
-    headers: { 'Content-Type': 'application/json' }
+  msg.innerHTML="⏳ Enviando pedido...";
+  fetch(scriptURL,{
+    method:"POST",
+    body:JSON.stringify(Object.fromEntries(new FormData(form))),
+    headers:{'Content-Type':'application/json'}
   })
-  .then(r => r.json())
-  .then(d => {
-    if (d.success) {
-      msg.innerHTML = `
-        <span class="success">✅ Pedido ${d.idPedido} registrado.</span><br>
-        Revisa tu correo para el comprobante.<br>
-        Serás redirigido a la página principal...`;
-      form.reset();
-
-      // 🔁 Redirigir automáticamente al index luego de 5 segundos
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 5000);
-
-    } else {
-      msg.innerHTML = <span class="error">❌ ${d.error}</span>;
-    }
+  .then(r=>r.json())
+  .then(d=>{
+    if(d.success){
+      msg.innerHTML=<span class="success">✅ Pedido ${d.idPedido} registrado correctamente.</span><br>Redirigiendo...;
+      setTimeout(()=>{window.location.href="index.html";},2500);
+    }else msg.innerHTML=<span class="error">❌ ${d.error}</span>;
   })
-  .catch(() => {
-    msg.innerHTML = '<span class="error">Error de conexión.</span>';
-  });
+  .catch(()=>msg.innerHTML='<span class="error">⚠️ Error de conexión.</span>');
 });
 </script>
 </body>
