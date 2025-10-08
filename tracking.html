@@ -2,28 +2,71 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Seguimiento de Pedido | Miski Chukulati</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 <style>
-body{font-family:'Poppins',sans-serif;background:#fff8f0;color:#5c4033;margin:0;}
-.container{max-width:700px;margin:60px auto;background:#fff;padding:30px 40px;border-radius:12px;box-shadow:0 0 15px rgba(92,64,51,0.1);}
-h1{text-align:center;color:#5c4033;}
-input{width:70%;padding:10px;border:1px solid #d4c5b2;border-radius:6px;}
-button{background:#c7a86d;color:#5c4033;border:none;padding:10px 20px;border-radius:30px;cursor:pointer;margin-left:10px;}
-button:hover{transform:scale(1.05);}
-.result{margin-top:25px;}
-a.pdf{display:inline-block;margin-top:15px;padding:10px 20px;background:#5c4033;color:#fff;border-radius:6px;text-decoration:none;}
-footer{text-align:center;margin-top:40px;font-size:.9rem;}
+body {
+  font-family:'Poppins',sans-serif;
+  background:#fff8f0;
+  color:#5c4033;
+  margin:0;
+}
+.container {
+  max-width:600px;
+  margin:60px auto;
+  background:#fff;
+  padding:30px 40px;
+  border-radius:12px;
+  box-shadow:0 0 15px rgba(92,64,51,0.1);
+  text-align:center;
+}
+h1 {color:#5c4033;margin-bottom:20px;}
+input {
+  width:70%;
+  padding:10px;
+  border:1px solid #d4c5b2;
+  border-radius:6px;
+}
+button {
+  background:linear-gradient(90deg,#c7a86d,#e5c99c);
+  color:#5c4033;
+  border:none;
+  padding:10px 20px;
+  border-radius:30px;
+  cursor:pointer;
+  margin-left:10px;
+  transition:.3s;
+}
+button:hover {transform:scale(1.05);}
+.result {
+  text-align:left;
+  margin-top:25px;
+}
+a.pdf {
+  display:inline-block;
+  margin-top:15px;
+  padding:10px 20px;
+  background:#5c4033;
+  color:#fff;
+  border-radius:6px;
+  text-decoration:none;
+}
+footer {
+  text-align:center;
+  margin-top:40px;
+  font-size:.9rem;
+  color:#7b5b4a;
+}
 </style>
 </head>
 <body>
 <div class="container">
   <h1>Seguimiento de Pedido</h1>
-  <p>Ingresa tu ID de pedido o DNI para consultar el estado y descargar tu comprobante.</p>
+  <p>Ingresa tu <strong>ID de pedido</strong> o <strong>DNI</strong> para consultar el estado y descargar tu comprobante.</p>
   <input id="codigo" placeholder="Ejemplo: P20251006123456 o 12345678">
   <button onclick="buscar()">Buscar</button>
-  <div class="result" id="result"></div>
+  <div id="result" class="result"></div>
 </div>
 <footer>
   <p><strong>Números 6:24</strong> “Jehová te bendiga y te guarde”</p>
@@ -34,16 +77,24 @@ const api="https://script.google.com/macros/s/AKfycbwCeQp2C4YJHqjZ8BS6Ke-99wQKdS
 function buscar(){
   const c=document.getElementById("codigo").value.trim();
   if(!c){alert("Ingresa un ID o DNI");return;}
-  const url=`${api}?action=trackOrder&${c.startsWith('P')?'idPedido':'dni'}=${c}`;
-  fetch(url).then(r=>r.json()).then(d=>{
-    if(d.error){result.innerHTML=`<p style="color:red">${d.error}</p>`;return;}
+  const url=${api}?action=trackOrder&${c.startsWith('P')?'idPedido':'dni'}=${c};
+  const result=document.getElementById("result");
+  result.innerHTML="Buscando...";
+  fetch(url)
+  .then(r=>r.json())
+  .then(d=>{
+    if(d.error){
+      result.innerHTML=<p style="color:red">${d.error}</p>;
+      return;
+    }
     result.innerHTML=`
       <p><strong>Cliente:</strong> ${d.cliente}</p>
       <p><strong>Producto:</strong> ${d.producto}</p>
       <p><strong>Cantidad:</strong> ${d.cantidad}</p>
       <p><strong>Estado:</strong> ${d.estado}</p>
-      ${d.link?`<a href="${d.link}" target="_blank" class="pdf">Descargar PDF</a>`:""}`;
-  }).catch(()=>result.innerHTML='<p style="color:red">Error de conexión</p>');
+      ${d.link?<a href="${d.link}" target="_blank" class="pdf">Descargar PDF</a>:""}`;
+  })
+  .catch(()=>result.innerHTML='<p style="color:red">Error de conexión</p>');
 }
 </script>
 </body>
