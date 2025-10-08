@@ -160,48 +160,41 @@
     </footer>
 
     <script>
-        // IMPORTANTE: Reemplaza esta URL con la URL de tu propio script desplegado
-        const scriptURL = "URL_DE_TU_SCRIPT_DESPLEGADO_AQUÍ"; 
+        // ¡TU URL YA ESTÁ AQUÍ!
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxbEcTySgoCEUD-pGOEuC0sUEmSRYs8jZJ6kbfXInclCOTAPnKavMj2NOvL-Et0ROTF/exec"; 
         
         const form = document.getElementById("pedidoForm");
         const msg = document.getElementById("msg");
         const submitBtn = document.getElementById("submitBtn");
 
-        form.addEventListener("submit", async e => {
+        form.addEventListener("submit", e => {
             e.preventDefault();
             
             submitBtn.disabled = true;
             msg.innerHTML = '<span style="color: #f7e7ce;">⏳ Enviando pedido...</span>';
 
-            try {
-                const formData = new FormData(form);
-                const formDataJSON = Object.fromEntries(formData.entries());
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
 
-                const response = await fetch(scriptURL, {
-                    method: "POST",
-                    body: JSON.stringify(formDataJSON),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    mode: 'no-cors' // Cambiar a 'cors' si el script lo maneja correctamente
-                });
-                
-                // Debido a una limitación de Google Apps Script al responder a peticiones `no-cors`,
-                // no podemos leer la respuesta `data.success` directamente. 
-                // Asumiremos éxito si no hay un error de red y mostraremos un mensaje genérico.
-                
-                msg.innerHTML = `<span class="success">✅ ¡Pedido registrado correctamente! Gracias por tu compra.</span><br>Redirigiendo al inicio...`;
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                msg.innerHTML = `<span class="success">✅ ¡Pedido registrado correctamente! Gracias por tu compra.</span><br>Redirigiendo...`;
                 form.reset();
                 setTimeout(() => {
-                    window.location.href = "index.html"; // O la página de agradecimiento que prefieras
+                    window.location.href = "index.html";
                 }, 3000);
-
-
-            } catch (error) {
+            })
+            .catch(error => {
                 console.error("Error al enviar el formulario:", error);
-                msg.innerHTML = '<span class="error">⚠️ Error de conexión. Por favor, intenta de nuevo.</span>';
+                msg.innerHTML = '<span class="error">⚠️ Error de conexión. Por favor, revisa tu internet e intenta de nuevo.</span>';
                 submitBtn.disabled = false;
-            }
+            });
         });
     </script>
 </body>
