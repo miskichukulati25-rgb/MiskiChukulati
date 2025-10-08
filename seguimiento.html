@@ -14,6 +14,18 @@
             color: #fff8e7;
             margin: 0;
             padding: 20px;
+         .rating-link {
+    display: block;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #c7a86d;
+    color: #3b2314;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+.rating-link:hover { background-color: #e5c99c; }
         }
 
         @keyframes bgShift {
@@ -145,34 +157,39 @@
                 const response = await fetch(url);
                 const data = await response.json();
 
-                if (data.success) {
-                    const order = data.order;
-                    let estadoClass = '';
-                    switch(order.estado.toLowerCase()) {
-                        case 'recibido': estadoClass = 'status-recibido'; break;
-                        case 'en proceso': estadoClass = 'status-en-proceso'; break;
-                        case 'enviado': estadoClass = 'status-enviado'; break;
-                    }
+               if (data.success) {
+    const order = data.order;
+    let estadoClass = '';
+    switch(order.estado.toLowerCase()) {
+        case 'recibido': estadoClass = 'status-recibido'; break;
+        case 'en proceso': estadoClass = 'status-en-proceso'; break;
+        case 'entregado': estadoClass = 'status-enviado'; break;
+    }
 
-                    let courierLinkHTML = '';
-                    if (order.linkCourier) {
-                        courierLinkHTML = `<a href="${order.linkCourier}" target="_blank" class="tracking-link">Ver Ubicación del Courier</a>`;
-                    } else if (order.estado.toLowerCase() === 'enviado') {
-                         courierLinkHTML = `<p>El enlace de seguimiento se activará pronto.</p>`;
-                    }
+    let courierLinkHTML = '';
+    if (order.linkCourier) {
+        courierLinkHTML = `<a href="${order.linkCourier}" target="_blank" class="tracking-link">Ver Ubicación del Courier</a>`;
+    }
+    
+    // --- ¡LÓGICA AÑADIDA! ---
+    let ratingLinkHTML = '';
+    if (order.estado.toLowerCase() === 'entregado') {
+        // Este link lleva al cliente a la nueva página de calificación
+        ratingLinkHTML = `<a href="calificacion.html?trackingID=${order.trackingID}" class="rating-link">⭐ Calificar la Entrega</a>`;
+    }
 
-                    resultDiv.innerHTML = `
-                        <h3>Estado de tu Último Pedido</h3>
-                        <p><strong>Tracking ID:</strong> ${order.trackingID}</p>
-                        <p><strong>Producto:</strong> ${order.producto}</p>
-                        <p><strong>Estado:</strong> <span class="status-badge ${estadoClass}">${order.estado}</span></p>
-                        ${order.encargado ? `<p><strong>Courier:</strong> ${order.encargado}</p>` : ''}
-                        ${courierLinkHTML}
-                    `;
-                    resultDiv.style.display = 'block';
-                } else {
-                    msgDiv.innerHTML = `<span class="error">${data.error}</span>`;
-                }
+    resultDiv.innerHTML = `
+        <h3>Estado de tu Último Pedido</h3>
+        <p><strong>Tracking ID:</strong> ${order.trackingID}</p>
+        <p><strong>Estado:</strong> <span class="status-badge ${estadoClass}">${order.estado}</span></p>
+        ${order.encargado ? `<p><strong>Courier:</strong> ${order.encargado}</p>` : ''}
+        ${courierLinkHTML}
+        ${ratingLinkHTML} 
+    `; // <-- Se añade la variable del link de calificación
+    resultDiv.style.display = 'block';
+} else {
+    msgDiv.innerHTML = `<span class="error">${data.error}</span>`;
+}
 
             } catch (error) {
                 console.error('Error:', error);
@@ -185,3 +202,4 @@
     </script>
 </body>
 </html>
+
