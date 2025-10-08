@@ -6,73 +6,133 @@
 <title>Seguimiento de Pedido | Miski Chukulati</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 <style>
-body{
+body {
   font-family:'Poppins',sans-serif;
   background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);
   background-size:400% 400%;
   animation:bgShift 15s ease infinite;
   color:#fff8e7;
-  text-align:center;
   margin:0;
   padding:20px;
 }
-@keyframes bgShift{
+@keyframes bgShift {
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
-.container{
-  max-width:600px;margin:40px auto;background:rgba(255,255,255,0.1);
-  padding:30px 40px;border-radius:12px;box-shadow:0 0 15px rgba(255,255,255,0.15);
+.container {
+  max-width:650px;
+  margin:50px auto;
+  background:rgba(255,255,255,0.1);
+  padding:30px 40px;
+  border-radius:12px;
+  box-shadow:0 0 15px rgba(255,255,255,0.15);
   backdrop-filter:blur(6px);
 }
+h1{text-align:center;color:#f7e7ce;margin-bottom:25px;}
+label{font-weight:500;display:block;margin-top:10px;}
 input{
-  padding:10px;border-radius:6px;border:1px solid #d4c5b2;width:100%;margin-bottom:10px;
+  width:100%;padding:10px;margin-top:5px;
+  border:1px solid #d4c5b2;border-radius:6px;
+  background-color:rgba(255,255,255,0.85);
+  color:#333;
 }
 button{
+  margin-top:20px;width:100%;
   background:linear-gradient(90deg,#c7a86d,#e5c99c);
-  color:#3b2314;border:none;padding:12px 25px;font-size:1rem;border-radius:30px;cursor:pointer;
+  color:#3b2314;border:none;padding:12px;font-size:1.1rem;
+  border-radius:30px;cursor:pointer;transition:0.3s;
+  font-weight:bold;
 }
-.result{margin-top:20px;text-align:left;}
+button:hover{transform:scale(1.05);}
+.result{margin-top:25px;}
+.result table{width:100%;border-collapse:collapse;}
+.result td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.2);}
+.success{color:#b8ffb8;}
+.error{color:#ffcccc;text-align:center;}
+footer{text-align:center;margin-top:40px;font-size:.9rem;color:#e0c68b;}
+.loading {
+  text-align:center;
+  color:#f7e7ce;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0%{opacity:0.5;}
+  50%{opacity:1;}
+  100%{opacity:0.5;}
+}
 </style>
 </head>
 <body>
 <div class="container">
-<h1>🔍 Seguimiento de tu Pedido</h1>
-<p>Ingresa tu <strong>DNI</strong> o <strong>ID de pedido</strong>:</p>
-<input type="text" id="busqueda" placeholder="Ejemplo: P20251008123456 o 87654321">
-<button onclick="buscarPedido()">Consultar</button>
-<div id="resultado" class="result"></div>
+  <h1>Rastrea tu Pedido</h1>
+  <p style="text-align:center;color:#f7e7ce;">Ingresa tu <strong>ID de pedido</strong> o tu <strong>DNI</strong> para ver el estado de tu compra.</p>
+
+  <form id="trackForm">
+    <label for="idPedido">ID de Pedido</label>
+    <input type="text" id="idPedido" name="idPedido" placeholder="Ej: P20251008123045">
+
+    <label for="dni">DNI</label>
+    <input type="text" id="dni" name="dni" placeholder="8 dígitos">
+
+    <button type="submit">Consultar estado</button>
+  </form>
+
+  <div id="msg" class="message"></div>
+  <div id="result" class="result"></div>
 </div>
+
 <footer>
   <p><strong>Números 6:24</strong> “Jehová te bendiga y te guarde”</p>
 </footer>
 
 <script>
 const scriptURL = "https://script.google.com/macros/s/AKfycbwCeQp2C4YJHqjZ8BS6Ke-99wQKdSj0vFCisJ5iYmn4RYKmRTkLKCA3FlKKFGcuzl78ww/exec";
+const form = document.getElementById("trackForm");
+const msg = document.getElementById("msg");
+const result = document.getElementById("result");
 
-function buscarPedido(){
-  const val=document.getElementById("busqueda").value.trim();
-  if(!val){alert("Por favor ingresa un ID o DNI válido.");return;}
-  document.getElementById("resultado").innerHTML="⏳ Buscando...";
-  fetch(${scriptURL}?action=trackOrder&idPedido=${val}&dni=${val})
-  .then(r=>r.json())
-  .then(d=>{
-    if(d.success){
-      const o=d.order;
-      document.getElementById("resultado").innerHTML=`
-        <h3>📦 Pedido encontrado</h3>
-        <p><strong>ID:</strong> ${o.idPedido}<br>
-        <strong>Cliente:</strong> ${o.nombre}<br>
-        <strong>Producto:</strong> ${o.producto}<br>
-        <strong>Cantidad:</strong> ${o.cantidad}<br>
-        <strong>Estado:</strong> ${o.estado}<br>
-        <strong>Fecha:</strong> ${o.fecha}<br>
-        <a href="${o.pdfUrl}" target="_blank">📄 Ver comprobante</a></p>`;
-    } else document.getElementById("resultado").innerHTML="❌ Pedido no encontrado.";
-  })
-  .catch(()=>document.getElementById("resultado").innerHTML="⚠️ Error de conexión.");
-}
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  msg.innerHTML = '<div class="loading">⏳ Consultando pedido...</div>';
+  result.innerHTML = "";
+
+  const idPedido = document.getElementById("idPedido").value.trim();
+  const dni = document.getElementById("dni").value.trim();
+
+  if(!idPedido && !dni){
+    msg.innerHTML = '<p class="error">⚠️ Ingresa al menos un dato.</p>';
+    return;
+  }
+
+  const params = new URLSearchParams({action:"trackOrder", idPedido, dni});
+
+  fetch(${scriptURL}?${params.toString()})
+    .then(res => res.json())
+    .then(data => {
+      if(data.success && data.order){
+        const o = data.order;
+        msg.innerHTML = <p class="success">✅ Pedido encontrado.</p>;
+        result.innerHTML = `
+          <table>
+            <tr><td><strong>Cliente:</strong></td><td>${o.nombre}</td></tr>
+            <tr><td><strong>Producto:</strong></td><td>${o.producto}</td></tr>
+            <tr><td><strong>Cantidad:</strong></td><td>${o.cantidad}</td></tr>
+            <tr><td><strong>Estado:</strong></td><td>${o.estado}</td></tr>
+            <tr><td><strong>Fecha:</strong></td><td>${o.fecha}</td></tr>
+            <tr><td><strong>Comprobante:</strong></td><td><a href="${o.pdfUrl}" target="_blank">📄 Ver PDF</a></td></tr>
+            ${o.whatsappLink ? <tr><td><strong>WhatsApp:</strong></td><td><a href="${o.whatsappLink}" target="_blank">💬 Abrir chat</a></td></tr> : ""}
+          </table>
+        `;
+      } else {
+        msg.innerHTML = <p class="error">❌ ${data.error || "Pedido no encontrado."}</p>;
+      }
+    })
+    .catch(err=>{
+      console.error(err);
+      msg.innerHTML = '<p class="error">⚠️ Error de conexión al servidor.</p>';
+    });
+});
 </script>
 </body>
 </html>
