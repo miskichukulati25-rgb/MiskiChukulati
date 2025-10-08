@@ -1,174 +1,187 @@
-/* MISKI CHUKULATI - Código.gs v4 (Seguimiento en Vivo con Couriers Propios)
-   Copia y pega TODO este archivo para reemplazar el anterior.
-*/
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento de Pedido | Miski Chukulati</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #3b2314, #5c3b1e, #7b4c22);
+            background-size: 400% 400%;
+            animation: bgShift 15s ease infinite;
+            color: #fff8e7;
+            margin: 0;
+            padding: 20px;
+        }
 
-// --- CONFIGURACIÓN ---
-const SPREADSHEET_ID = "1KK-qOTQWIDRVo_vfXmiCi5ee7cPFhoGmLf3zYy8bfUw";
+        @keyframes bgShift {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+        }
 
-// =========================
-// onOpen: Crea un menú personalizado en la interfaz de Google Sheets.
-// =========================
-function onOpen() {
-  SpreadsheetApp.getUi()
-    .createMenu('⚙️ Miski Chukulati')
-    .addItem('Asignar Courier y Generar Link de Seguimiento', 'asignarCourierYGenerarLink')
-    .addToUi();
-}
+        .container {
+            max-width: 500px;
+            margin: 60px auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(6px);
+            text-align: center;
+        }
 
-// =========================
-// NUEVA FUNCIÓN AUTOMÁTICA: Asigna el link del courier al pedido seleccionado.
-// =========================
-function asignarCourierYGenerarLink() {
-  const ui = SpreadsheetApp.getUi();
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const pedidosSheet = ss.getSheetByName("Pedidos");
-  const couriersSheet = ss.getSheetByName("Couriers");
-  const activeCell = pedidosSheet.getActiveCell();
-  
-  // Validar que se esté en la hoja correcta y haya una fila seleccionada
-  if (activeCell.getSheet().getName() !== "Pedidos" || activeCell.getRow() < 2) {
-    ui.alert("Por favor, selecciona una celda en la fila del pedido al que deseas asignar un courier.");
-    return;
-  }
-  
-  const currentRow = activeCell.getRow();
-  const headers = pedidosSheet.getRange(1, 1, 1, pedidosSheet.getLastColumn()).getValues()[0];
-  const encargadoCol = headers.indexOf("Encargado de Envío") + 1;
-  const estadoCol = headers.indexOf("Estado") + 1;
-  const linkCourierCol = headers.indexOf("Link Courier") + 1;
+        h1 { color: #f7e7ce; }
+        p { color: #d4c5b2; }
 
-  if (encargadoCol === 0 || estadoCol === 0 || linkCourierCol === 0) {
-      ui.alert("Error: No se encontraron las columnas 'Encargado de Envío', 'Estado' o 'Link Courier'.");
-      return;
-  }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #d4c5b2;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.85);
+            color: #333;
+            box-sizing: border-box;
+            font-size: 1rem;
+            text-align: center;
+        }
 
-  const courierName = pedidosSheet.getRange(currentRow, encargadoCol).getValue();
-  if (!courierName) {
-    ui.alert("Primero, selecciona un courier del menú desplegable en la columna 'Encargado de Envío'.");
-    return;
-  }
+        button {
+            margin-top: 20px;
+            width: 100%;
+            background: linear-gradient(90deg, #c7a86d, #e5c99c);
+            color: #3b2314;
+            border: none;
+            padding: 12px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        button:hover { transform: scale(1.05); }
+        
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            display: none; /* Oculto por defecto */
+            text-align: left;
+        }
+        #result h3 {
+            text-align: center;
+            margin-top: 0;
+            color: #e5c99c;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            color: #3b2314;
+        }
+        .status-recibido { background-color: #f0ad4e; }
+        .status-en-proceso { background-color: #5bc0de; }
+        .status-enviado { background-color: #5cb85c; }
+        
+        .tracking-link {
+            display: block;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #5cb85c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .tracking-link:hover { background-color: #4a9d4a; }
 
-  // Buscar el link del courier en la hoja "Couriers"
-  const couriersData = couriersSheet.getRange(2, 1, couriersSheet.getLastRow() - 1, 2).getValues();
-  let courierLink = "";
-  for (let i = 0; i < couriersData.length; i++) {
-    if (couriersData[i][0] === courierName) {
-      courierLink = couriersData[i][1];
-      break;
-    }
-  }
+        #msg { margin-top: 15px; font-weight: 500; }
+        .error { color: #ffcccc; }
 
-  if (courierLink) {
-    // Actualizar la hoja de Pedidos
-    pedidosSheet.getRange(currentRow, estadoCol).setValue("Enviado");
-    pedidosSheet.getRange(currentRow, linkCourierCol).setValue(courierLink);
-    ui.alert(`¡Éxito! El pedido ha sido marcado como "Enviado" y el link de seguimiento de ${courierName} ha sido asignado.`);
-  } else {
-    ui.alert(`Error: No se encontró un link de seguimiento para "${courierName}" en la hoja 'Couriers'.`);
-  }
-}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Seguimiento de Pedido</h1>
+        <p>Ingresa el DNI que usaste en tu compra para ver el estado de tu último pedido.</p>
+        <form id="trackingForm">
+            <input type="text" id="dni" name="dni" required maxlength="8" pattern="[0-9]{8}" placeholder="Ingresa tu DNI de 8 dígitos">
+            <button type="submit" id="submitBtn">Consultar</button>
+        </form>
+        <div id="msg"></div>
+        <div id="result"></div>
+    </div>
 
+    <script>
+        const scriptURL = "URL_DE_TU_SCRIPT_DESPLEGADO_AQUÍ"; // << REEMPLAZA CON TU URL
+        const form = document.getElementById('trackingForm');
+        const msgDiv = document.getElementById('msg');
+        const resultDiv = document.getElementById('result');
+        const submitBtn = document.getElementById('submitBtn');
 
-// =========================
-// doPost y doGet (El resto del código sigue siendo el mismo)
-// =========================
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
+            
+            const dni = document.getElementById('dni').value;
+            if (dni.length !== 8 || !/^\d+$/.test(dni)) {
+                msgDiv.innerHTML = `<span class="error">Por favor, ingresa un DNI válido de 8 dígitos.</span>`;
+                return;
+            }
 
-function doPost(e) {
-  try {
-    const data = JSON.parse(e.postData.contents);
-    if (!data || !data.nombre || !data.dni || !data.producto || !data.metodoPago) {
-      return ContentService.createTextOutput(JSON.stringify({ success: false, error: "Faltan datos obligatorios."})).setMimeType(ContentService.MimeType.JSON);
-    }
-    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    let sheet = ss.getSheetByName("Pedidos");
-    if (!sheet) {
-      sheet = ss.insertSheet("Pedidos");
-      const headers = [
-        "Tracking", "Fecha y Hora", "DNI", "Nombre Completo", "Producto", "Cantidad", 
-        "Precio Unitario", "Total", "Método de Pago", "Encargado de Envío", "Estado", 
-        "Calificación", "Teléfono", "Correo", "Dirección", "Comentarios", 
-        "Link PDF", "WhatsApp Link", "Link Courier"
-      ];
-      sheet.appendRow(headers);
-      sheet.getRange("A1:S1").setFontWeight("bold");
-    }
-    const trackingID = generarTrackingID(sheet);
-    const fila = [
-      trackingID, new Date(), data.dni, data.nombre, data.producto, 
-      Number(data.cantidad || 1), getPrecioUnitario(data.producto), 
-      (getPrecioUnitario(data.producto) * Number(data.cantidad || 1)).toFixed(2), 
-      data.metodoPago, "", "Recibido", "", data.telefono || "", data.correo || "", 
-      data.direccion || "", data.comentarios || "", "", "", ""
-    ];
-    sheet.appendRow(fila);
-    return ContentService.createTextOutput(JSON.stringify({ success: true, trackingID: trackingID })).setMimeType(ContentService.MimeType.JSON);
-  } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({ success: false, error: err.message })).setMimeType(ContentService.MimeType.JSON);
-  }
-}
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Buscando...";
+            msgDiv.textContent = "";
+            resultDiv.style.display = 'none';
 
-function doGet(e) {
-  try {
-    if (e && e.parameter && e.parameter.action === "trackOrder") {
-      const dni = e.parameter.dni;
-      if (!dni) throw new Error("El DNI es obligatorio.");
-      const order = getOrderDataByDNI(dni);
-      if (order) {
-        const clientData = {
-          trackingID: order["Tracking"],
-          fecha: Utilities.formatDate(new Date(order["Fecha y Hora"]), Session.getScriptTimeZone(), "dd/MM/yyyy"),
-          producto: order["Producto"],
-          estado: order["Estado"],
-          encargado: order["Encargado de Envío"],
-          linkCourier: order["Link Courier"]
-        };
-        return ContentService.createTextOutput(JSON.stringify({ success: true, order: clientData })).setMimeType(ContentService.MimeType.JSON);
-      } else {
-        return ContentService.createTextOutput(JSON.stringify({ success: false, error: "No se encontraron pedidos recientes con ese DNI." })).setMimeType(ContentService.MimeType.JSON);
-      }
-    }
-    return ContentService.createTextOutput(JSON.stringify({ success: true, message: "Miski Chukulati Apps Script activo" })).setMimeType(ContentService.MimeType.JSON);
-  } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({ success: false, error: err.message })).setMimeType(ContentService.MimeType.JSON);
-  }
-}
+            const url = `${scriptURL}?action=trackOrder&dni=${dni}`;
 
-function getOrderDataByDNI(dni) {
-  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName("Pedidos");
-  if (!sheet) return null;
-  const values = sheet.getDataRange().getValues();
-  const headers = values[0];
-  const headerMap = headers.reduce((obj, header, i) => { obj[header.trim()] = i; return obj; }, {});
-  const dniColumnIndex = headerMap["DNI"];
-  if (dniColumnIndex === undefined) return null;
-  for (let i = values.length - 1; i > 0; i--) {
-    const row = values[i];
-    if (String(row[dniColumnIndex]).trim() === String(dni).trim()) {
-      let orderData = {};
-      for (const header in headerMap) { orderData[header] = row[headerMap[header]]; }
-      return orderData;
-    }
-  }
-  return null;
-}
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
 
-function generarTrackingID(sheet) {
-  const year = new Date().getFullYear();
-  const lastRow = sheet.getLastRow();
-  if (lastRow < 2) return `MSK-${year}-001`;
-  const lastTracking = sheet.getRange(lastRow, 1).getValue();
-  const lastNum = parseInt(lastTracking.split('-')[2], 10);
-  const newNum = ("000" + (lastNum + 1)).slice(-3);
-  return `MSK-${year}-${newNum}`;
-}
+                if (data.success) {
+                    const order = data.order;
+                    let estadoClass = '';
+                    switch(order.estado.toLowerCase()) {
+                        case 'recibido': estadoClass = 'status-recibido'; break;
+                        case 'en proceso': estadoClass = 'status-en-proceso'; break;
+                        case 'enviado': estadoClass = 'status-enviado'; break;
+                    }
 
-function getPrecioUnitario(nombreProducto) {
-  const precios = {
-    "Tableta de Chocolate con Leche": 9.00,
-    "Tableta de Chocolate Bitter 70%": 11.00,
-    "Bombones Surtidos (Caja 120g)": 20.00,
-    "Tableta de Chocolate Blanco": 10.00,
-    "Cacao en Polvo (200g)": 20.00
-  };
-  return precios[nombreProducto] || 0;
-}
+                    let courierLinkHTML = '';
+                    if (order.linkCourier) {
+                        courierLinkHTML = `<a href="${order.linkCourier}" target="_blank" class="tracking-link">Ver Ubicación del Courier</a>`;
+                    } else if (order.estado.toLowerCase() === 'enviado') {
+                         courierLinkHTML = `<p>El enlace de seguimiento se activará pronto.</p>`;
+                    }
+
+                    resultDiv.innerHTML = `
+                        <h3>Estado de tu Último Pedido</h3>
+                        <p><strong>Tracking ID:</strong> ${order.trackingID}</p>
+                        <p><strong>Producto:</strong> ${order.producto}</p>
+                        <p><strong>Estado:</strong> <span class="status-badge ${estadoClass}">${order.estado}</span></p>
+                        ${order.encargado ? `<p><strong>Courier:</strong> ${order.encargado}</p>` : ''}
+                        ${courierLinkHTML}
+                    `;
+                    resultDiv.style.display = 'block';
+                } else {
+                    msgDiv.innerHTML = `<span class="error">${data.error}</span>`;
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                msgDiv.innerHTML = `<span class="error">Ocurrió un error de conexión. Inténtalo de nuevo.</span>`;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Consultar";
+            }
+        });
+    </script>
+</body>
+</html>
