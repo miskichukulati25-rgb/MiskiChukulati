@@ -1,104 +1,78 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Miski Chukulati 🍫</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, #3b2314, #5c3b1e, #7b4c22);
-      background-size: 400% 400%;
-      animation: backgroundShift 15s ease infinite;
-      color: #fff;
-      text-align: center;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-    @keyframes backgroundShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .logo {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      box-shadow: 0 0 20px rgba(212,175,55,0.4);
-      opacity: 0;
-      transform: scale(0.8);
-      animation: fadeInLogo 2s ease forwards;
-    }
-    @keyframes fadeInLogo { to { opacity: 1; transform: scale(1); } }
-    h1 {
-      font-size: 2.3rem;
-      margin-top: 25px;
-      color: #f7e7ce;
-      opacity: 0;
-      animation: fadeInText 2s ease 1s forwards;
-    }
-    p.slogan {
-      font-size: 1.2rem;
-      color: #e0c68b;
-      margin-bottom: 40px;
-      opacity: 0;
-      animation: fadeInText 2s ease 2s forwards;
-    }
-    @keyframes fadeInText { to { opacity: 1; } }
-    .order-btn {
-      display: inline-block;
-      background: linear-gradient(90deg, #a67c52, #d4af37, #a67c52);
-      background-size: 200% 100%;
-      color: #fff;
-      font-weight: 700;
-      font-size: 1.2rem;
-      padding: 14px 34px;
-      border: none;
-      border-radius: 40px;
-      text-decoration: none;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      animation: goldenGlow 6s linear infinite, fadeInText 2s ease 3s forwards;
-      opacity: 0;
-    }
-    .order-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.6);
-    }
-    @keyframes goldenGlow {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-    footer {
-      position: absolute;
-      bottom: 15px;
-      font-size: 0.9rem;
-      color: #d2b48c;
-      opacity: 0.9;
-    }
-    footer span {
-      font-style: italic;
-      color: #f4d67b;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Miski Chukulati 🍫</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#3b2314; --bg2:#5c3b1e; --bg3:#7b4c22; --gold:#d4af37; --ivory:#fff8e7;
+  }
+  html,body{height:100%;margin:0;font-family:Montserrat, sans-serif;}
+  body{
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+    background-size:400% 400%;animation:shift 15s ease infinite;color:var(--ivory);
+    text-align:center;padding:28px;
+  }
+  @keyframes shift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  .card{background:rgba(255,255,255,0.04);padding:34px;border-radius:18px;max-width:880px;box-shadow:0 10px 30px rgba(0,0,0,0.4)}
+  .logo{width:160px;height:160px;border-radius:50%;border:4px solid var(--gold);background:#fff8e7;padding:8px;display:inline-block;box-shadow:0 8px 24px rgba(212,175,55,0.25)}
+  h1{margin:18px 0 6px;font-size:2.4rem;color:#fdeed8}
+  p.slogan{margin:0 0 18px;color:#e7d2ad;font-size:1.05rem}
+  .cta{display:inline-block;background:linear-gradient(90deg,#a67c52,#d4af37,#a67c52);padding:14px 34px;border-radius:40px;color:#fff;font-weight:700;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,0.35);transition:transform .18s}
+  .cta:hover{transform:scale(1.03)}
+  .small{margin-top:12px;color:#f0ddb8}
+  footer{position:fixed;left:0;right:0;bottom:10px;text-align:center;color:#f0ddb8;font-size:0.9rem}
+  .menu-toggle{position:fixed;right:20px;top:20px;background:none;border:none;cursor:pointer;z-index:50}
+  .menu-toggle span{display:block;width:30px;height:3px;background:var(--ivory);margin:5px 0;border-radius:2px}
+  /* footer social icons small */
+  .socials a img{width:26px;margin:0 6px;vertical-align:middle;filter:brightness(.98) saturate(.9)}
+</style>
 </head>
 <body>
-  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Miski Chukulati Logo" class="logo">
-  <h1>Miski Chukulati</h1>
-  <p class="slogan">El sabor que une a la familia 🍫</p>
+  <button class="menu-toggle" onclick="openMenu()" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
 
-  <a href="pedidos.html" class="order-btn">¡Pídelo aquí!</a>
+  <div class="card">
+    <img class="logo" src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Miski Chukulati logo">
+    <h1>Miski Chukulati</h1>
+    <p class="slogan">El sabor que une a la familia 🍫</p>
+
+    <a class="cta" href="pedidos.html" target="_self">¡Pídelo aquí!</a>
+    <p class="small">También puedes <a href="tracking.html" style="color:#fbe8b6">rastrear tu pedido</a> o visitar nuestra tienda y blog desde el menú.</p>
+  </div>
 
   <footer>
-    <span>“Jehová te bendiga, y te guarde” – Números 6:24</span><br>
-    © Miski Chukulati - 2025
+    <div class="socials">
+      <a href="https://www.instagram.com/miski.chukulati" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="IG"></a>
+      <a href="https://www.tiktok.com/@miski.chukulati" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046126.png" alt="TT"></a>
+    </div>
+    <div style="margin-top:6px"><strong>"Jehová te bendiga, y te guarde"</strong> – Números 6:24</div>
   </footer>
+
+  <!-- Menú hamburguesa compartido -->
+  <div id="menu" style="display:none;position:fixed;right:0;top:0;bottom:0;width:290px;background:rgba(59,35,20,0.98);padding:36px;z-index:60;">
+    <button onclick="closeMenu()" style="background:none;border:none;color:#fdeed8;font-size:22px;position:absolute;right:10px;top:8px">&times;</button>
+    <nav style="margin-top:20px">
+      <ul style="list-style:none;padding:0;color:#fdeed8">
+        <li style="margin:16px 0"><a href="index.html" style="color:inherit;text-decoration:none">🏠 Inicio</a></li>
+        <li style="margin:16px 0"><a href="sostenibilidad.html" style="color:inherit;text-decoration:none">🌿 Sostenibilidad</a></li>
+        <li style="margin:16px 0"><a href="origen.html" style="color:inherit;text-decoration:none">🌱 Origen responsable</a></li>
+        <li style="margin:16px 0"><a href="productos.html" style="color:inherit;text-decoration:none">🍫 Productos</a></li>
+        <li style="margin:16px 0"><a href="blog.html" style="color:inherit;text-decoration:none">📰 Blog</a></li>
+        <li style="margin:16px 0"><a href="economia.html" style="color:inherit;text-decoration:none">📈 Economía del cacao</a></li>
+        <li style="margin:16px 0"><a href="pedidos.html" style="color:inherit;text-decoration:none">📦 Hacer pedido</a></li>
+        <li style="margin:16px 0"><a href="tracking.html" style="color:inherit;text-decoration:none">🔎 Seguimiento</a></li>
+      </ul>
+    </nav>
+  </div>
+
+<script>
+function openMenu(){document.getElementById('menu').style.display='block'}
+function closeMenu(){document.getElementById('menu').style.display='none'}
+</script>
 </body>
 </html>
