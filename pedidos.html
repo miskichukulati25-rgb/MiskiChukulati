@@ -141,50 +141,39 @@ footer{text-align:center;margin-top:40px;font-size:.9rem;color:#e0c68b;}
 </footer>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbyevvNNkqikvr2Y6lp6R0GK0DvhC6jlr_QenQJUFGnak-64CKs_0w0pkF2wt0sQyIm2rw/exec";
+const scriptURL = "🔗 TU_URL_DEL_SCRIPT_AQUI"; // reemplaza con la URL .exec más reciente
 const form = document.getElementById("pedidoForm");
 const msg = document.getElementById("msg");
 const btn = document.getElementById("submitBtn");
 
-function showToast(text) {
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = text;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3200);
-}
-
-form.addEventListener("submit", async (e) => {
+form.addEventListener("submit", e => {
   e.preventDefault();
   btn.disabled = true;
   msg.innerHTML = '<span style="color:#f7e7ce;">⏳ Enviando pedido...</span>';
 
-  const formData = Object.fromEntries(new FormData(form).entries());
+  const data = Object.fromEntries(new FormData(form).entries());
 
-  try {
-    const res = await fetch(scriptURL, {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {'Content-Type': 'application/json'}
-    });
-    const data = await res.json();
-
-    if (data.success) {
-      msg.innerHTML = <span class="success">✅ Pedido ${data.idPedido || ''} registrado correctamente.<br>Revisa tu correo para el comprobante.</span>;
-      showToast("✅ Pedido recibido correctamente");
+  fetch(scriptURL, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(res => res.json())
+  .then(r => {
+    if (r.success) {
+      msg.innerHTML = <span class="success">✅ Pedido ${r.idPedido} registrado correctamente.<br>Revisa tu correo para el comprobante.</span>;
       form.reset();
-      setTimeout(() => { window.location.href = "index.html"; }, 3500);
+      setTimeout(() => window.location.href = "index.html", 3000);
     } else {
-      msg.innerHTML = <span class="error">❌ ${data.error || 'Ocurrió un error desconocido.'}</span>;
-      showToast("❌ Error al registrar el pedido");
-      btn.disabled = false;
+      msg.innerHTML = <span class="error">❌ Error: ${r.error}</span>;
     }
-  } catch (err) {
-    msg.innerHTML = '<span class="error">⚠️ Error de conexión con el servidor.</span>';
-    console.error(err);
-    showToast("⚠️ Error de conexión");
+  })
+  .catch(() => {
+    msg.innerHTML = '<span class="error">⚠️ Error de conexión. Intenta de nuevo.</span>';
+  })
+  .finally(() => {
     btn.disabled = false;
-  }
+  });
 });
 </script>
 </body>
