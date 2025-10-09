@@ -141,51 +141,39 @@ footer{text-align:center;margin-top:40px;font-size:.9rem;color:#e0c68b;}
 </footer>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxZooKifkeJJy46s3xhJrgrBzk-X63ko2t8XUNlyhDuu9THEWXHgPXuVr2OSphgf7z6ag/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbw-0JPfhR59b4wTVGjXDdqwPDzPhdQWg1DMN7WerkzO-C83QlpesQpZ1Cp1aMseRZ326w/exec";
+
 const form = document.getElementById("pedidoForm");
 const msg = document.getElementById("msg");
 const btn = document.getElementById("submitBtn");
 
-form.addEventListener("submit", async e => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  msg.innerHTML = "⏳ Enviando pedido...";
   btn.disabled = true;
-  msg.innerHTML = '<span style="color:#f7e7ce;">⏳ Enviando pedido...</span>';
-
-  const data = Object.fromEntries(new FormData(form).entries());
 
   try {
-    const res = await fetch(scriptURL, {
+    const response = await fetch(scriptURL, {
       method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(new FormData(form))),
     });
 
-    // Verifica si la respuesta es texto plano (no JSON)
-    const text = await res.text();
-    console.log("Respuesta cruda:", text);
+    // ✅ Leer respuesta del servidor
+    const result = await response.json();
 
-    // Intenta convertir a JSON
-    let json;
-    try {
-      json = JSON.parse(text);
-    } catch {
-      throw new Error("Respuesta no válida del servidor (no es JSON).");
-    }
-
-    if (json.success) {
-      msg.innerHTML = <span class="success">✅ Pedido ${json.idPedido || ''} registrado correctamente.<br>Revisa tu correo para el comprobante.</span>;
-      form.reset();
-      setTimeout(() => window.location.href = "index.html", 3000);
+    if (result.success) {
+      msg.innerHTML = <span class="success">✅ ${result.message}.<br>ID: ${result.idPedido}</span>;
+      setTimeout(() => (window.location.href = "index.html"), 3000);
     } else {
-      msg.innerHTML = <span class="error">❌ ${json.error || 'Error al registrar el pedido.'}</span>;
+      msg.innerHTML = <span class="error">❌ ${result.error || "Ocurrió un error inesperado."}</span>;
     }
-
   } catch (err) {
-    console.error("Error:", err);
-    msg.innerHTML = <span class="error">⚠️ ${err.message}</span>;
-  } finally {
-    btn.disabled = false;
+    console.error(err);
+    msg.innerHTML = <span class="error">⚠️ Error de conexión. No se pudo enviar el pedido.</span>;
   }
+
+  btn.disabled = false;
 });
 </script>
 </body>
