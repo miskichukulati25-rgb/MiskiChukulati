@@ -141,39 +141,51 @@ footer{text-align:center;margin-top:40px;font-size:.9rem;color:#e0c68b;}
 </footer>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxZooKifkeJJy46s3xhJrgrBzk-X63ko2t8XUNlyhDuu9THEWXHgPXuVr2OSphgf7z6ag/exec"; // reemplaza con la URL .exec más reciente
+const scriptURL = "https://script.google.com/macros/s/AKfycbxZooKifkeJJy46s3xhJrgrBzk-X63ko2t8XUNlyhDuu9THEWXHgPXuVr2OSphgf7z6ag/exec";
 const form = document.getElementById("pedidoForm");
 const msg = document.getElementById("msg");
 const btn = document.getElementById("submitBtn");
 
-form.addEventListener("submit", e => {
+form.addEventListener("submit", async e => {
   e.preventDefault();
   btn.disabled = true;
   msg.innerHTML = '<span style="color:#f7e7ce;">⏳ Enviando pedido...</span>';
 
   const data = Object.fromEntries(new FormData(form).entries());
 
-  fetch(scriptURL, {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json" }
-  })
-  .then(res => res.json())
-  .then(r => {
-    if (r.success) {
-      msg.innerHTML = <span class="success">✅ Pedido ${r.idPedido} registrado correctamente.<br>Revisa tu correo para el comprobante.</span>;
+  try {
+    const res = await fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    // Verifica si la respuesta es texto plano (no JSON)
+    const text = await res.text();
+    console.log("Respuesta cruda:", text);
+
+    // Intenta convertir a JSON
+    let json;
+    try {
+      json = JSON.parse(text);
+    } catch {
+      throw new Error("Respuesta no válida del servidor (no es JSON).");
+    }
+
+    if (json.success) {
+      msg.innerHTML = <span class="success">✅ Pedido ${json.idPedido || ''} registrado correctamente.<br>Revisa tu correo para el comprobante.</span>;
       form.reset();
       setTimeout(() => window.location.href = "index.html", 3000);
     } else {
-      msg.innerHTML = <span class="error">❌ Error: ${r.error}</span>;
+      msg.innerHTML = <span class="error">❌ ${json.error || 'Error al registrar el pedido.'}</span>;
     }
-  })
-  .catch(() => {
-    msg.innerHTML = '<span class="error">⚠️ Error de conexión. Intenta de nuevo.</span>';
-  })
-  .finally(() => {
+
+  } catch (err) {
+    console.error("Error:", err);
+    msg.innerHTML = <span class="error">⚠️ ${err.message}</span>;
+  } finally {
     btn.disabled = false;
-  });
+  }
 });
 </script>
 </body>
