@@ -1,60 +1,182 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<base target="_top">
-<title>Haz tu Pedido - Miski Chukulati</title>
-<style>
-body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
-.container { max-width: 500px; margin: 0 auto; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-h1, h2 { text-align: center; color: #333; }
-label { display: block; margin-bottom: 8px; font-weight: bold; }
-input[type="text"], input[type="email"], input[type="tel"], select, textarea { width: calc(100% - 20px); padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; }
-button { background-color: #5cb85c; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
-button:hover { background-color: #4cae4c; }
-.message { text-align: center; margin-top: 20px; padding: 10px; border-radius: 4px; display: none; }
-.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-.logo-container { text-align: center; margin-bottom: 20px; }
-.logo-container img { max-width: 150px; height: auto; }
-.tracking-section { margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; }
-.tracking-section input[type="text"], .tracking-section button { width: auto; display: inline-block; margin-right: 10px; }
-</style>
+  <meta charset="UTF-8">
+  <title>Haz tu Pedido - Miski Chukulati 🍫</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #f8f5f2;
+      color: #3e2723;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #5d4037;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #795548;
+      font-weight: normal;
+      margin-top: 0;
+      font-size: 1.1em;
+    }
+
+    form {
+      max-width: 500px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #4e342e;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d7ccc8;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 0.95em;
+      box-sizing: border-box;
+      background: #fefefe;
+    }
+
+    button {
+      width: 100%;
+      background-color: #6d4c41;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      font-size: 1em;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #4e342e;
+    }
+
+    #msg {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .success {
+      color: #2e7d32;
+    }
+
+    .error {
+      color: #c62828;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.9em;
+      margin-top: 30px;
+      color: #6d4c41;
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 10px auto;
+      width: 120px;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<div class="logo-container">
-<!-- Reemplaza esto con tu logo si lo tienes en Drive o un URL público -->
-<img src="https://i.ibb.co/b3226Vf/miski-chukulati-logo.png" alt="Miski Chukulati Logo">
-</div>
-<h1>Haz tu Pedido</h1>
-<form id="orderForm">
-<label for="dni">DNI:</label>
-<input type="text" id="dni" name="dni" required maxlength="8" pattern="[0-9]{8}">
-<label for="nombre">Nombre completo:</label>
-<input type="text" id="nombre" name="nombre" required>
-<label for="correo">Correo:</label>
-<input type="email" id="correo" name="correo" required>
-<label for="telefono">Teléfono:</label>
-<input type="tel" id="telefono" name="telefono" required>
-<label for="producto">Producto:</label>
-<select id="producto" name="producto" required>
-<option value="">Seleccione...</option>
-<option value="Tableta 70 % cacao">Tableta 70 % cacao (S/ 8.00)</option>
-<option value="Tableta 85 % cacao">Tableta 85 % cacao (S/ 9.00)</option>
-<option value="Bombones surtidos">Bombones surtidos (S/ 15.00)</option>
-<option value="Dark Chocolate Bar">Dark Chocolate Bar (S/ 8.00)</option>
-<option value="ChocoNibs">ChocoNibs (S/ 5.00)</option>
-<option value="ChocoBites">ChocoBites (S/ 6.50)</option>
-<option value="Chocolate Blanco">Chocolate Blanco (S/ 24.00)</option>
-</select>
-<label for="cantidad">Cantidad:</label>
-<input type="number" id="cantidad" name="cantidad" value="1" min="1" required>
-<label for="direccion">Dirección:</label>
-<input type="text" id="direccion" name="direccion">
-<label for="comentarios">Comentarios (Opcional):</label>
-<textarea id="comentarios" name="comentarios" rows="3"></textarea>
-<button type="submit">Enviar Pedido</button>
-</form>
-<div id="responseMessage" class="message"></div>
-<div class="tracking-section">
-<h2>Seguimiento de Pedido</h2>
+
+  <img class="logo" src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Logo Miski Chukulati">
+  <h1>Haz tu Pedido</h1>
+  <h2>“El sabor que une a la familia”</h2>
+
+  <form id="pedidoForm">
+    <label>Nombre completo:</label>
+    <input type="text" name="nombre" required>
+
+    <label>DNI:</label>
+    <input type="text" name="dni" required maxlength="12">
+
+    <label>Correo electrónico:</label>
+    <input type="email" name="correo" required>
+
+    <label>Teléfono (WhatsApp):</label>
+    <input type="text" name="telefono" required>
+
+    <label>Dirección de entrega:</label>
+    <input type="text" name="direccion" required>
+
+    <label>Producto:</label>
+    <select name="producto" required>
+      <option value="">Selecciona un producto</option>
+      <option>Tableta 70 % cacao</option>
+      <option>Tableta 85 % cacao</option>
+      <option>Bombones surtidos</option>
+      <option>Dark Chocolate Bar</option>
+      <option>ChocoNibs</option>
+      <option>ChocoBites</option>
+      <option>Chocolate Blanco</option>
+    </select>
+
+    <label>Cantidad:</label>
+    <input type="number" name="cantidad" min="1" value="1" required>
+
+    <label>Comentarios adicionales:</label>
+    <textarea name="comentarios" rows="3" placeholder="Ej: Entregar después de las 4 p.m."></textarea>
+
+    <button type="submit">Enviar Pedido</button>
+  </form>
+
+  <div id="msg"></div>
+
+  <div class="footer">
+    Miski Chukulati 🍫 — “Hecho con amor y cacao puro peruano”
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyPkjKHLjC7lbsOWGyloDsCUukDdwZt_eoKsJH5LcT7tdX16FPSCZLZMY7qtenmT_y0/exec";
+    const form = document.getElementById("pedidoForm");
+    const msg = document.getElementById("msg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      msg.innerHTML = "⏳ Enviando pedido...";
+      msg.className = "";
+
+      try {
+        const formData = Object.fromEntries(new FormData(form).entries());
+        const response = await fetch(scriptURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+
+        const d = await response.json();
+
+        if (d.success) {
+          msg.innerHTML = `<span class="success">✅ Pedido ${d.idPedido} registrado.</span><br>Revisa tu correo para el comprobante.`;
+          form.reset();
+        } else {
+          msg.innerHTML = `<span class="error">❌ ${d.error || "No se pudo registrar el pedido."}</span>`;
+        }
+      } catch (err) {
+        msg.innerHTML = `<span class="error">⚠️ Error al conectar con el servidor.</span>`;
+      }
+    });
+  </script>
+</body>
+</html>
