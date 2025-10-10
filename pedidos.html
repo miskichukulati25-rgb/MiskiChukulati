@@ -11,10 +11,11 @@ body {
   background: #fff8f0;
   color: #5c4033;
   margin: 0;
+  padding: 20px;
 }
 .container {
   max-width: 600px;
-  margin: 60px auto;
+  margin: 40px auto;
   background: #fff;
   padding: 30px 40px;
   border-radius: 12px;
@@ -35,6 +36,7 @@ input, select, textarea {
   margin-top: 5px;
   border: 1px solid #d4c5b2;
   border-radius: 6px;
+  box-sizing: border-box; /* Añadido para consistencia */
 }
 button {
   margin-top: 25px;
@@ -56,12 +58,8 @@ button:hover {
   margin-top: 20px;
   font-weight: 500;
 }
-.success {
-  color: green;
-}
-.error {
-  color: red;
-}
+.success { color: green; }
+.error { color: red; }
 footer {
   text-align: center;
   margin-top: 40px;
@@ -119,6 +117,7 @@ footer {
 </footer>
 
 <script>
+// IMPORTANTE: Reemplaza esta URL con la URL de tu IMPLEMENTACIÓN de Google Apps Script.
 const scriptURL = "https://script.google.com/macros/s/AKfycbypicbViQpx68de35No3yAEd2XoLHOQ5banZ8cmJjn15es3eus8K4rTM8sRtFoPaDiH/exec";
 const form = document.getElementById("pedidoForm");
 const msg = document.getElementById("msg");
@@ -129,19 +128,30 @@ form.addEventListener("submit", e => {
   
   fetch(scriptURL, {
     method: "POST",
-    body: JSON.stringify(Object.fromEntries(new FormData(form))),
-    headers: { 'Content-Type': 'application/json' }
+    body: new FormData(form) // Enviamos los datos directamente, es más estándar.
   })
-  .then(r => r.json())
-  .then(d => {
-    if (d.success) {
-      msg.innerHTML = `<span class="success">✅ Pedido ${d.idPedido} registrado.</span><br>Revisa tu correo para el comprobante.`;
+  .then(response => {
+    // La respuesta del script siempre debe ser JSON.
+    if (!response.ok) {
+        throw new Error(`Error en la red: ${response.statusText}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log(data); // Útil para ver la respuesta del servidor en la consola.
+    if (data.success) {
+      msg.innerHTML = `<span class="success">✅ Pedido ${data.idPedido} registrado.</span><br>Revisa tu correo para el comprobante.`;
       form.reset();
     } else {
-      msg.innerHTML = `<span class="error">❌ ${d.error}</span>`;
+      // Si el script devolvió un error conocido.
+      msg.innerHTML = `<span class="error">❌ ${data.error || 'Ocurrió un error desconocido.'}</span>`;
     }
   })
-  .catch(() => msg.innerHTML = '<span class="error">⚠️ Error de conexión. Intenta nuevamente.</span>');
+  .catch(error => {
+    // Si hay un error de conexión o la respuesta no fue JSON.
+    console.error('Error en fetch:', error);
+    msg.innerHTML = '<span class="error">⚠️ Error de conexión o respuesta inválida del servidor. Intenta nuevamente.</span>';
+  });
 });
 </script>
 
