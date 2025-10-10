@@ -20,12 +20,14 @@ body {
   background: rgba(255,255,255,0.08);
   padding: 24px;
   border-radius: 12px;
+  text-align: center;
 }
 
 label {
   display: block;
   margin-top: 10px;
   font-weight: 600;
+  text-align: left;
 }
 
 input, button {
@@ -51,15 +53,19 @@ button:hover {
 .result {
   margin-top: 18px;
   background: rgba(255,255,255,0.15);
-  padding: 12px;
-  border-radius: 8px;
+  padding: 18px;
+  border-radius: 10px;
   color: #fffbe7;
   line-height: 1.6;
 }
 
+.qr {
+  margin-top: 14px;
+}
+
 a.download {
   display: inline-block;
-  margin-top: 12px;
+  margin-top: 14px;
   padding: 10px 16px;
   border-radius: 24px;
   background: linear-gradient(90deg,#c7a86d,#e5c99c);
@@ -71,7 +77,7 @@ a.download {
 </head>
 <body>
 <div class="container">
-  <h2>Seguimiento de Pedido</h2>
+  <h2>📦 Seguimiento de Pedido</h2>
   <p>Busca por <b>ID de pedido</b> (P...) o por <b>DNI</b></p>
 
   <label>ID de Pedido</label>
@@ -113,15 +119,18 @@ btn.addEventListener('click', async ()=>{
 
     if(json.success && json.order){
       const o = json.order;
+      const comprobante = o.pdfUrl ? `<a class="download" href="${o.pdfUrl}" target="_blank">📄 Descargar comprobante</a>` : '';
+      const qrImg = o.pdfUrl ? `<div class="qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(o.pdfUrl)}" alt="QR Comprobante" width="140"></div>` : '';
+      
       result.innerHTML = `
         <strong>ID:</strong> ${o.idPedido}<br>
         <strong>Estado:</strong> ${o.estado}<br>
         <strong>Cliente:</strong> ${o.nombre}<br>
         <strong>Producto:</strong> ${o.producto} (x${o.cantidad})<br>
         <strong>Dirección:</strong> ${o.direccion || '—'}<br>
+        ${comprobante}
+        ${qrImg}
       `;
-      if(o.pdfUrl)
-        result.innerHTML += `<a class="download" href="${o.pdfUrl}" target="_blank">📄 Descargar comprobante</a>`;
     } else {
       result.innerHTML = '❌ Pedido no encontrado.';
     }
@@ -133,4 +142,3 @@ btn.addEventListener('click', async ()=>{
 </script>
 </body>
 </html>
-
