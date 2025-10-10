@@ -3,15 +3,70 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Seguimiento - Miski Chukulati</title>
+<title>Seguimiento - Miski Chukulati 🍫</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 <style>
-body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);color:#fff;padding:22px;margin:0}
-.container{max-width:820px;margin:36px auto;background:rgba(255,255,255,0.08);padding:24px;border-radius:12px}
-label{display:block;margin-top:10px;font-weight:600}
-input,button{padding:10px;border-radius:8px;border:1px solid #d4c5b2}
-.result{margin-top:18px;background:rgba(255,255,255,0.05);padding:12px;border-radius:8px}
-a.download{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:24px;background:linear-gradient(90deg,#c7a86d,#e5c99c);color:#3b2314;text-decoration:none;font-weight:700}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);
+  color: #fff;
+  padding: 22px;
+  margin: 0;
+}
+
+.container {
+  max-width: 820px;
+  margin: 36px auto;
+  background: rgba(255,255,255,0.08);
+  padding: 24px;
+  border-radius: 12px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+input, button {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d4c5b2;
+  width: 100%;
+}
+
+button {
+  margin-top: 12px;
+  background: linear-gradient(90deg,#c7a86d,#e5c99c);
+  color: #3b2314;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.03);
+}
+
+.result {
+  margin-top: 18px;
+  background: rgba(255,255,255,0.15);
+  padding: 12px;
+  border-radius: 8px;
+  color: #fffbe7;
+  line-height: 1.6;
+}
+
+a.download {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 24px;
+  background: linear-gradient(90deg,#c7a86d,#e5c99c);
+  color: #3b2314;
+  text-decoration: none;
+  font-weight: 700;
+}
 </style>
 </head>
 <body>
@@ -20,14 +75,12 @@ a.download{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:
   <p>Busca por <b>ID de pedido</b> (P...) o por <b>DNI</b></p>
 
   <label>ID de Pedido</label>
-  <input id="idPedido" placeholder="P2025..." style="width:100%">
+  <input id="idPedido" placeholder="P2025..." />
 
   <label style="margin-top:8px">O DNI</label>
-  <input id="dni" placeholder="DNI 8 dígitos" style="width:100%">
+  <input id="dni" placeholder="DNI 8 dígitos" />
 
-  <div style="margin-top:12px">
-    <button id="btnSearch">Buscar</button>
-  </div>
+  <button id="btnSearch">Buscar</button>
 
   <div id="result" class="result" style="display:none"></div>
 </div>
@@ -38,34 +91,43 @@ const btn = document.getElementById('btnSearch');
 const result = document.getElementById('result');
 
 btn.addEventListener('click', async ()=>{
-  result.style.display='none';
-  result.innerHTML='Buscando...';
+  result.style.display = 'block';
+  result.innerHTML = '🔎 Buscando...';
+  
   const idPedido = document.getElementById('idPedido').value.trim();
   const dni = document.getElementById('dni').value.trim();
-  if(!idPedido && !dni){ result.innerHTML='Ingresa ID o DNI'; return; }
+  
+  if(!idPedido && !dni){
+    result.innerHTML = '⚠️ Ingresa ID o DNI.';
+    return;
+  }
 
   try {
     const params = new URLSearchParams();
-    if(idPedido) params.append('action','trackOrder'), params.append('idPedido', idPedido);
-    else params.append('action','trackOrder'), params.append('dni', dni);
+    params.append('action','trackOrder');
+    if(idPedido) params.append('idPedido', idPedido);
+    else params.append('dni', dni);
 
-    const res = await fetch(SCRIPT_WEB_APP_URL + '?' + params.toString(), {method:'GET', mode:'cors'});
+    const res = await fetch(`${SCRIPT_WEB_APP_URL}?${params.toString()}`, {method:'GET', mode:'cors'});
     const json = await res.json();
+
     if(json.success && json.order){
       const o = json.order;
-      result.style.display='block';
-      result.innerHTML = `<strong>ID:</strong> ${o.idPedido} <br>
-                          <strong>Estado:</strong> ${o.estado} <br>
-                          <strong>Cliente:</strong> ${o.nombre} <br>
-                          <strong>Producto:</strong> ${o.producto} (x${o.cantidad}) <br>
-                          <strong>Dirección:</strong> ${o.direccion || '—'} <br>`;
-      if(o.pdfUrl) result.innerHTML += <a class="download" href="${o.pdfUrl}" target="_blank">📄 Descargar comprobante</a>;
+      result.innerHTML = `
+        <strong>ID:</strong> ${o.idPedido}<br>
+        <strong>Estado:</strong> ${o.estado}<br>
+        <strong>Cliente:</strong> ${o.nombre}<br>
+        <strong>Producto:</strong> ${o.producto} (x${o.cantidad})<br>
+        <strong>Dirección:</strong> ${o.direccion || '—'}<br>
+      `;
+      if(o.pdfUrl)
+        result.innerHTML += `<a class="download" href="${o.pdfUrl}" target="_blank">📄 Descargar comprobante</a>`;
     } else {
-      result.style.display='block'; result.innerHTML = 'Pedido no encontrado.';
+      result.innerHTML = '❌ Pedido no encontrado.';
     }
   } catch(err){
     console.error(err);
-    result.style.display='block'; result.innerHTML = 'Error de conexión al consultar pedido.';
+    result.innerHTML = '⚠️ Error de conexión al consultar pedido.';
   }
 });
 </script>
