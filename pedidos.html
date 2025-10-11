@@ -4,85 +4,70 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Haz tu Pedido | Miski Chukulati 🍫</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: #fff8f0;
-    color: #5c4033;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  .container {
-    max-width: 600px;
-    margin: 40px auto;
-    background: #fff;
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(92, 64, 51, 0.1);
-    flex-grow: 1;
-  }
-  h1 {
-    text-align: center;
-    color: #5c4033;
-    font-weight: 600;
-  }
-  label {
-    font-weight: 500;
-    display: block;
-    margin-top: 15px;
-    color: #4a342a;
-  }
-  input, select, textarea {
-    width: 100%;
-    padding: 12px;
-    margin-top: 5px;
-    border: 1px solid #d4c5b2;
-    border-radius: 6px;
-    box-sizing: border-box; /* Asegura que padding no afecte el ancho total */
-    transition: all 0.2s ease-in-out;
-  }
-  /* Mejora de UX: Estilo al enfocar un campo */
-  input:focus, select:focus, textarea:focus {
-    border-color: #c7a86d;
-    outline: none;
-    box-shadow: 0 0 8px rgba(199, 168, 109, 0.4);
-  }
-  button {
-    margin-top: 25px;
-    width: 100%;
-    background: linear-gradient(90deg, #c7a86d, #e5c99c);
-    color: #5c4033;
-    border: none;
-    padding: 12px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  button:hover {
-    transform: scale(1.03);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-  .message {
-    text-align: center;
-    margin-top: 20px;
-    font-weight: 500;
-    line-height: 1.5;
-  }
-  .success { color: #28a745; }
-  .error { color: #dc3545; }
-  footer {
-    text-align: center;
-    margin-top: auto; /* Empuja el footer hacia abajo */
-    padding-top: 20px;
-    font-size: .9rem;
-    color: #7b5b4a;
-  }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fff8f0;
+  color: #5c4033;
+  margin: 0;
+}
+.container {
+  max-width: 600px;
+  margin: 60px auto;
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(92,64,51,0.1);
+}
+h1 {
+  text-align: center;
+  color: #5c4033;
+}
+label {
+  font-weight: 500;
+  display: block;
+  margin-top: 15px;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #d4c5b2;
+  border-radius: 6px;
+}
+button {
+  margin-top: 25px;
+  width: 100%;
+  background: linear-gradient(90deg,#c7a86d,#e5c99c);
+  color: #5c4033;
+  border: none;
+  padding: 12px;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover {
+  transform: scale(1.05);
+}
+.message {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: 500;
+}
+.success {
+  color: green;
+}
+.error {
+  color: red;
+}
+footer {
+  text-align: center;
+  margin-top: 40px;
+  font-size: .9rem;
+  color: #7b5b4a;
+}
 </style>
 </head>
 <body>
@@ -90,41 +75,40 @@
 <div class="container">
   <h1>Haz tu Pedido</h1>
   <form id="pedidoForm">
-    <!-- Mejora de Accesibilidad: 'for' en label y 'id' en input -->
-    <label for="dni">DNI</label>
-    <input type="text" id="dni" name="dni" required maxlength="8" placeholder="8 dígitos">
+    <label>DNI</label>
+    <input type="text" name="dni" required maxlength="8" placeholder="8 dígitos">
     
-    <label for="nombre">Nombre</label>
-    <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre completo">
+    <label>Nombre</label>
+    <input type="text" name="nombre" required placeholder="Tu nombre completo">
     
-    <label for="correo">Correo</label>
-    <input type="email" id="correo" name="correo" required placeholder="ejemplo@gmail.com">
+    <label>Correo</label>
+    <input type="email" name="correo" required placeholder="ejemplo@gmail.com">
     
-    <label for="telefono">Teléfono</label>
-    <input type="tel" id="telefono" name="telefono" required placeholder="987654321">
+    <label>Teléfono</label>
+    <input type="tel" name="telefono" required placeholder="987654321">
     
-    <label for="producto">Producto</label>
-    <select id="producto" name="producto" required>
-      <option value="" disabled selected>Selecciona un producto</option>
-      <option value="Tableta 70% cacao">Tableta 70 % cacao</option>
-      <option value="Tableta 85% cacao">Tableta 85 % cacao</option>
-      <option value="Bombones surtidos">Bombones surtidos</option>
-      <option value="Dark Chocolate Bar">Dark Chocolate Bar</option>
-      <option value="ChocoNibs">ChocoNibs</option>
-      <option value="ChocoBites">ChocoBites</option>
-      <option value="Chocolate Blanco">Chocolate Blanco</option>
+    <label>Producto</label>
+    <select name="producto" required>
+      <option value="">Selecciona un producto</option>
+      <option>Tableta 70 % cacao</option>
+      <option>Tableta 85 % cacao</option>
+      <option>Bombones surtidos</option>
+      <option>Dark Chocolate Bar</option>
+      <option>ChocoNibs</option>
+      <option>ChocoBites</option>
+      <option>Chocolate Blanco</option>
     </select>
     
-    <label for="cantidad">Cantidad</label>
-    <input type="number" id="cantidad" name="cantidad" min="1" value="1" required>
+    <label>Cantidad</label>
+    <input type="number" name="cantidad" min="1" value="1" required>
     
-    <label for="direccion">Dirección</label>
-    <input type="text" id="direccion" name="direccion" placeholder="Dirección de entrega (opcional)">
+    <label>Dirección</label>
+    <input type="text" name="direccion" placeholder="Dirección de entrega (opcional)">
     
-    <label for="comentarios">Comentarios</label>
-    <textarea id="comentarios" name="comentarios" rows="3" placeholder="Algún detalle adicional..."></textarea>
+    <label>Comentarios</label>
+    <textarea name="comentarios" rows="3" placeholder="Algún detalle adicional..."></textarea>
     
-    <button type="submit" id="submitBtn">Enviar pedido</button>
+    <button type="submit">Enviar pedido</button>
   </form>
 
   <div id="msg" class="message"></div>
@@ -135,51 +119,29 @@
 </footer>
 
 <script>
-// CORRECCIÓN: Se eliminó el "https://" duplicado.
-const scriptURL = "https://script.google.com/macros/s/AKfycbzn6ra3tFXtX6E8K5P_IIzGqgT-wGGSNzIg5afdMo7AXEnxvXiOnRM-QIBEmwonjdE/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbypicbViQpx68de35No3yAEd2XoLHOQ5banZ8cmJjn15es3eus8K4rTM8sRtFoPaDiH/exec";
 const form = document.getElementById("pedidoForm");
 const msg = document.getElementById("msg");
-const submitBtn = document.getElementById("submitBtn");
 
 form.addEventListener("submit", e => {
   e.preventDefault();
-  
-  // Deshabilitar el botón para evitar envíos múltiples
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Enviando...';
-  msg.innerHTML = "⏳ Procesando tu pedido...";
+  msg.innerHTML = "⏳ Enviando tu pedido...";
   
   fetch(scriptURL, {
     method: "POST",
-    body: new FormData(form)
+    body: JSON.stringify(Object.fromEntries(new FormData(form))),
+    headers: { 'Content-Type': 'application/json' }
   })
-  .then(response => {
-    if (!response.ok) {
-        // Si el servidor responde con un error HTTP (ej. 404, 500)
-        throw new Error(`Error en la red: ${response.statusText}`);
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log("Respuesta del servidor:", data);
-    if (data.success) {
-      msg.innerHTML = `<span class="success">✅ ¡Pedido ${data.idPedido} registrado con éxito!</span><br>Revisa tu correo para ver el comprobante.`;
+  .then(r => r.json())
+  .then(d => {
+    if (d.success) {
+      msg.innerHTML = `<span class="success">✅ Pedido ${d.idPedido} registrado.</span><br>Revisa tu correo para el comprobante.`;
       form.reset();
     } else {
-      // Si el script de Google Apps devuelve un error controlado
-      msg.innerHTML = `<span class="error">❌ ${data.error || 'Ocurrió un error al registrar el pedido.'}</span>`;
+      msg.innerHTML = `<span class="error">❌ ${d.error}</span>`;
     }
   })
-  .catch(error => {
-    // Si hay un error de conexión o la respuesta no es un JSON válido
-    console.error('Error durante el fetch:', error);
-    msg.innerHTML = '<span class="error">⚠️ Error de conexión. Por favor, revisa tu internet e intenta nuevamente.</span>';
-  })
-  .finally(() => {
-      // Reactivar el botón sin importar el resultado
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Enviar pedido';
-  });
+  .catch(() => msg.innerHTML = '<span class="error">⚠️ Error de conexión. Intenta nuevamente.</span>');
 });
 </script>
 
