@@ -1,144 +1,111 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Seguimiento - Miski Chukulati 🍫</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguimiento de Pedido - Miski Chukulati</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 <style>
 body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);
-  color: #fff;
-  padding: 22px;
-  margin: 0;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);
+  color:#fff;
+  padding:22px;
+  margin:0;
 }
-
 .container {
-  max-width: 820px;
-  margin: 36px auto;
-  background: rgba(255,255,255,0.08);
-  padding: 24px;
-  border-radius: 12px;
-  text-align: center;
+  max-width:900px;
+  margin:36px auto;
+  background:rgba(255,255,255,0.08);
+  padding:24px;
+  border-radius:12px;
 }
-
 label {
-  display: block;
-  margin-top: 10px;
-  font-weight: 600;
-  text-align: left;
+  display:block;
+  margin-top:10px;
+  font-weight:600;
 }
-
 input, button {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #d4c5b2;
-  width: 100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #d4c5b2;
+  width:100%;
+  box-sizing:border-box;
 }
-
 button {
-  margin-top: 12px;
-  background: linear-gradient(90deg,#c7a86d,#e5c99c);
-  color: #3b2314;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
+  background:linear-gradient(90deg,#c7a86d,#e5c99c);
+  color:#3b2314;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:12px;
 }
-
-button:hover {
-  transform: scale(1.03);
-}
-
 .result {
-  margin-top: 18px;
-  background: rgba(255,255,255,0.15);
-  padding: 18px;
-  border-radius: 10px;
-  color: #fffbe7;
-  line-height: 1.6;
+  margin-top:18px;
+  background:rgba(255,255,255,0.05);
+  padding:12px;
+  border-radius:8px;
+  display:none;
 }
-
-.qr {
-  margin-top: 14px;
-}
-
 a.download {
-  display: inline-block;
-  margin-top: 14px;
-  padding: 10px 16px;
-  border-radius: 24px;
-  background: linear-gradient(90deg,#c7a86d,#e5c99c);
-  color: #3b2314;
-  text-decoration: none;
-  font-weight: 700;
+  display:inline-block;
+  margin-top:12px;
+  padding:10px 16px;
+  border-radius:24px;
+  background:linear-gradient(90deg,#c7a86d,#e5c99c);
+  color:#3b2314;
+  text-decoration:none;
+  font-weight:700;
 }
 </style>
 </head>
 <body>
 <div class="container">
-  <h2>📦 Seguimiento de Pedido</h2>
-  <p>Busca por <b>ID de pedido</b> (P...) o por <b>DNI</b></p>
+  <h2>Seguimiento de Pedido</h2>
+  <p>Busca por <b>ID de pedido</b> (MSK-YYYY-XXX) o por <b>DNI</b></p>
 
   <label>ID de Pedido</label>
-  <input id="idPedido" placeholder="P2025..." />
+  <input id="idPedido" placeholder="MSK-2025-001">
 
   <label style="margin-top:8px">O DNI</label>
-  <input id="dni" placeholder="DNI 8 dígitos" />
+  <input id="dni" placeholder="DNI 8 dígitos">
 
   <button id="btnSearch">Buscar</button>
 
-  <div id="result" class="result" style="display:none"></div>
+  <div id="result" class="result"></div>
 </div>
 
 <script>
-const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbypicbViQpx68de35No3yAEd2XoLHOQ5banZ8cmJjn15es3eus8K4rTM8sRtFoPaDiH/exec";
+const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjkZePM6u1C5mWYEzuFSBNBhWjM-DNaYI56LHOSMU3Hxk3CaSAm8pPn0gtMkXTb5cx/exec";
+
 const btn = document.getElementById('btnSearch');
 const result = document.getElementById('result');
 
-btn.addEventListener('click', async ()=>{
-  result.style.display = 'block';
-  result.innerHTML = '🔎 Buscando...';
+btn.addEventListener('click', async () => {
+  result.style.display='none';
+  result.innerHTML='Buscando...';
   
   const idPedido = document.getElementById('idPedido').value.trim();
   const dni = document.getElementById('dni').value.trim();
-  
-  if(!idPedido && !dni){
-    result.innerHTML = '⚠️ Ingresa ID o DNI.';
-    return;
+  if(!idPedido && !dni){ 
+    result.style.display='block';
+    result.innerHTML='Ingresa ID o DNI';
+    return; 
   }
 
   try {
     const params = new URLSearchParams();
     params.append('action','trackOrder');
     if(idPedido) params.append('idPedido', idPedido);
-    else params.append('dni', dni);
+    if(dni) params.append('dni', dni);
 
-    const res = await fetch(`${SCRIPT_WEB_APP_URL}?${params.toString()}`, {method:'GET', mode:'cors'});
+    const res = await fetch(SCRIPT_WEB_APP_URL + '?' + params.toString(), {method:'GET', mode:'cors'});
     const json = await res.json();
 
     if(json.success && json.order){
       const o = json.order;
-      const comprobante = o.pdfUrl ? `<a class="download" href="${o.pdfUrl}" target="_blank">📄 Descargar comprobante</a>` : '';
-      const qrImg = o.pdfUrl ? `<div class="qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(o.pdfUrl)}" alt="QR Comprobante" width="140"></div>` : '';
-      
+      result.style.display='block';
       result.innerHTML = `
-        <strong>ID:</strong> ${o.idPedido}<br>
-        <strong>Estado:</strong> ${o.estado}<br>
-        <strong>Cliente:</strong> ${o.nombre}<br>
-        <strong>Producto:</strong> ${o.producto} (x${o.cantidad})<br>
-        <strong>Dirección:</strong> ${o.direccion || '—'}<br>
-        ${comprobante}
-        ${qrImg}
-      `;
-    } else {
-      result.innerHTML = '❌ Pedido no encontrado.';
-    }
-  } catch(err){
-    console.error(err);
-    result.innerHTML = '⚠️ Error de conexión al consultar pedido.';
-  }
-});
-</script>
-</body>
-</html>
+        <strong>ID Pedido:</strong> ${o.idPedido} <br>
+        <strong>Fecha / Hora:</strong> ${o.fecha} <br>
+        <strong>DNI:</strong> ${o.dni} <br>
+        <strong>Nombre:</strong> ${o.nombre}
