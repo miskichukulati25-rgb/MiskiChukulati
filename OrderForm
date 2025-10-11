@@ -1,97 +1,204 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Haz tu Pedido - Miski Chukulati</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 <style>
-body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);color:#fff;padding:22px;margin:0}
-.container{max-width:820px;margin:36px auto;background:rgba(255,255,255,0.08);padding:24px;border-radius:12px}
+body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);color:#fff;margin:0;padding:0}
+header{padding:12px 24px;background:rgba(0,0,0,0.5);display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:1.5em}
+.menu-btn{font-size:1.5em;cursor:pointer}
+nav{position:absolute;top:50px;right:0;background:rgba(0,0,0,0.85);width:220px;display:none;flex-direction:column;border-radius:8px;margin:8px}
+nav a{padding:12px 16px;color:#fff;text-decoration:none;border-bottom:1px solid #d4c5b2}
+nav a:last-child{border-bottom:none}
+nav a:hover{background:rgba(255,255,255,0.1)}
+.container{max-width:600px;margin:36px auto;background:rgba(255,255,255,0.08);padding:24px;border-radius:12px}
 label{display:block;margin-top:10px;font-weight:600}
-input,select,button{padding:10px;border-radius:8px;border:1px solid #d4c5b2;width:100%;margin-top:4px}
-.totalBox{margin-top:16px;padding:12px;background:rgba(255,255,255,0.05);border-radius:8px}
+input,select,textarea,button{padding:10px;border-radius:8px;border:1px solid #d4c5b2;width:100%;box-sizing:border-box;margin-top:4px}
+textarea{resize:vertical}
+.result{margin-top:18px;background:rgba(255,255,255,0.05);padding:12px;border-radius:8px}
+.total-box{background:rgba(255,255,255,0.1);padding:12px;border-radius:8px;margin-top:12px;font-weight:700}
 button{background:linear-gradient(90deg,#c7a86d,#e5c99c);color:#3b2314;font-weight:700;border:none;cursor:pointer}
+button:hover{opacity:0.9}
 </style>
 </head>
 <body>
-<div class="container">
-<h2>Haz tu Pedido</h2>
-<label>Nombre Completo</label><input id="nombre">
-<label>Correo</label><input id="correo">
-<label>Celular</label><input id="telefono">
-<label>DNI</label><input id="dni">
-<label>Producto</label>
-<select id="producto">
-  <option value="Tableta 70 % cacao">Tableta 70 % cacao</option>
-  <option value="Tableta 85 % cacao">Tableta 85 % cacao</option>
-  <option value="Bombones surtidos">Bombones surtidos</option>
-  <option value="Dark Chocolate Bar">Dark Chocolate Bar</option>
-  <option value="ChocoNibs">ChocoNibs</option>
-  <option value="ChocoBites">ChocoBites</option>
-  <option value="Chocolate Blanco">Chocolate Blanco</option>
-</select>
-<label>Cantidad</label><input id="cantidad" type="number" value="1">
-<label>Método de Pago</label>
-<select id="metodoPago">
-  <option>PLIN</option><option>YAPE</option><option>Transferencia</option><option>Efectivo</option>
-</select>
-<label>Courier</label>
-<select id="courier">
-  <option>Correo1</option><option>Correo2</option><option>Correo3</option>
-</select>
 
-<div class="totalBox">
-<p>Base Imponible: S/ <span id="base">0.00</span></p>
-<p>IGV: S/ <span id="igv">0.00</span></p>
-<p>Comisión Envío: S/ <span id="comision">7.00</span></p>
-<p><b>Total a pagar por tu pedido es: S/ <span id="total">0.00</span></b></p>
+<header>
+<h1>Miski Chukulati 🍫</h1>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+<nav id="menuNav">
+  <a href="#" onclick="showPedido()">Hacer Pedido</a>
+  <a href="#" onclick="showOracion()">Pedido de Oración</a>
+</nav>
+</header>
+
+<div class="container" id="pedidoForm">
+  <h2>Hacer Pedido</h2>
+
+  <label>Nombre Completo</label>
+  <input id="nombre" placeholder="Juan Pérez">
+
+  <label>DNI</label>
+  <input id="dni" placeholder="8 dígitos">
+
+  <label>Correo</label>
+  <input id="correo" type="email" placeholder="correo@ejemplo.com">
+
+  <label>Celular</label>
+  <input id="telefono" placeholder="9 dígitos">
+
+  <label>Producto</label>
+  <select id="producto" onchange="calcularTotal()">
+    <option value="">--Selecciona--</option>
+    <option value="Tableta 70 % cacao">Tableta 70 % cacao</option>
+    <option value="Tableta 85 % cacao">Tableta 85 % cacao</option>
+    <option value="Bombones surtidos">Bombones surtidos</option>
+    <option value="Dark Chocolate Bar">Dark Chocolate Bar</option>
+    <option value="ChocoNibs">ChocoNibs</option>
+    <option value="ChocoBites">ChocoBites</option>
+    <option value="Chocolate Blanco">Chocolate Blanco</option>
+  </select>
+
+  <label>Cantidad</label>
+  <input id="cantidad" type="number" min="1" value="1" onchange="calcularTotal()">
+
+  <label>Método de Pago</label>
+  <select id="metodoPago">
+    <option value="PLIN">PLIN</option>
+    <option value="YAPE">YAPE</option>
+    <option value="Transferencia">Transferencia</option>
+    <option value="Efectivo">Efectivo</option>
+  </select>
+
+  <label>Encargado de Envío</label>
+  <select id="encargadoEnvio">
+    <option value="Courier1">Courier1</option>
+    <option value="Courier2">Courier2</option>
+    <option value="Courier3">Courier3</option>
+  </select>
+
+  <label>Comentarios</label>
+  <textarea id="comentarios" placeholder="Opcional"></textarea>
+
+  <div class="total-box">
+    <div>Base Imponible: S/ <span id="baseImponible">0.00</span></div>
+    <div>IGV (18%): S/ <span id="igv">0.00</span></div>
+    <div>Comisión envío: S/ <span id="envio">7.00</span></div>
+    <div>Total a pagar por tu pedido: S/ <span id="total">0.00</span></div>
+  </div>
+
+  <button onclick="enviarPedido()">Enviar Pedido</button>
+  <div id="result" class="result" style="display:none"></div>
 </div>
 
-<button id="btnSend">Enviar Pedido</button>
-<div id="msg" style="margin-top:12px"></div>
+<div class="container" id="oracionForm" style="display:none">
+  <h2>Pedido de Oración</h2>
+  <label>Nombre Completo</label>
+  <input id="nombreOracion" placeholder="Juan Pérez">
+
+  <label>Pedido de Oración</label>
+  <textarea id="pedidoOracion" placeholder="Escribe tu pedido de oración"></textarea>
+
+  <label>Orar Por</label>
+  <input id="orarPor" placeholder="Por quién deseas orar">
+
+  <button onclick="enviarOracion()">Enviar Pedido de Oración</button>
+  <div id="resultOracion" class="result" style="display:none"></div>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjkZePM6u1C5mWYEzuFSBNBhWjM-DNaYI56LHOSMU3Hxk3CaSAm8pPn0gtMkXTb5cx/exec";
-const precios={"Tableta 70 % cacao":8,"Tableta 85 % cacao":9,"Bombones surtidos":15,"Dark Chocolate Bar":8,"ChocoNibs":5,"ChocoBites":6.5,"Chocolate Blanco":24};
-const cantidadInput = document.getElementById('cantidad');
-const productoSelect = document.getElementById('producto');
-const baseEl=document.getElementById('base'), igvEl=document.getElementById('igv'), comisionEl=document.getElementById('comision'), totalEl=document.getElementById('total');
-const comision = 7;
+const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbypicbViQpx68de35No3yAEd2XoLHOQ5banZ8cmJjn15es3eus8K4rTM8sRtFoPaDiH/exec";
+const productosPrecios = {
+  "Tableta 70 % cacao": 8.00,
+  "Tableta 85 % cacao": 9.00,
+  "Bombones surtidos": 15.00,
+  "Dark Chocolate Bar": 8.00,
+  "ChocoNibs": 5.00,
+  "ChocoBites": 6.50,
+  "Chocolate Blanco": 24.00
+};
+const envioFijo = 7;
+
+function toggleMenu(){const nav=document.getElementById('menuNav');nav.style.display=(nav.style.display==='flex')?'none':'flex';}
+
+function showPedido(){document.getElementById('pedidoForm').style.display='block';document.getElementById('oracionForm').style.display='none';}
+function showOracion(){document.getElementById('pedidoForm').style.display='none';document.getElementById('oracionForm').style.display='block';}
 
 function calcularTotal(){
-  const cantidad=Number(cantidadInput.value);
-  const producto=productoSelect.value;
-  const base = precios[producto]*cantidad;
-  const igv = base*0.18;
-  const total = base+igv+comision;
-  baseEl.innerText=base.toFixed(2);
-  igvEl.innerText=igv.toFixed(2);
-  totalEl.innerText=total.toFixed(2);
+  const producto = document.getElementById('producto').value;
+  const cantidad = Number(document.getElementById('cantidad').value || 1);
+  const precioUnitario = productosPrecios[producto] || 0;
+  const base = precioUnitario * cantidad;
+  const igv = parseFloat((base*0.18).toFixed(2));
+  const total = parseFloat((base + igv + envioFijo).toFixed(2));
+
+  document.getElementById('baseImponible').innerText = base.toFixed(2);
+  document.getElementById('igv').innerText = igv.toFixed(2);
+  document.getElementById('envio').innerText = envioFijo.toFixed(2);
+  document.getElementById('total').innerText = total.toFixed(2);
 }
 
-cantidadInput.addEventListener('input',calcularTotal);
-productoSelect.addEventListener('change',calcularTotal);
-calcularTotal();
-
-document.getElementById('btnSend').addEventListener('click',async()=>{
-  const data={
-    nombre:document.getElementById('nombre').value,
-    correo:document.getElementById('correo').value,
-    telefono:document.getElementById('telefono').value,
-    dni:document.getElementById('dni').value,
-    producto:document.getElementById('producto').value,
-    cantidad:Number(document.getElementById('cantidad').value),
-    metodoPago:document.getElementById('metodoPago').value,
-    courier:document.getElementById('courier').value,
-    comisionEnvio:comision
+async function enviarPedido(){
+  const data = {
+    type: "pedido",
+    nombre: document.getElementById('nombre').value.trim(),
+    dni: document.getElementById('dni').value.trim(),
+    correo: document.getElementById('correo').value.trim(),
+    telefono: document.getElementById('telefono').value.trim(),
+    producto: document.getElementById('producto').value,
+    cantidad: Number(document.getElementById('cantidad').value || 1),
+    metodoPago: document.getElementById('metodoPago').value,
+    encargadoEnvio: document.getElementById('encargadoEnvio').value,
+    comentarios: document.getElementById('comentarios').value.trim(),
+    envio: envioFijo
   };
-  const res = await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(data)});
-  const json = await res.json();
-  if(json.success) document.getElementById('msg').innerHTML=`Pedido registrado ✅ ID: ${json.idPedido}`;
-  else document.getElementById('msg').innerHTML=`Error: ${json.error}`;
-});
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').innerText='Enviando pedido...';
+  try{
+    const res = await fetch(SCRIPT_WEB_APP_URL,{method:'POST',body:JSON.stringify(data)});
+    const json = await res.json();
+    if(json.success){
+      document.getElementById('result').innerText='Gracias por tu compra...!, Que Dios te guíe y guarde siempre...!';
+      document.getElementById('pedidoForm').reset();
+      calcularTotal();
+    } else {
+      document.getElementById('result').innerText='Error: '+json.error;
+    }
+  }catch(err){
+    console.error(err);
+    document.getElementById('result').innerText='Error al enviar pedido.';
+  }
+}
+
+async function enviarOracion(){
+  const data = {
+    type: "prayer",
+    nombre: document.getElementById('nombreOracion').value.trim(),
+    pedido: document.getElementById('pedidoOracion').value.trim(),
+    orarPor: document.getElementById('orarPor').value.trim()
+  };
+  document.getElementById('resultOracion').style.display='block';
+  document.getElementById('resultOracion').innerText='Enviando pedido de oración...';
+  try{
+    const res = await fetch(SCRIPT_WEB_APP_URL,{method:'POST',body:JSON.stringify(data)});
+    const json = await res.json();
+    if(json.success){
+      document.getElementById('resultOracion').innerText='¡Pedido de oración enviado correctamente!';
+      document.getElementById('oracionForm').reset();
+    } else {
+      document.getElementById('resultOracion').innerText='Error: '+json.error;
+    }
+  }catch(err){
+    console.error(err);
+    document.getElementById('resultOracion').innerText='Error al enviar pedido de oración.';
+  }
+}
+
+calcularTotal();
 </script>
+
 </body>
 </html>
