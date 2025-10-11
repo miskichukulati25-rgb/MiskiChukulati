@@ -110,7 +110,7 @@ button:hover{opacity:0.9}
 </div>
 
 <script>
-const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjkZePM6u1C5mWYEzuFSBNBhWjM-DNaYI56LHOSMU3Hxk3CaSAm8pPn0gtMkXTb5cx/exec";
+const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzn6ra3tFXtX6E8K5P_IIzGqgT-wGGSNzIg5afdMo7AXEnxvXiOnRM-QIBEmwonjdE/exec";
 const productosPrecios = {
   "Tableta 70 % cacao": 8.00,
   "Tableta 85 % cacao": 9.00,
