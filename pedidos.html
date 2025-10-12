@@ -20,166 +20,191 @@ header h1{margin:0;font-size:1.5em}
 nav{
   position:absolute;top:50px;right:0;background:rgba(0,0,0,0.85);
   width:220px;display:none;flex-direction:column;border-radius:8px;margin:8px;
+  z-index: 1000; /* Ensure nav is above other content */
 }
 nav a{
   padding:12px 16px;color:#fff;text-decoration:none;border-bottom:1px solid #d4c5b2;
 }
 nav a:last-child{border-bottom:none}
 nav a:hover{background:rgba(255,255,255,0.1)}
-
 .container{
-  max-width:650px;margin:30px auto;background:rgba(255,255,255,0.08);
-  padding:24px;border-radius:12px;
+max-width:650px;margin:30px auto;background:rgba(255,255,255,0.08);
+padding:24px;border-radius:12px;
 }
 .logo{
-  width:120px;height:120px;border-radius:50%;
-  margin-top:20px;
-  box-shadow:0 0 20px rgba(212,175,55,0.4);
+width:120px;height:120px;border-radius:50%;
+margin-top:20px;
+box-shadow:0 0 20px rgba(212,175,55,0.4);
 }
-
 /* Campos */
 label{display:block;margin-top:10px;font-weight:600;text-align:left}
 input,select,textarea{
-  padding:10px;border-radius:8px;border:1px solid #d4c5b2;
-  width:100%;box-sizing:border-box;margin-top:4px;
+padding:10px;border-radius:8px;border:1px solid #d4c5b2;
+width:100%;box-sizing:border-box;margin-top:4px;
+background:rgba(255,255,255,0.1); /* Slightly transparent background for inputs */
+color: #fff;
+}
+input::placeholder, textarea::placeholder {
+  color: #ccc;
 }
 textarea{resize:vertical}
-
 /* Toggle Delivery */
 .toggle-container{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(255,255,255,0.08);
-  padding:10px 20px;border-radius:40px;
-  justify-content:center;margin-top:15px;
+display:flex;align-items:center;gap:10px;
+background:rgba(255,255,255,0.08);
+padding:10px 20px;border-radius:40px;
+justify-content:center;margin-top:15px;
 }
 .toggle-switch{
-  position:relative;width:55px;height:30px;
-  background:#a67c52;border-radius:30px;
-  cursor:pointer;transition:background 0.3s ease;
+position:relative;width:55px;height:30px;
+background:#a67c52;border-radius:30px;
+cursor:pointer;transition:background 0.3s ease;
 }
 .toggle-switch::before{
-  content:"";position:absolute;top:3px;left:3px;
-  width:24px;height:24px;border-radius:50%;background:white;
-  transition:transform 0.3s ease;
+content:"";position:absolute;top:3px;left:3px;
+width:24px;height:24px;border-radius:50%;background:white;
+transition:transform 0.3s ease;
 }
 .toggle-switch.active{background:linear-gradient(90deg,#c7a86d,#e5c99c);}
 .toggle-switch.active::before{transform:translateX(25px);}
 .toggle-label{color:#f4d67b;font-weight:600}
-
 /* Riders Section */
 .riders-section{
-  margin-top:25px;
+margin-top:25px;
 }
 .riders-section h3{
-  color:#f4d67b;
-  font-weight:700;
-  font-size:1.2em;
-  margin-bottom:15px;
+color:#f4d67b;
+font-weight:700;
+font-size:1.2em;
+margin-bottom:15px;
 }
 .riders-grid{
-  display:flex;flex-wrap:wrap;justify-content:center;gap:16px;
+display:flex;flex-wrap:wrap;justify-content:center;gap:16px;
 }
 .rider-card{
-  background:rgba(255,255,255,0.1);
-  border:2px solid transparent;
-  border-radius:15px;
-  padding:14px;
-  width:150px;
-  text-align:center;
-  cursor:pointer;
-  transition:all 0.3s ease;
-  position:relative;
+background:rgba(255,255,255,0.1);
+border:2px solid transparent;
+border-radius:15px;
+padding:14px;
+width:150px;
+text-align:center;
+cursor:pointer;
+transition:all 0.3s ease;
+position:relative;
 }
 .rider-card:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 20px rgba(212,175,55,0.5);
+transform:scale(1.05);
+box-shadow:0 0 20px rgba(212,175,55,0.5);
 }
 .rider-card.selected{
-  border:2px solid #d4af37;
-  box-shadow:0 0 25px rgba(212,175,55,0.7);
+border:2px solid #d4af37;
+box-shadow:0 0 25px rgba(212,175,55,0.7);
 }
 .rider-img{
-  width:80px;height:80px;border-radius:50%;object-fit:cover;
-  border:2px solid #d4af37;margin-bottom:8px;
+width:80px;height:80px;border-radius:50%;object-fit:cover;
+border:2px solid #d4af37;margin-bottom:8px;
 }
 .rider-name{font-weight:600;color:#f4d67b;}
 .rider-age{font-size:0.85em;color:#e8d9b5;}
 .rider-rating{
-  font-size:1.1em;
-  color:#ffd700;
-  transition:transform 0.3s ease;
+font-size:1.1em;
+color:#ffd700;
+transition:transform 0.3s ease;
 }
 .rider-card:hover .rider-rating{
-  transform:scale(1.2);
+transform:scale(1.2);
+}
+/* Total Box */
+.total-box {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+  text-align: right;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+.total-box div {
+  margin-bottom: 5px;
+  color: #d2b48c;
+}
+.total-box span {
+  color: #f4d67b;
+  font-weight: 700;
+}
+.total-box div:last-child {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #e5c99c;
+  margin-top: 10px;
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  padding-top: 10px;
 }
 
 /* Botón principal */
 .order-btn{
-  margin-top:20px;
-  background:linear-gradient(90deg,#c7a86d,#e5c99c);
-  border:none;padding:12px 30px;
-  border-radius:30px;font-weight:700;
-  color:#3b2314;cursor:pointer;
-  font-size:1.1em;
-  transition:transform 0.3s ease, box-shadow 0.3s ease;
+margin-top:20px;
+background:linear-gradient(90deg,#c7a86d,#e5c99c);
+border:none;padding:12px 30px;
+border-radius:30px;font-weight:700;
+color:#3b2314;cursor:pointer;
+font-size:1.1em;
+transition:transform 0.3s ease, box-shadow 0.3s ease;
 }
 .order-btn:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(212,175,55,0.6);}
-
 /* Popup */
 .popup{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:rgba(0,0,0,0.75);
-  display:flex;justify-content:center;align-items:center;
-  visibility:hidden;opacity:0;
-  transition:visibility 0s,opacity 0.3s ease;
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,0.75);
+display:flex;justify-content:center;align-items:center;
+visibility:hidden;opacity:0;
+transition:visibility 0s,opacity 0.3s ease;
+z-index: 2000; /* Ensure popup is above everything */
 }
 .popup.active{visibility:visible;opacity:1;}
 .popup-content{
-  background:#fff8e1;color:#5c4033;
-  border-radius:16px;padding:30px;text-align:center;
-  max-width:340px;transform:scale(0.8);
-  box-shadow:0 0 25px rgba(212,175,55,0.5);
-  transition:transform 0.3s ease;
+background:#fff8e1;color:#5c4033;
+border-radius:16px;padding:30px;text-align:center;
+max-width:340px;transform:scale(0.8);
+box-shadow:0 0 25px rgba(212,175,55,0.5);
+transition:transform 0.3s ease;
 }
 .popup.active .popup-content{transform:scale(1);}
 .popup h2{color:#a67c52;}
 .popup button{
-  margin-top:18px;background:linear-gradient(90deg,#c7a86d,#e5c99c);
-  border:none;padding:10px 20px;border-radius:25px;
-  font-weight:700;color:#3b2314;cursor:pointer;
-  transition:transform 0.2s ease;
+margin-top:18px;background:linear-gradient(90deg,#c7a86d,#e5c99c);
+border:none;padding:10px 20px;border-radius:25px;
+font-weight:700;color:#3b2314;cursor:pointer;
+transition:transform 0.2s ease;
 }
 .popup button:hover{transform:scale(1.05);box-shadow:0 0 15px rgba(212,175,55,0.6);}
-
 /* Toast */
 .toast{
-  position:fixed;bottom:30px;left:50%;
-  transform:translateX(-50%);
-  background:rgba(255,255,255,0.95);
-  color:#3b2314;
-  padding:16px 24px;border-radius:30px;
-  box-shadow:0 0 25px rgba(212,175,55,0.6);
-  font-weight:600;opacity:0;
-  transition:opacity 0.5s ease, bottom 0.5s ease;
-  text-align:center;
+position:fixed;bottom:30px;left:50%;
+transform:translateX(-50%);
+background:rgba(255,255,255,0.95);
+color:#3b2314;
+padding:16px 24px;border-radius:30px;
+box-shadow:0 0 25px rgba(212,175,55,0.6);
+font-weight:600;opacity:0;
+transition:opacity 0.5s ease, bottom 0.5s ease;
+text-align:center;
+z-index: 3000; /* Ensure toast is above everything */
 }
 .toast.show{opacity:1;bottom:50px;}
 .toast p{margin:0;padding:0;color:#3b2314;font-weight:700;}
 .toast button{
-  margin-top:8px;
-  background:linear-gradient(90deg,#c7a86d,#e5c99c);
-  border:none;padding:8px 18px;border-radius:20px;
-  font-weight:700;color:#3b2314;cursor:pointer;
-  transition:transform 0.2s ease;
+margin-top:8px;
+background:linear-gradient(90deg,#c7a86d,#e5c99c);
+border:none;padding:8px 18px;border-radius:20px;
+font-weight:700;color:#3b2314;cursor:pointer;
+transition:transform 0.2s ease;
 }
 .toast button:hover{transform:scale(1.05);box-shadow:0 0 12px rgba(212,175,55,0.6);}
-
 footer{margin:25px 0;color:#d2b48c;font-size:0.9rem;}
 footer span{color:#f4d67b;font-style:italic;}
 </style>
 </head>
 <body>
-
 <header>
   <h1>Miski Chukulati 🍫</h1>
   <div class="menu-btn" onclick="toggleMenu()">☰</div>
@@ -188,58 +213,48 @@ footer span{color:#f4d67b;font-style:italic;}
     <a href="#" onclick="showOracion()">Pedido de Oración</a>
   </nav>
 </header>
-
 <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Logo Miski Chukulati" class="logo">
-
 <div class="container" id="pedidoForm">
   <h2>Hacer Pedido</h2>
-
-  <label>Nombre Completo</label>
-  <input id="nombre" placeholder="Juan Pérez">
-  <label>DNI</label>
-  <input id="dni" placeholder="8 dígitos">
-  <label>Correo</label>
-  <input id="correo" type="email" placeholder="correo@ejemplo.com">
-  <label>Celular</label>
-  <input id="telefono" placeholder="9 dígitos">
-
-  <label>Producto</label>
-  <select id="producto" onchange="calcularTotal()">
-    <option value="">--Selecciona--</option>
-    <option value="Tableta 70 % cacao">Tableta 70 % cacao</option>
-    <option value="Tableta 85 % cacao">Tableta 85 % cacao</option>
-    <option value="Bombones surtidos">Bombones surtidos</option>
-    <option value="Dark Chocolate Bar">Dark Chocolate Bar</option>
-    <option value="ChocoNibs">ChocoNibs</option>
-    <option value="ChocoBites">ChocoBites</option>
-    <option value="Chocolate Blanco">Chocolate Blanco</option>
-  </select>
-
-  <label>Cantidad</label>
-  <input id="cantidad" type="number" min="1" value="1" onchange="calcularTotal()">
-
+<label for="nombre">Nombre Completo</label>
+<input id="nombre" placeholder="Juan Pérez" required>
+<label for="dni">DNI</label>
+<input id="dni" placeholder="8 dígitos" pattern="\d{8}" title="El DNI debe tener 8 dígitos" required>
+<label for="correo">Correo</label>
+<input id="correo" type="email" placeholder="correo@ejemplo.com" required>
+<label for="telefono">Celular</label>
+<input id="telefono" placeholder="9 dígitos" pattern="\d{9}" title="El celular debe tener 9 dígitos" required>
+<label for="producto">Producto</label>
+<select id="producto" onchange="calcularTotal()" required>
+<option value="">--Selecciona--</option>
+<option value="Tableta 70 % cacao">Tableta 70 % cacao</option>
+<option value="Tableta 85 % cacao">Tableta 85 % cacao</option>
+<option value="Bombones surtidos">Bombones surtidos</option>
+<option value="Dark Chocolate Bar">Dark Chocolate Bar</option>
+<option value="ChocoNibs">ChocoNibs</option>
+<option value="ChocoBites">ChocoBites</option>
+<option value="Chocolate Blanco">Chocolate Blanco</option>
+</select>
+<label for="cantidad">Cantidad</label>
+<input id="cantidad" type="number" min="1" value="1" onchange="calcularTotal()" required>
   <div class="toggle-container">
     <span class="toggle-label">Delivery</span>
     <div id="toggleDelivery" class="toggle-switch"></div>
     <span id="toggleStatus">Sin delivery</span>
   </div>
-
   <!-- Miski Riders -->
   <div class="riders-section">
     <h3>Elige a tu Miski Rider 🍫</h3>
     <div class="riders-grid" id="ridersGrid"></div>
   </div>
-
   <div class="total-box">
     <div>Precio Producto: S/ <span id="precioProducto">0.00</span></div>
-    <div>Comisión Envío: S/ <span id="comision">7.00</span></div>
+    <div>Comisión Envío: S/ <span id="comision">0.00</span></div> <!-- Changed to 0.00 initial -->
     <div>Total: S/ <span id="total">0.00</span></div>
   </div>
-
-  <button id="verTotalBtn" class="order-btn" onclick="mostrarPopup()">Ver total</button>
+<button id="verTotalBtn" class="order-btn" onclick="mostrarPopup()">Ver total</button>
   <div id="result" class="result" style="display:none"></div>
 </div>
-
 <!-- Popup -->
 <div id="popup" class="popup">
   <div class="popup-content">
@@ -253,18 +268,15 @@ footer span{color:#f4d67b;font-style:italic;}
     <button onclick="enviarPedido()">Enviar Pedido</button>
   </div>
 </div>
-
 <!-- Toast -->
 <div id="toast" class="toast">
   <p id="toastMsg"></p>
   <button id="verPedidoBtn" style="display:none;">Ver pedido</button>
 </div>
-
 <footer>
   <span>"Jehová te bendiga, y te guarde” – Números 6:24</span><br>
   © Miski Chukulati - 2025
 </footer>
-
 <script>
 const SCRIPT_WEB_APP_URL="https://script.google.com/macros/s/AKfycbypicbViQpx68de35No3yAEd2XoLHOQ5banZ8cmJjn15es3eus8K4rTM8sRtFoPaDiH/exec";
 const productosPrecios={"Tableta 70 % cacao":8,"Tableta 85 % cacao":9,"Bombones surtidos":15,"Dark Chocolate Bar":8,"ChocoNibs":5,"ChocoBites":6.5,"Chocolate Blanco":24};
@@ -274,7 +286,22 @@ let lastPdfUrl=null;
 let lastTracking=null;
 let riderSeleccionado=null;
 
-function toggleMenu(){const nav=document.getElementById('menuNav');nav.style.display=(nav.style.display==='flex')?'none':'flex';}
+function toggleMenu(){
+  const nav=document.getElementById('menuNav');
+  nav.style.display=(nav.style.display==='flex')?'none':'flex';
+}
+
+// These functions are placeholders if they navigate to other pages
+function showPedido() {
+    console.log("Navigating to Hacer Pedido (current page).");
+    toggleMenu(); // Close menu if open
+}
+
+function showOracion() {
+    alert("Función 'Pedido de Oración' no implementada en este demo.");
+    toggleMenu(); // Close menu if open
+}
+
 
 const toggle=document.getElementById('toggleDelivery');
 const statusText=document.getElementById('toggleStatus');
@@ -334,6 +361,31 @@ function calcularTotal(){
 }
 
 function mostrarPopup(){
+  // Basic validation before showing popup
+  const nombre = document.getElementById('nombre').value.trim();
+  const dni = document.getElementById('dni').value.trim();
+  const correo = document.getElementById('correo').value.trim();
+  const telefono = document.getElementById('telefono').value.trim();
+  const producto = document.getElementById('producto').value;
+  const cantidad = Number(document.getElementById('cantidad').value);
+
+  if (!nombre || !dni || !correo || !telefono || !producto || cantidad < 1) {
+    showToast("Por favor, completa todos los campos obligatorios.", true);
+    return;
+  }
+  if (!dni.match(/^\d{8}$/)) {
+    showToast("El DNI debe tener 8 dígitos.", true);
+    return;
+  }
+  if (!telefono.match(/^\d{9}$/)) {
+    showToast("El celular debe tener 9 dígitos.", true);
+    return;
+  }
+  if (conDelivery && !riderSeleccionado) {
+    showToast("Por favor, selecciona un Miski Rider para el delivery.", true);
+    return;
+  }
+
   calcularTotal();
   popup.classList.add('active');
 }
@@ -349,20 +401,94 @@ async function enviarPedido(){
     cantidad:Number(document.getElementById('cantidad').value||1),
     delivery:conDelivery?"si":"no",
     envio:conDelivery?envioFijo:0,
-    encargadoEnvio:riderSeleccionado?`${riderSeleccionado.nombre}`:"Sin asignar"
+    // Assign "Sin asignar" if no rider is selected, otherwise the rider's name
+    encargadoEnvio: riderSeleccionado ? `${riderSeleccionado.nombre}` : "Sin asignar"
   };
+
   popup.classList.remove('active');
   document.getElementById('result').style.display='block';
   document.getElementById('result').innerText='Enviando pedido...';
+  
   try{
     const res=await fetch(SCRIPT_WEB_APP_URL,{method:'POST',body:JSON.stringify(data)});
     const json=await res.json();
+    
     if(json.success){
       lastPdfUrl=json.pdfUrl;
       lastTracking=json.tracking;
       document.getElementById('result').innerText='Gracias por tu compra...! Que Dios te guíe y guarde siempre...!';
-      showToast(`Pedido registrado exitosamente\nNúmero: ${lastTracking}`);
+      showToast(`Pedido registrado exitosamente\nNúmero de seguimiento: ${lastTracking}`);
       verPedidoBtn.style.display='inline-block';
       verPedidoBtn.onclick=()=>window.open(`ordertracking.html?idPedido=${encodeURIComponent(lastTracking)}`,'_blank');
       const btn=document.getElementById('verTotalBtn');
       btn.textContent='📄 Comprobante de pedido';
+      // Optionally, reset the form after successful submission
+      document.getElementById('pedidoForm').reset(); // This won't reset custom elements like toggles
+      document.getElementById('nombre').value = '';
+      document.getElementById('dni').value = '';
+      document.getElementById('correo').value = '';
+      document.getElementById('telefono').value = '';
+      document.getElementById('producto').value = '';
+      document.getElementById('cantidad').value = 1;
+      // Reset delivery toggle and rider selection
+      conDelivery = false;
+      toggle.classList.remove('active');
+      statusText.textContent = "Sin delivery";
+      document.querySelectorAll('.rider-card').forEach(c => c.classList.remove('selected'));
+      riderSeleccionado = null;
+      calcularTotal(); // Recalculate to show 0.00
+    } else {
+      document.getElementById('result').innerText='Error al enviar el pedido: ' + (json.message || 'Error desconocido');
+      showToast('Error al enviar el pedido: ' + (json.message || 'Error desconocido'), true);
+    }
+  }catch(error){
+    document.getElementById('result').innerText='Error de conexión: ' + error.message;
+    showToast('Error de conexión: ' + error.message, true);
+  }
+}
+
+function showToast(message, isError = false) {
+  toastMsg.innerText = message;
+  toast.style.backgroundColor = isError ? 'rgba(255, 99, 71, 0.95)' : 'rgba(255, 255, 255, 0.95)';
+  toastMsg.style.color = isError ? '#fff' : '#3b2314';
+  
+  if (isError) {
+    verPedidoBtn.style.display = 'none'; // Hide "Ver pedido" for errors
+    toast.querySelector('button').style.display = 'inline-block'; // Show a generic close button
+    toast.querySelector('button').textContent = 'Cerrar';
+    toast.querySelector('button').onclick = () => { toast.classList.remove('show'); };
+  } else {
+    // If it's a success message, the verPedidoBtn will be set by enviarPedido()
+    // For general info, we might want a close button too
+    if (message.includes("Pedido registrado exitosamente")) {
+        // verPedidoBtn is handled in enviarPedido
+    } else {
+        verPedidoBtn.style.display = 'none';
+        toast.querySelector('button').style.display = 'inline-block';
+        toast.querySelector('button').textContent = 'Cerrar';
+        toast.querySelector('button').onclick = () => { toast.classList.remove('show'); };
+    }
+  }
+
+  toast.classList.add('show');
+  if (!isError) { // Automatically hide success toasts after a few seconds
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 5000);
+  }
+}
+
+// Initial calculation when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    calcularTotal();
+    // Hide the "Ver pedido" button initially
+    verPedidoBtn.style.display = 'none';
+});
+
+// Update rider selection in popup on initial load if a rider is pre-selected (though none are)
+document.getElementById('popupRider').innerText = riderSeleccionado ? `${riderSeleccionado.nombre} (⭐${riderSeleccionado.calif})` : "Sin asignar";
+
+
+</script>
+</body>
+</html>
