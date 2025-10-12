@@ -1,112 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seguimiento de Pedido - Miski Chukulati</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
-<style>
-body {
-  font-family:'Poppins',sans-serif;
-  background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);
-  color:#fff;
-  padding:22px;
-  margin:0;
-}
-.container {
-  max-width:900px;
-  margin:36px auto;
-  background:rgba(255,255,255,0.08);
-  padding:24px;
-  border-radius:12px;
-}
-label {
-  display:block;
-  margin-top:10px;
-  font-weight:600;
-}
-input, button {
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #d4c5b2;
-  width:100%;
-  box-sizing:border-box;
-}
-button {
-  background:linear-gradient(90deg,#c7a86d,#e5c99c);
-  color:#3b2314;
-  font-weight:700;
-  cursor:pointer;
-  margin-top:12px;
-}
-.result {
-  margin-top:18px;
-  background:rgba(255,255,255,0.05);
-  padding:12px;
-  border-radius:8px;
-  display:none;
-}
-a.download {
-  display:inline-block;
-  margin-top:12px;
-  padding:10px 16px;
-  border-radius:24px;
-  background:linear-gradient(90deg,#c7a86d,#e5c99c);
-  color:#3b2314;
-  text-decoration:none;
-  font-weight:700;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seguimiento de Pedido - Miski Chukulati</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #fff7f2;
+      color: #4b2e05;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+    }
+    header img {
+      width: 100px;
+      border-radius: 50%;
+    }
+    h1 {
+      font-size: 1.5em;
+      color: #5a3516;
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: 500;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #c9a77c;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+    button {
+      background: linear-gradient(90deg, #c98a4b, #e5bb7e);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 1em;
+      border-radius: 25px;
+      margin-top: 15px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .resultado {
+      margin-top: 15px;
+      padding: 10px;
+      text-align: center;
+      background-color: #fff3e0;
+      border-radius: 10px;
+      font-weight: 500;
+      color: #5a3516;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <h2>Seguimiento de Pedido</h2>
-  <p>Busca por <b>ID de pedido</b> (MSK-YYYY-XXX) o por <b>DNI</b></p>
+  <header>
+    <img src="https://i.ibb.co/ScVhT9F/logo-redondo.png" alt="Logo Miski Chukulati">
+    <h1>Seguimiento de Pedido</h1>
+  </header>
 
-  <label>ID de Pedido</label>
-  <input id="idPedido" placeholder="MSK-2025-001">
+  <form id="trackingForm">
+    <label for="trackingID">Ingresa tu código de seguimiento:</label>
+    <input type="text" id="trackingID" placeholder="Ejemplo: MSK-2025-001" required>
+    <button type="submit">Consultar</button>
+    <div class="resultado" id="resultado"></div>
+  </form>
 
-  <label style="margin-top:8px">O DNI</label>
-  <input id="dni" placeholder="DNI 8 dígitos">
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbypicbViQpx68de35No3yAEd2XoLHOQ5banZ8cmJjn15es3eus8K4rTM8sRtFoPaDiH/exec";
 
-  <button id="btnSearch">Buscar</button>
+    document.getElementById("trackingForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const trackingID = document.getElementById("trackingID").value.trim();
+      const resultado = document.getElementById("resultado");
+      resultado.innerHTML = "🔍 Buscando tu pedido...";
 
-  <div id="result" class="result"></div>
-</div>
+      try {
+        const response = await fetch(`${scriptURL}?tracking=${trackingID}`);
+        const data = await response.json();
 
-<script>
-const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzn6ra3tFXtX6E8K5P_IIzGqgT-wGGSNzIg5afdMo7AXEnxvXiOnRM-QIBEmwonjdE/exec";
-
-const btn = document.getElementById('btnSearch');
-const result = document.getElementById('result');
-
-btn.addEventListener('click', async () => {
-  result.style.display='none';
-  result.innerHTML='Buscando...';
-  
-  const idPedido = document.getElementById('idPedido').value.trim();
-  const dni = document.getElementById('dni').value.trim();
-  if(!idPedido && !dni){ 
-    result.style.display='block';
-    result.innerHTML='Ingresa ID o DNI';
-    return; 
-  }
-
-  try {
-    const params = new URLSearchParams();
-    params.append('action','trackOrder');
-    if(idPedido) params.append('idPedido', idPedido);
-    if(dni) params.append('dni', dni);
-
-    const res = await fetch(SCRIPT_WEB_APP_URL + '?' + params.toString(), {method:'GET', mode:'cors'});
-    const json = await res.json();
-
-    if(json.success && json.order){
-      const o = json.order;
-      result.style.display='block';
-      result.innerHTML = `
-        <strong>ID Pedido:</strong> ${o.idPedido} <br>
-        <strong>Fecha / Hora:</strong> ${o.fecha} <br>
-        <strong>DNI:</strong> ${o.dni} <br>
-        <strong>Nombre:</strong> ${o.nombre}
-
+        if (data && data.estado) {
+          resultado.innerHTML = `
+            <strong>Cliente:</strong> ${data.nombre}<br>
+            <strong>Producto:</strong> ${data.producto}<br>
+            <strong>Cantidad:</strong> ${data.cantidad}<br>
+            <strong>Estado:</strong> ${data.estado}<br>
+            <strong>Courier:</strong> ${data.courier || "En asignación"}<br>
+            <strong>Total:</strong> S/ ${data.total || "0.00"}<br><br>
+            🌱 <em>Gracias por confiar en Miski Chukulati.</em>
+          `;
+        } else {
+          resultado.innerHTML = "⚠️ No se encontró un pedido con ese código.";
+        }
+      } catch (error) {
+        resultado.innerHTML = "❌ Error de conexión. Intenta nuevamente.";
+      }
+    });
+  </script>
+</body>
+</html>
