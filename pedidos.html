@@ -104,26 +104,31 @@ textarea{resize:vertical}
 }
 .popup button:hover{transform:scale(1.05);box-shadow:0 0 15px rgba(212,175,55,0.6);}
 
-/* Result */
-.result{
-  margin-top:18px;background:rgba(255,255,255,0.05);
-  padding:12px;border-radius:8px;
-}
-footer{margin:25px 0;color:#d2b48c;font-size:0.9rem;}
-footer span{color:#f4d67b;font-style:italic;}
-
 /* Toast */
 .toast{
   position:fixed;bottom:30px;left:50%;
   transform:translateX(-50%);
-  background:rgba(212,175,55,0.95);
+  background:rgba(255,255,255,0.95);
   color:#3b2314;
   padding:16px 24px;border-radius:30px;
   box-shadow:0 0 25px rgba(212,175,55,0.6);
-  font-weight:700;opacity:0;
+  font-weight:600;opacity:0;
   transition:opacity 0.5s ease, bottom 0.5s ease;
+  text-align:center;
 }
 .toast.show{opacity:1;bottom:50px;}
+.toast p{margin:0;padding:0;color:#3b2314;font-weight:700;}
+.toast button{
+  margin-top:8px;
+  background:linear-gradient(90deg,#c7a86d,#e5c99c);
+  border:none;padding:8px 18px;border-radius:20px;
+  font-weight:700;color:#3b2314;cursor:pointer;
+  transition:transform 0.2s ease;
+}
+.toast button:hover{transform:scale(1.05);box-shadow:0 0 12px rgba(212,175,55,0.6);}
+
+footer{margin:25px 0;color:#d2b48c;font-size:0.9rem;}
+footer span{color:#f4d67b;font-style:italic;}
 </style>
 </head>
 <body>
@@ -197,7 +202,10 @@ footer span{color:#f4d67b;font-style:italic;}
 </div>
 
 <!-- Toast -->
-<div id="toast" class="toast"></div>
+<div id="toast" class="toast">
+  <p id="toastMsg"></p>
+  <button id="verPedidoBtn" style="display:none;">Ver pedido</button>
+</div>
 
 <footer>
   <span>"Jehová te bendiga, y te guarde” – Números 6:24</span><br>
@@ -213,13 +221,13 @@ let lastPdfUrl=null;
 let lastTracking=null;
 
 function toggleMenu(){const nav=document.getElementById('menuNav');nav.style.display=(nav.style.display==='flex')?'none':'flex';}
-function showPedido(){document.getElementById('pedidoForm').style.display='block';}
-function showOracion(){document.getElementById('pedidoForm').style.display='none';}
 
 const toggle=document.getElementById('toggleDelivery');
 const statusText=document.getElementById('toggleStatus');
 const popup=document.getElementById('popup');
 const toast=document.getElementById('toast');
+const toastMsg=document.getElementById('toastMsg');
+const verPedidoBtn=document.getElementById('verPedidoBtn');
 
 toggle.addEventListener('click',()=>{
   conDelivery=!conDelivery;
@@ -273,6 +281,8 @@ async function enviarPedido(){
       lastTracking=json.tracking;
       document.getElementById('result').innerText='Gracias por tu compra...! Que Dios te guíe y guarde siempre...!';
       showToast(`Pedido registrado exitosamente\nNúmero: ${lastTracking}`);
+      verPedidoBtn.style.display='inline-block';
+      verPedidoBtn.onclick=()=>window.open(`ordertracking.html?idPedido=${encodeURIComponent(lastTracking)}`,'_blank');
       const btn=document.getElementById('verTotalBtn');
       btn.textContent='📄 Comprobante de pedido';
       btn.onclick=()=>window.open(lastPdfUrl,'_blank');
@@ -286,7 +296,7 @@ async function enviarPedido(){
 }
 
 function showToast(msg){
-  toast.innerText=msg;
+  toastMsg.innerText=msg;
   toast.classList.add('show');
   setTimeout(()=>toast.classList.remove('show'),6000);
 }
