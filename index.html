@@ -20,7 +20,6 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
-      position: relative;
     }
 
     @keyframes backgroundShift {
@@ -28,54 +27,6 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
-    /* Menú hamburguesa */
-    .menu-btn {
-      position: absolute;
-      top: 25px;
-      left: 25px;
-      width: 35px;
-      height: 30px;
-      cursor: pointer;
-      z-index: 10;
-    }
-    .menu-btn span {
-      display: block;
-      height: 4px;
-      background: #d4af37;
-      margin: 6px 0;
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-    .menu-btn.active span:nth-child(1) { transform: translateY(10px) rotate(45deg); }
-    .menu-btn.active span:nth-child(2) { opacity: 0; }
-    .menu-btn.active span:nth-child(3) { transform: translateY(-10px) rotate(-45deg); }
-
-    nav {
-      position: fixed;
-      top: 0; left: -100%;
-      width: 250px;
-      height: 100%;
-      background: rgba(59,35,20,0.97);
-      backdrop-filter: blur(4px);
-      box-shadow: 2px 0 10px rgba(0,0,0,0.5);
-      transition: 0.4s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: start;
-      padding-left: 40px;
-    }
-    nav.active { left: 0; }
-
-    nav a {
-      color: #d4af37;
-      text-decoration: none;
-      font-size: 1.2rem;
-      margin: 15px 0;
-      transition: color 0.3s;
-    }
-    nav a:hover { color: #f7e7ce; }
 
     .logo {
       width: 160px;
@@ -158,44 +109,19 @@
   </style>
 </head>
 <body>
-  <div class="menu-btn" id="menuBtn">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-
-  <nav id="sideMenu">
-    <a href="orderform.html">🍫 Hacer Pedido</a>
-    <a href="oracion.html">🙏 Pedido de Oración</a>
-    <a href="#nosotros">👥 Nosotros</a>
-    <a href="#historia">📜 Historia</a>
-    <a href="#novedades">🌟 Novedades</a>
-    <a href="#foro">💬 Foro</a>
-  </nav>
-
   <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Miski Chukulati Logo" class="logo">
   <h1>Miski Chukulati</h1>
   <p class="slogan">El sabor que une a la familia 🍫</p>
 
-  <a href="https://script.google.com/macros/s/AKfycbzf8ItcHW5XfN93jmnwacmwXOuc9Xgac2aHdO4s4_fZ7ddQBnU3hQtfNUFxkpii5psr/exec" 
+  <a href="https://script.google.com/macros/s/AKfycbwCeQp2C4YJHqjZ8BS6Ke-99wQKdSj0vFCisJ5iYmn4RYKmRTkLKCA3FlKKFGcuzl78ww/exec" 
      target="_blank"
      class="order-btn">
      ¡Pídelo aquí!
   </a>
 
   <footer>
-    <span>“Jehová te bendiga, y te guarde” – Números 6:24</span><br>
+    <span>"“Jehová te bendiga, y te guarde” – Números 6:24</span><br>
     © Miski Chukulati - 2025
   </footer>
-
-  <script>
-    const menuBtn = document.getElementById('menuBtn');
-    const sideMenu = document.getElementById('sideMenu');
-
-    menuBtn.addEventListener('click', () => {
-      menuBtn.classList.toggle('active');
-      sideMenu.classList.toggle('active');
-    });
-  </script>
 </body>
 </html>
