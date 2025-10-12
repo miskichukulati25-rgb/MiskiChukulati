@@ -1,240 +1,284 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hacer Pedido | Miski Chukulati 🍫</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Haz tu Pedido - Miski Chukulati</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg1:#3b2314; --bg2:#5c3b1e; --bg3:#7b4c22;
-  --gold:#d4af37; --gold-soft:#f7e7ce;
+body{
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);
+  color:#fff;margin:0;padding:0;
 }
-
-body {
-  margin:0;
-  font-family:'Montserrat',sans-serif;
-  background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
-  background-size:400% 400%;
-  animation:bgShift 15s ease infinite;
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  min-height:100vh;
+header{
+  padding:12px 24px;
+  background:rgba(0,0,0,0.5);
+  display:flex;justify-content:space-between;align-items:center;
 }
-@keyframes bgShift {
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+header h1{margin:0;font-size:1.4em}
+.menu-btn{font-size:1.5em;cursor:pointer}
+nav{
+  position:absolute;top:50px;right:0;
+  background:rgba(0,0,0,0.9);
+  width:230px;display:none;flex-direction:column;border-radius:10px;
 }
-
-.container {
+nav a{
+  padding:12px 16px;color:#fff;text-decoration:none;border-bottom:1px solid #d4c5b2;
+}
+nav a:last-child{border-bottom:none}
+nav a:hover{background:rgba(255,255,255,0.1)}
+.container{
+  max-width:600px;margin:36px auto;
   background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(6px);
-  padding:30px 40px;
-  border-radius:16px;
-  box-shadow:0 0 25px rgba(0,0,0,0.3);
-  max-width:620px;
-  width:90%;
-  text-align:left;
+  padding:24px;border-radius:12px;
 }
+label{display:block;margin-top:10px;font-weight:600}
+input,select,textarea,button{
+  padding:10px;border-radius:8px;
+  border:1px solid #d4c5b2;width:100%;
+  box-sizing:border-box;margin-top:4px;
+}
+textarea{resize:vertical}
+.result{
+  margin-top:18px;background:rgba(255,255,255,0.05);
+  padding:12px;border-radius:8px;
+}
+button{
+  background:linear-gradient(90deg,#c7a86d,#e5c99c);
+  color:#3b2314;font-weight:700;border:none;cursor:pointer;
+  transition:0.3s;
+}
+button:hover{opacity:0.9;transform:scale(1.03)}
 
-.logo {
-  display:block;
-  margin:0 auto 15px;
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  box-shadow:0 0 20px rgba(212,175,55,0.4);
+/* POPUP */
+.popup-overlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.7);display:none;justify-content:center;align-items:center;
+  animation: fadeInOverlay 0.4s ease forwards;
 }
-
-h1 {
-  text-align:center;
-  color:var(--gold-soft);
-  margin-bottom:10px;
+@keyframes fadeInOverlay{
+  from{opacity:0;} to{opacity:1;}
 }
-
-label {
-  display:block;
-  margin-top:12px;
-  color:var(--gold-soft);
-  font-weight:600;
+.popup{
+  background:#fff8f0;color:#3b2314;
+  padding:25px 35px;border-radius:15px;max-width:340px;
+  text-align:center;box-shadow:0 0 20px rgba(0,0,0,0.4);
+  border:2px solid #d4af37;
+  transform:scale(0.8);
+  animation: zoomInPopup 0.4s ease forwards, goldenGlow 6s linear infinite;
 }
-input, select, textarea {
-  width:100%;
-  padding:10px;
-  margin-top:5px;
-  border-radius:8px;
-  border:1px solid rgba(212,175,55,0.3);
-  background:rgba(255,255,255,0.1);
-  color:#fff;
-  font-family:inherit;
+@keyframes zoomInPopup{
+  from{opacity:0;transform:scale(0.8);}
+  to{opacity:1;transform:scale(1);}
 }
-input:focus, select:focus, textarea:focus {
-  outline:none;
-  border-color:var(--gold);
+@keyframes goldenGlow{
+  0%{box-shadow:0 0 10px rgba(212,175,55,0.3);}
+  50%{box-shadow:0 0 25px rgba(212,175,55,0.7);}
+  100%{box-shadow:0 0 10px rgba(212,175,55,0.3);}
 }
-
-button {
-  margin-top:25px;
-  width:100%;
-  background:linear-gradient(90deg,#a67c52,#d4af37,#a67c52);
-  background-size:200% 100%;
-  color:#fff;
-  font-weight:700;
-  font-size:1rem;
-  padding:12px;
-  border:none;
-  border-radius:30px;
+.popup h3{margin-top:0;color:#7b5b4a}
+.popup button{
+  margin-top:15px;background:linear-gradient(90deg,#c7a86d,#e5c99c);
+  border:none;padding:10px 24px;border-radius:30px;font-weight:600;
   cursor:pointer;
-  transition:transform 0.3s ease, box-shadow 0.3s ease;
 }
-button:hover {
+.popup button:hover{
   transform:scale(1.05);
-  box-shadow:0 6px 18px rgba(212,175,55,0.6);
-}
-
-.total {
-  margin-top:18px;
-  background:rgba(255,255,255,0.08);
-  padding:12px;
-  border-radius:10px;
-  text-align:center;
-  color:#f7e7ce;
-  font-weight:600;
-}
-
-.message {
-  text-align:center;
-  margin-top:20px;
-  font-weight:600;
-}
-.success{color:#00ff99;}
-.error{color:#ff6666;}
-
-.back-link {
-  display:inline-block;
-  margin-top:25px;
-  text-decoration:none;
-  color:var(--gold);
-  font-weight:600;
-  text-align:center;
-  width:100%;
-}
-
-footer {
-  text-align:center;
-  color:#e0c68b;
-  margin-top:30px;
-  font-size:0.9rem;
 }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Logo" class="logo">
-  <h1>Haz tu Pedido</h1>
+<header>
+  <h1>Miski Chukulati 🍫</h1>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  <nav id="menuNav">
+    <a href="#" onclick="showPedido()">Hacer Pedido</a>
+    <a href="#" onclick="showOracion()">Pedido de Oración</a>
+  </nav>
+</header>
 
-  <form id="pedidoForm">
-    <label for="dni">DNI</label>
-    <input type="text" id="dni" name="dni" maxlength="8" required>
+<div class="container" id="pedidoForm">
+  <h2>Hacer Pedido</h2>
 
-    <label for="nombre">Nombre Completo</label>
-    <input type="text" id="nombre" name="nombre" required>
+  <label>Nombre Completo</label>
+  <input id="nombre" placeholder="Juan Pérez">
 
-    <label for="correo">Correo</label>
-    <input type="email" id="correo" name="correo" required>
+  <label>DNI</label>
+  <input id="dni" placeholder="8 dígitos">
 
-    <label for="telefono">Celular</label>
-    <input type="tel" id="telefono" name="telefono" required>
+  <label>Correo</label>
+  <input id="correo" type="email" placeholder="correo@ejemplo.com">
 
-    <label for="producto">Producto</label>
-    <select id="producto" name="producto" required>
-      <option value="">Selecciona un producto</option>
-      <option data-precio="10">Tableta 70 % cacao</option>
-      <option data-precio="12">Tableta 85 % cacao</option>
-      <option data-precio="15">Bombones surtidos</option>
-      <option data-precio="14">Dark Chocolate Bar</option>
-      <option data-precio="11">ChocoNibs</option>
-      <option data-precio="9">ChocoBites</option>
-      <option data-precio="10">Chocolate Blanco</option>
-    </select>
+  <label>Celular</label>
+  <input id="telefono" placeholder="9 dígitos">
 
-    <label for="cantidad">Cantidad</label>
-    <input type="number" id="cantidad" name="cantidad" min="1" value="1" required>
+  <label>Producto</label>
+  <select id="producto" onchange="calcularTotal()">
+    <option value="">--Selecciona--</option>
+    <option value="Tableta 70 % cacao">Tableta 70 % cacao</option>
+    <option value="Tableta 85 % cacao">Tableta 85 % cacao</option>
+    <option value="Bombones surtidos">Bombones surtidos</option>
+    <option value="Dark Chocolate Bar">Dark Chocolate Bar</option>
+    <option value="ChocoNibs">ChocoNibs</option>
+    <option value="ChocoBites">ChocoBites</option>
+    <option value="Chocolate Blanco">Chocolate Blanco</option>
+  </select>
 
-    <label for="direccion">Dirección</label>
-    <input type="text" id="direccion" name="direccion">
+  <label>Cantidad</label>
+  <input id="cantidad" type="number" min="1" value="1" onchange="calcularTotal()">
 
-    <label for="comentarios">Comentarios</label>
-    <textarea id="comentarios" name="comentarios" rows="3"></textarea>
+  <label>Método de Pago</label>
+  <select id="metodoPago">
+    <option value="PLIN">PLIN</option>
+    <option value="YAPE">YAPE</option>
+    <option value="Transferencia">Transferencia</option>
+    <option value="Efectivo">Efectivo</option>
+  </select>
 
-    <div class="total" id="resumen">
-      💰 <b>Total estimado:</b> S/ 0.00<br>
-      (Base: S/ 0.00 | IGV: S/ 0.00 | Envío: S/ 7.00)
-    </div>
+  <label>Encargado de Envío</label>
+  <select id="encargadoEnvio">
+    <option value="Courier1">Courier1</option>
+    <option value="Courier2">Courier2</option>
+    <option value="Courier3">Courier3</option>
+  </select>
 
-    <button type="submit">Enviar Pedido</button>
-  </form>
+  <label>Comentarios</label>
+  <textarea id="comentarios" placeholder="Opcional"></textarea>
 
-  <div id="msg" class="message"></div>
-
-  <a href="index.html" class="back-link">⬅ Volver al inicio</a>
+  <button onclick="mostrarPopup()">Ver Total</button>
+  <button onclick="enviarPedido()">Enviar Pedido</button>
+  <div id="result" class="result" style="display:none"></div>
 </div>
 
-<footer>
-  <p><strong>Números 6:24</strong> “Jehová te bendiga y te guarde”</p>
-  <p>© Miski Chukulati - 2025</p>
-</footer>
+<div class="container" id="oracionForm" style="display:none">
+  <h2>Pedido de Oración</h2>
+  <label>Nombre Completo</label>
+  <input id="nombreOracion" placeholder="Juan Pérez">
+
+  <label>Pedido de Oración</label>
+  <textarea id="pedidoOracion" placeholder="Escribe tu pedido de oración"></textarea>
+
+  <label>Orar Por</label>
+  <input id="orarPor" placeholder="Por quién deseas orar">
+
+  <button onclick="enviarOracion()">Enviar Pedido de Oración</button>
+  <div id="resultOracion" class="result" style="display:none"></div>
+</div>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="popupOverlay">
+  <div class="popup">
+    <h3>Detalle de tu pedido</h3>
+    <p>Precio producto: S/ <span id="pPrecio">0.00</span></p>
+    <p>Comisión de envío: S/ <span id="pEnvio">7.00</span></p>
+    <hr>
+    <h3>Total a pagar: S/ <span id="pTotal">0.00</span></h3>
+    <button onclick="cerrarPopup()">Aceptar</button>
+  </div>
+</div>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbzf8ItcHW5XfN93jmnwacmwXOuc9Xgac2aHdO4s4_fZ7ddQBnU3hQtfNUFxkpii5psr/exec";
-const form = document.getElementById("pedidoForm");
-const msg = document.getElementById("msg");
-const resumen = document.getElementById("resumen");
-const envioFijo = 7.00; // editable por administrador
+const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzf8ItcHW5XfN93jmnwacmwXOuc9Xgac2aHdO4s4_fZ7ddQBnU3hQtfNUFxkpii5psr/exec";
+const productosPrecios = {
+  "Tableta 70 % cacao": 8.00,
+  "Tableta 85 % cacao": 9.00,
+  "Bombones surtidos": 15.00,
+  "Dark Chocolate Bar": 8.00,
+  "ChocoNibs": 5.00,
+  "ChocoBites": 6.50,
+  "Chocolate Blanco": 24.00
+};
+const envioFijo = 7;
+let totalActual = 0;
 
-function actualizarTotal() {
-  const producto = document.getElementById("producto");
-  const cantidad = parseInt(document.getElementById("cantidad").value) || 1;
-  const precioUnit = parseFloat(producto.options[producto.selectedIndex]?.dataset.precio || 0);
-  const subtotal = precioUnit * cantidad;
-  const igv = subtotal * 0.18;
-  const total = subtotal + igv + envioFijo;
-
-  resumen.innerHTML = `💰 <b>Total estimado:</b> S/ ${total.toFixed(2)}<br>
-  (Base: S/ ${subtotal.toFixed(2)} | IGV: S/ ${igv.toFixed(2)} | Envío: S/ ${envioFijo.toFixed(2)})`;
+function toggleMenu(){
+  const nav=document.getElementById('menuNav');
+  nav.style.display=(nav.style.display==='flex')?'none':'flex';
 }
-
-document.getElementById("producto").addEventListener("change", actualizarTotal);
-document.getElementById("cantidad").addEventListener("input", actualizarTotal);
-
-form.addEventListener("submit", e => {
-  e.preventDefault();
-  msg.textContent = "⏳ Enviando tu pedido...";
-  fetch(scriptURL, {
-    method: "POST",
-    body: JSON.stringify(Object.fromEntries(new FormData(form))),
-    headers: { "Content-Type": "application/json" }
-  })
-  .then(r => r.json())
-  .then(d => {
-    if (d.success) {
-      msg.innerHTML = `<span class="success">✅ Pedido ${d.idPedido} registrado.</span><br>
-      Revisa tu correo para el comprobante.<br><br>
-      Gracias por tu compra...!<br>
-      Que Dios te guíe y guarde siempre...! 🙏`;
-      form.reset();
-      resumen.innerHTML = "💰 <b>Total estimado:</b> S/ 0.00<br>(Base: S/ 0.00 | IGV: S/ 0.00 | Envío: S/ 7.00)";
-    } else {
-      msg.innerHTML = `<span class="error">❌ ${d.error || 'Error al registrar el pedido.'}</span>`;
+function showPedido(){
+  document.getElementById('pedidoForm').style.display='block';
+  document.getElementById('oracionForm').style.display='none';
+}
+function showOracion(){
+  document.getElementById('pedidoForm').style.display='none';
+  document.getElementById('oracionForm').style.display='block';
+}
+function calcularTotal(){
+  const producto=document.getElementById('producto').value;
+  const cantidad=Number(document.getElementById('cantidad').value||1);
+  const precioUnitario=productosPrecios[producto]||0;
+  totalActual = (precioUnitario*cantidad)+envioFijo;
+}
+function mostrarPopup(){
+  calcularTotal();
+  const producto=document.getElementById('producto').value;
+  const cantidad=Number(document.getElementById('cantidad').value||1);
+  const precioUnitario=productosPrecios[producto]||0;
+  const total=(precioUnitario*cantidad)+envioFijo;
+  document.getElementById('pPrecio').innerText=(precioUnitario*cantidad).toFixed(2);
+  document.getElementById('pEnvio').innerText=envioFijo.toFixed(2);
+  document.getElementById('pTotal').innerText=total.toFixed(2);
+  document.getElementById('popupOverlay').style.display='flex';
+}
+function cerrarPopup(){
+  document.getElementById('popupOverlay').style.display='none';
+}
+async function enviarPedido(){
+  const data={
+    type:"pedido",
+    nombre:document.getElementById('nombre').value.trim(),
+    dni:document.getElementById('dni').value.trim(),
+    correo:document.getElementById('correo').value.trim(),
+    telefono:document.getElementById('telefono').value.trim(),
+    producto:document.getElementById('producto').value,
+    cantidad:Number(document.getElementById('cantidad').value||1),
+    metodoPago:document.getElementById('metodoPago').value,
+    encargadoEnvio:document.getElementById('encargadoEnvio').value,
+    comentarios:document.getElementById('comentarios').value.trim(),
+    envio:envioFijo
+  };
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').innerText='Enviando pedido...';
+  try{
+    const res=await fetch(SCRIPT_WEB_APP_URL,{method:'POST',body:JSON.stringify(data)});
+    const json=await res.json();
+    if(json.success){
+      document.getElementById('result').innerText='✅ Gracias por tu compra...! Que Dios te guíe y guarde siempre...!';
+      setTimeout(()=>{location.reload()},3000);
+    }else{
+      document.getElementById('result').innerText='Error: '+json.message;
     }
-  })
-  .catch(() => msg.innerHTML = '<span class="error">Error de conexión.</span>');
-});
+  }catch(err){
+    console.error(err);
+    document.getElementById('result').innerText='Error al enviar pedido.';
+  }
+}
+async function enviarOracion(){
+  const data={
+    type:"prayer",
+    nombre:document.getElementById('nombreOracion').value.trim(),
+    pedido:document.getElementById('pedidoOracion').value.trim(),
+    orarPor:document.getElementById('orarPor').value.trim()
+  };
+  document.getElementById('resultOracion').style.display='block';
+  document.getElementById('resultOracion').innerText='Enviando pedido de oración...';
+  try{
+    const res=await fetch(SCRIPT_WEB_APP_URL,{method:'POST',body:JSON.stringify(data)});
+    const json=await res.json();
+    if(json.success){
+      document.getElementById('resultOracion').innerText='🙏 ¡Pedido de oración enviado correctamente!';
+      setTimeout(()=>{location.reload()},3000);
+    }else{
+      document.getElementById('resultOracion').innerText='Error: '+json.message;
+    }
+  }catch(err){
+    console.error(err);
+    document.getElementById('resultOracion').innerText='Error al enviar pedido de oración.';
+  }
+}
+calcularTotal();
 </script>
 </body>
 </html>
