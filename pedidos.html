@@ -16,10 +16,19 @@ header{
   background:rgba(0,0,0,0.5);
   display:flex;justify-content:space-between;align-items:center;
 }
-header h1{margin:0;font-size:1.4em}
+.logo{
+  width:70px;height:70px;
+  border-radius:50%;
+  box-shadow:0 0 15px rgba(212,175,55,0.5);
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+}
+.logo:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 25px rgba(212,175,55,0.8);
+}
 .menu-btn{font-size:1.5em;cursor:pointer}
 nav{
-  position:absolute;top:50px;right:0;
+  position:absolute;top:80px;right:0;
   background:rgba(0,0,0,0.9);
   width:230px;display:none;flex-direction:column;border-radius:10px;
 }
@@ -31,7 +40,7 @@ nav a:hover{background:rgba(255,255,255,0.1)}
 .container{
   max-width:600px;margin:36px auto;
   background:rgba(255,255,255,0.08);
-  padding:24px;border-radius:12px;
+  padding:24px;border-radius:12px;text-align:left;
 }
 label{display:block;margin-top:10px;font-weight:600}
 input,select,textarea,button{
@@ -83,15 +92,13 @@ button:hover{opacity:0.9;transform:scale(1.03)}
   border:none;padding:10px 24px;border-radius:30px;font-weight:600;
   cursor:pointer;
 }
-.popup button:hover{
-  transform:scale(1.05);
-}
+.popup button:hover{transform:scale(1.05);}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Miski Chukulati 🍫</h1>
+  <img src="ea94f829-847c-4e93-8216-1baab28ea466.png" alt="Miski Chukulati Logo" class="logo">
   <div class="menu-btn" onclick="toggleMenu()">☰</div>
   <nav id="menuNav">
     <a href="#" onclick="showPedido()">Hacer Pedido</a>
@@ -191,7 +198,6 @@ const productosPrecios = {
   "Chocolate Blanco": 24.00
 };
 const envioFijo = 7;
-let totalActual = 0;
 
 function toggleMenu(){
   const nav=document.getElementById('menuNav');
@@ -209,10 +215,9 @@ function calcularTotal(){
   const producto=document.getElementById('producto').value;
   const cantidad=Number(document.getElementById('cantidad').value||1);
   const precioUnitario=productosPrecios[producto]||0;
-  totalActual = (precioUnitario*cantidad)+envioFijo;
+  return (precioUnitario*cantidad)+envioFijo;
 }
 function mostrarPopup(){
-  calcularTotal();
   const producto=document.getElementById('producto').value;
   const cantidad=Number(document.getElementById('cantidad').value||1);
   const precioUnitario=productosPrecios[producto]||0;
@@ -255,30 +260,6 @@ async function enviarPedido(){
     document.getElementById('result').innerText='Error al enviar pedido.';
   }
 }
-async function enviarOracion(){
-  const data={
-    type:"prayer",
-    nombre:document.getElementById('nombreOracion').value.trim(),
-    pedido:document.getElementById('pedidoOracion').value.trim(),
-    orarPor:document.getElementById('orarPor').value.trim()
-  };
-  document.getElementById('resultOracion').style.display='block';
-  document.getElementById('resultOracion').innerText='Enviando pedido de oración...';
-  try{
-    const res=await fetch(SCRIPT_WEB_APP_URL,{method:'POST',body:JSON.stringify(data)});
-    const json=await res.json();
-    if(json.success){
-      document.getElementById('resultOracion').innerText='🙏 ¡Pedido de oración enviado correctamente!';
-      setTimeout(()=>{location.reload()},3000);
-    }else{
-      document.getElementById('resultOracion').innerText='Error: '+json.message;
-    }
-  }catch(err){
-    console.error(err);
-    document.getElementById('resultOracion').innerText='Error al enviar pedido de oración.';
-  }
-}
-calcularTotal();
 </script>
 </body>
 </html>
