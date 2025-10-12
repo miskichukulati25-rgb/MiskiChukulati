@@ -8,7 +8,7 @@
 <style>
 :root {
   --bg1:#3b2314; --bg2:#5c3b1e; --bg3:#7b4c22;
-  --gold:#d4af37; --gold-soft:#f7e7ce; --brown:#5c4033;
+  --gold:#d4af37; --gold-soft:#f7e7ce;
 }
 
 body {
@@ -36,24 +36,24 @@ body {
   padding:30px 40px;
   border-radius:16px;
   box-shadow:0 0 25px rgba(0,0,0,0.3);
-  max-width:600px;
+  max-width:620px;
   width:90%;
   text-align:left;
+}
+
+.logo {
+  display:block;
+  margin:0 auto 15px;
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  box-shadow:0 0 20px rgba(212,175,55,0.4);
 }
 
 h1 {
   text-align:center;
   color:var(--gold-soft);
-  margin-bottom:15px;
-}
-
-.logo {
-  display:block;
-  margin:0 auto 20px;
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  box-shadow:0 0 20px rgba(212,175,55,0.4);
+  margin-bottom:10px;
 }
 
 label {
@@ -78,7 +78,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 button {
-  margin-top:20px;
+  margin-top:25px;
   width:100%;
   background:linear-gradient(90deg,#a67c52,#d4af37,#a67c52);
   background-size:200% 100%;
@@ -96,9 +96,19 @@ button:hover {
   box-shadow:0 6px 18px rgba(212,175,55,0.6);
 }
 
+.total {
+  margin-top:18px;
+  background:rgba(255,255,255,0.08);
+  padding:12px;
+  border-radius:10px;
+  text-align:center;
+  color:#f7e7ce;
+  font-weight:600;
+}
+
 .message {
   text-align:center;
-  margin-top:18px;
+  margin-top:20px;
   font-weight:600;
 }
 .success{color:#00ff99;}
@@ -138,19 +148,19 @@ footer {
     <label for="correo">Correo</label>
     <input type="email" id="correo" name="correo" required>
 
-    <label for="telefono">Teléfono</label>
+    <label for="telefono">Celular</label>
     <input type="tel" id="telefono" name="telefono" required>
 
     <label for="producto">Producto</label>
     <select id="producto" name="producto" required>
       <option value="">Selecciona un producto</option>
-      <option>Tableta 70 % cacao</option>
-      <option>Tableta 85 % cacao</option>
-      <option>Bombones surtidos</option>
-      <option>Dark Chocolate Bar</option>
-      <option>ChocoNibs</option>
-      <option>ChocoBites</option>
-      <option>Chocolate Blanco</option>
+      <option data-precio="10">Tableta 70 % cacao</option>
+      <option data-precio="12">Tableta 85 % cacao</option>
+      <option data-precio="15">Bombones surtidos</option>
+      <option data-precio="14">Dark Chocolate Bar</option>
+      <option data-precio="11">ChocoNibs</option>
+      <option data-precio="9">ChocoBites</option>
+      <option data-precio="10">Chocolate Blanco</option>
     </select>
 
     <label for="cantidad">Cantidad</label>
@@ -161,6 +171,11 @@ footer {
 
     <label for="comentarios">Comentarios</label>
     <textarea id="comentarios" name="comentarios" rows="3"></textarea>
+
+    <div class="total" id="resumen">
+      💰 <b>Total estimado:</b> S/ 0.00<br>
+      (Base: S/ 0.00 | IGV: S/ 0.00 | Envío: S/ 7.00)
+    </div>
 
     <button type="submit">Enviar Pedido</button>
   </form>
@@ -179,6 +194,23 @@ footer {
 const scriptURL = "https://script.google.com/macros/s/AKfycbzf8ItcHW5XfN93jmnwacmwXOuc9Xgac2aHdO4s4_fZ7ddQBnU3hQtfNUFxkpii5psr/exec";
 const form = document.getElementById("pedidoForm");
 const msg = document.getElementById("msg");
+const resumen = document.getElementById("resumen");
+const envioFijo = 7.00; // editable por administrador
+
+function actualizarTotal() {
+  const producto = document.getElementById("producto");
+  const cantidad = parseInt(document.getElementById("cantidad").value) || 1;
+  const precioUnit = parseFloat(producto.options[producto.selectedIndex]?.dataset.precio || 0);
+  const subtotal = precioUnit * cantidad;
+  const igv = subtotal * 0.18;
+  const total = subtotal + igv + envioFijo;
+
+  resumen.innerHTML = `💰 <b>Total estimado:</b> S/ ${total.toFixed(2)}<br>
+  (Base: S/ ${subtotal.toFixed(2)} | IGV: S/ ${igv.toFixed(2)} | Envío: S/ ${envioFijo.toFixed(2)})`;
+}
+
+document.getElementById("producto").addEventListener("change", actualizarTotal);
+document.getElementById("cantidad").addEventListener("input", actualizarTotal);
 
 form.addEventListener("submit", e => {
   e.preventDefault();
@@ -191,8 +223,12 @@ form.addEventListener("submit", e => {
   .then(r => r.json())
   .then(d => {
     if (d.success) {
-      msg.innerHTML = `<span class="success">✅ Pedido ${d.idPedido} registrado.</span><br>Revisa tu correo para el comprobante.<br><br>Gracias por tu compra...!<br>Que Dios te guíe y guarde siempre...!`;
+      msg.innerHTML = `<span class="success">✅ Pedido ${d.idPedido} registrado.</span><br>
+      Revisa tu correo para el comprobante.<br><br>
+      Gracias por tu compra...!<br>
+      Que Dios te guíe y guarde siempre...! 🙏`;
       form.reset();
+      resumen.innerHTML = "💰 <b>Total estimado:</b> S/ 0.00<br>(Base: S/ 0.00 | IGV: S/ 0.00 | Envío: S/ 7.00)";
     } else {
       msg.innerHTML = `<span class="error">❌ ${d.error || 'Error al registrar el pedido.'}</span>`;
     }
