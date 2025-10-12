@@ -3,92 +3,146 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Haz tu Pedido | Miski Chukulati 🍫</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+<title>Hacer Pedido | Miski Chukulati 🍫</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 <style>
+:root {
+  --bg1:#3b2314; --bg2:#5c3b1e; --bg3:#7b4c22;
+  --gold:#d4af37; --gold-soft:#f7e7ce; --brown:#5c4033;
+}
+
 body {
-  font-family: 'Poppins', sans-serif;
-  background: #fff8f0;
-  color: #5c4033;
-  margin: 0;
+  margin:0;
+  font-family:'Montserrat',sans-serif;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+  background-size:400% 400%;
+  animation:bgShift 15s ease infinite;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
 }
+@keyframes bgShift {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
 .container {
-  max-width: 600px;
-  margin: 60px auto;
-  background: #fff;
-  padding: 30px 40px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(92,64,51,0.1);
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(6px);
+  padding:30px 40px;
+  border-radius:16px;
+  box-shadow:0 0 25px rgba(0,0,0,0.3);
+  max-width:600px;
+  width:90%;
+  text-align:left;
 }
+
 h1 {
-  text-align: center;
-  color: #5c4033;
+  text-align:center;
+  color:var(--gold-soft);
+  margin-bottom:15px;
 }
+
+.logo {
+  display:block;
+  margin:0 auto 20px;
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  box-shadow:0 0 20px rgba(212,175,55,0.4);
+}
+
 label {
-  font-weight: 500;
-  display: block;
-  margin-top: 15px;
+  display:block;
+  margin-top:12px;
+  color:var(--gold-soft);
+  font-weight:600;
 }
 input, select, textarea {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #d4c5b2;
-  border-radius: 6px;
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  border-radius:8px;
+  border:1px solid rgba(212,175,55,0.3);
+  background:rgba(255,255,255,0.1);
+  color:#fff;
+  font-family:inherit;
 }
+input:focus, select:focus, textarea:focus {
+  outline:none;
+  border-color:var(--gold);
+}
+
 button {
-  margin-top: 25px;
-  width: 100%;
-  background: linear-gradient(90deg,#c7a86d,#e5c99c);
-  color: #5c4033;
-  border: none;
-  padding: 12px;
-  font-size: 1.1rem;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: 0.3s;
+  margin-top:20px;
+  width:100%;
+  background:linear-gradient(90deg,#a67c52,#d4af37,#a67c52);
+  background-size:200% 100%;
+  color:#fff;
+  font-weight:700;
+  font-size:1rem;
+  padding:12px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
 }
 button:hover {
-  transform: scale(1.05);
+  transform:scale(1.05);
+  box-shadow:0 6px 18px rgba(212,175,55,0.6);
 }
+
 .message {
-  text-align: center;
-  margin-top: 20px;
-  font-weight: 500;
+  text-align:center;
+  margin-top:18px;
+  font-weight:600;
 }
-.success {
-  color: green;
+.success{color:#00ff99;}
+.error{color:#ff6666;}
+
+.back-link {
+  display:inline-block;
+  margin-top:25px;
+  text-decoration:none;
+  color:var(--gold);
+  font-weight:600;
+  text-align:center;
+  width:100%;
 }
-.error {
-  color: red;
-}
+
 footer {
-  text-align: center;
-  margin-top: 40px;
-  font-size: .9rem;
-  color: #7b5b4a;
+  text-align:center;
+  color:#e0c68b;
+  margin-top:30px;
+  font-size:0.9rem;
 }
 </style>
 </head>
 <body>
 
 <div class="container">
+  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Logo" class="logo">
   <h1>Haz tu Pedido</h1>
+
   <form id="pedidoForm">
-    <label>DNI</label>
-    <input type="text" name="dni" required maxlength="8" placeholder="8 dígitos">
-    
-    <label>Nombre</label>
-    <input type="text" name="nombre" required placeholder="Tu nombre completo">
-    
-    <label>Correo</label>
-    <input type="email" name="correo" required placeholder="ejemplo@gmail.com">
-    
-    <label>Teléfono</label>
-    <input type="tel" name="telefono" required placeholder="987654321">
-    
-    <label>Producto</label>
-    <select name="producto" required>
+    <label for="dni">DNI</label>
+    <input type="text" id="dni" name="dni" maxlength="8" required>
+
+    <label for="nombre">Nombre Completo</label>
+    <input type="text" id="nombre" name="nombre" required>
+
+    <label for="correo">Correo</label>
+    <input type="email" id="correo" name="correo" required>
+
+    <label for="telefono">Teléfono</label>
+    <input type="tel" id="telefono" name="telefono" required>
+
+    <label for="producto">Producto</label>
+    <select id="producto" name="producto" required>
       <option value="">Selecciona un producto</option>
       <option>Tableta 70 % cacao</option>
       <option>Tableta 85 % cacao</option>
@@ -98,52 +152,53 @@ footer {
       <option>ChocoBites</option>
       <option>Chocolate Blanco</option>
     </select>
-    
-    <label>Cantidad</label>
-    <input type="number" name="cantidad" min="1" value="1" required>
-    
-    <label>Dirección</label>
-    <input type="text" name="direccion" placeholder="Dirección de entrega (opcional)">
-    
-    <label>Comentarios</label>
-    <textarea name="comentarios" rows="3" placeholder="Algún detalle adicional..."></textarea>
-    
-    <button type="submit">Enviar pedido</button>
+
+    <label for="cantidad">Cantidad</label>
+    <input type="number" id="cantidad" name="cantidad" min="1" value="1" required>
+
+    <label for="direccion">Dirección</label>
+    <input type="text" id="direccion" name="direccion">
+
+    <label for="comentarios">Comentarios</label>
+    <textarea id="comentarios" name="comentarios" rows="3"></textarea>
+
+    <button type="submit">Enviar Pedido</button>
   </form>
 
   <div id="msg" class="message"></div>
+
+  <a href="index.html" class="back-link">⬅ Volver al inicio</a>
 </div>
 
 <footer>
   <p><strong>Números 6:24</strong> “Jehová te bendiga y te guarde”</p>
+  <p>© Miski Chukulati - 2025</p>
 </footer>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbywFtSSD7h2UN3BRmZ45Bce8Hqh51ermwC_1IlT0XoYfVGcYMT4I9iSvAVSJD4m_Hck/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbzf8ItcHW5XfN93jmnwacmwXOuc9Xgac2aHdO4s4_fZ7ddQBnU3hQtfNUFxkpii5psr/exec";
 const form = document.getElementById("pedidoForm");
 const msg = document.getElementById("msg");
 
 form.addEventListener("submit", e => {
   e.preventDefault();
-  msg.innerHTML = "⏳ Enviando tu pedido...";
-  
+  msg.textContent = "⏳ Enviando tu pedido...";
   fetch(scriptURL, {
     method: "POST",
     body: JSON.stringify(Object.fromEntries(new FormData(form))),
-    headers: { 'Content-Type': 'application/json' }
+    headers: { "Content-Type": "application/json" }
   })
   .then(r => r.json())
   .then(d => {
     if (d.success) {
-      msg.innerHTML = `<span class="success">✅ Pedido ${d.idPedido} registrado.</span><br>Revisa tu correo para el comprobante.`;
+      msg.innerHTML = `<span class="success">✅ Pedido ${d.idPedido} registrado.</span><br>Revisa tu correo para el comprobante.<br><br>Gracias por tu compra...!<br>Que Dios te guíe y guarde siempre...!`;
       form.reset();
     } else {
-      msg.innerHTML = `<span class="error">❌ ${d.error}</span>`;
+      msg.innerHTML = `<span class="error">❌ ${d.error || 'Error al registrar el pedido.'}</span>`;
     }
   })
-  .catch(() => msg.innerHTML = '<span class="error">⚠️ Error de conexión. Intenta nuevamente.</span>');
+  .catch(() => msg.innerHTML = '<span class="error">Error de conexión.</span>');
 });
 </script>
-
 </body>
 </html>
