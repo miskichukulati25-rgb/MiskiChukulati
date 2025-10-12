@@ -1,193 +1,125 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hacer pedido - Miski Chukulati</title>
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background-color: #fff7f2;
-      color: #4b2e05;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      text-align: center;
-      padding: 20px 10px;
-    }
-    header img {
-      width: 100px;
-      border-radius: 50%;
-    }
-    h1 {
-      font-size: 1.5em;
-      color: #5a3516;
-      margin-bottom: 10px;
-    }
-    form {
-      max-width: 400px;
-      margin: 0 auto;
-      background-color: #fff;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-      font-weight: 500;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #c9a77c;
-      border-radius: 8px;
-      font-size: 1em;
-    }
-    button {
-      background: linear-gradient(90deg, #c98a4b, #e5bb7e);
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 1em;
-      border-radius: 25px;
-      margin-top: 15px;
-      cursor: pointer;
-      width: 100%;
-    }
-    button:hover {
-      background: linear-gradient(90deg, #b97c3e, #d6a865);
-    }
-    .total-box {
-      margin-top: 10px;
-      padding: 10px;
-      background-color: #fff3e0;
-      border-radius: 10px;
-      text-align: center;
-      font-weight: bold;
-      color: #4b2e05;
-    }
-    .mensaje-final {
-      text-align: center;
-      margin-top: 15px;
-      color: #5a3516;
-      font-weight: 600;
-    }
-    footer {
-      text-align: center;
-      font-size: 0.85em;
-      margin-top: 25px;
-      color: #4b2e05;
-      padding-bottom: 20px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Haz tu Pedido | Miski Chukulati</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body {
+  font-family:'Poppins',sans-serif;
+  background:#fff8f0;
+  color:#5c4033;
+  margin:0;
+}
+.container {
+  max-width:600px;
+  margin:60px auto;
+  background:#fff;
+  padding:30px 40px;
+  border-radius:12px;
+  box-shadow:0 0 15px rgba(92,64,51,0.1);
+  text-align:center;
+}
+.container img {
+  width:100px;
+  border-radius:50%;
+  margin-bottom:10px;
+}
+h1 {text-align:center;color:#5c4033;}
+label {font-weight:500;display:block;margin-top:15px;text-align:left;}
+input,select,textarea {
+  width:100%;padding:10px;margin-top:5px;
+  border:1px solid #d4c5b2;border-radius:6px;
+}
+button {
+  margin-top:25px;width:100%;
+  background:linear-gradient(90deg,#c7a86d,#e5c99c);
+  color:#5c4033;border:none;padding:12px;font-size:1.1rem;
+  border-radius:30px;cursor:pointer;transition:0.3s;
+}
+button:hover {transform:scale(1.05);}
+.message{text-align:center;margin-top:20px;}
+.success{color:green;} .error{color:red;}
+footer{text-align:center;margin-top:40px;font-size:.9rem;color:#7b5b4a;}
+.total {margin-top:15px;font-weight:600;color:#4b2e05;}
+</style>
 </head>
 <body>
-  <header>
-    <img src="https://i.ibb.co/ScVhT9F/logo-redondo.png" alt="Logo Miski Chukulati">
-    <h1>Formulario de Pedido</h1>
-  </header>
-
-  <form id="orderForm">
-    <label for="nombre">Nombre completo:</label>
-    <input type="text" id="nombre" name="nombre" required>
-
-    <label for="dni">DNI:</label>
-    <input type="text" id="dni" name="dni" required>
-
-    <label for="correo">Correo:</label>
-    <input type="email" id="correo" name="correo" required>
-
-    <label for="telefono">Teléfono:</label>
-    <input type="tel" id="telefono" name="telefono" required>
-
-    <label for="producto">Producto:</label>
-    <select id="producto" name="producto" required>
+<div class="container">
+  <img src="https://i.ibb.co/ScVhT9F/logo-redondo.png" alt="Miski Logo">
+  <h1>Haz tu Pedido</h1>
+  <form id="pedidoForm">
+    <label>DNI</label><input type="text" name="dni" required maxlength="8">
+    <label>Nombre Completo</label><input type="text" name="nombre" required>
+    <label>Correo</label><input type="email" name="correo" required>
+    <label>Teléfono / Celular</label><input type="tel" name="telefono" required>
+    <label>Producto</label>
+    <select name="producto" id="producto" required>
+      <option value="">Selecciona un producto</option>
+      <option value="Tableta 70%">Tableta 70 % cacao</option>
+      <option value="Tableta 85%">Tableta 85 % cacao</option>
+      <option value="Bombones">Bombones surtidos</option>
+      <option value="Dark">Dark Chocolate Bar</option>
+      <option value="ChocoNibs">ChocoNibs</option>
       <option value="ChocoBites">ChocoBites</option>
-      <option value="Trufas Premium">Trufas Premium</option>
-      <option value="Tableta 70%">Tableta 70%</option>
-      <option value="Cacao en polvo">Cacao en polvo</option>
+      <option value="Blanco">Chocolate Blanco</option>
     </select>
-
-    <label for="cantidad">Cantidad:</label>
-    <input type="number" id="cantidad" name="cantidad" min="1" value="1" required>
-
-    <label for="direccion">Dirección:</label>
-    <textarea id="direccion" name="direccion" rows="2" required></textarea>
-
-    <label for="comentarios">Comentarios:</label>
-    <textarea id="comentarios" name="comentarios" rows="2"></textarea>
-
-    <div class="total-box" id="totalBox">
-      Total a pagar: S/ 0.00
-    </div>
-
+    <label>Cantidad</label><input type="number" id="cantidad" name="cantidad" min="1" value="1" required>
+    <label>Dirección</label><input type="text" name="direccion">
+    <label>Comentarios</label><textarea name="comentarios" rows="3"></textarea>
+    <div class="total" id="total"></div>
     <button type="submit">Enviar pedido</button>
-    <p id="mensaje" class="mensaje-final"></p>
   </form>
+  <div id="msg" class="message"></div>
+</div>
+<footer>
+  <p><strong>Números 6:24</strong> “Jehová te bendiga y te guarde.”</p>
+</footer>
 
-  <footer>
-    “Gracias por tu compra... ¡Que Dios te guíe y guarde siempre!”<br>
-    <em>Números 6:24</em>
-  </footer>
+<script>
+const scriptURL="https://script.google.com/macros/s/AKfycbypicbViQpx68de35No3yAEd2XoLHOQ5banZ8cmJjn15es3eus8K4rTM8sRtFoPaDiH/exec";
+const form=document.getElementById("pedidoForm");
+const msg=document.getElementById("msg");
+const totalDiv=document.getElementById("total");
 
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbypicbViQpx68de35No3yAEd2XoLHOQ5banZ8cmJjn15es3eus8K4rTM8sRtFoPaDiH/exec";
+const precios = {
+  "Tableta 70%": 10,
+  "Tableta 85%": 12,
+  "Bombones": 15,
+  "Dark": 13,
+  "ChocoNibs": 11,
+  "ChocoBites": 9,
+  "Blanco": 10
+};
+const comisionEnvio = 7;
 
-    const form = document.getElementById("orderForm");
-    const totalBox = document.getElementById("totalBox");
-    const mensaje = document.getElementById("mensaje");
+function calcularTotal(){
+  const producto = document.getElementById("producto").value;
+  const cantidad = parseInt(document.getElementById("cantidad").value || 1);
+  if(precios[producto]){
+    const subtotal = precios[producto] * cantidad;
+    const total = subtotal + comisionEnvio;
+    totalDiv.innerHTML = `El total a pagar por tu pedido es: <strong>S/ ${total}</strong><br>(Base imponible: S/ ${(subtotal/1.18).toFixed(2)}, IGV: S/ ${(subtotal - subtotal/1.18).toFixed(2)}, Envío: S/ ${comisionEnvio})`;
+  } else {
+    totalDiv.innerHTML = "";
+  }
+}
+document.getElementById("producto").addEventListener("change", calcularTotal);
+document.getElementById("cantidad").addEventListener("input", calcularTotal);
 
-    const precios = {
-      "ChocoBites": 10,
-      "Trufas Premium": 15,
-      "Tableta 70%": 12,
-      "Cacao en polvo": 18
-    };
-    const comisionEnvio = 7;
-
-    document.getElementById("producto").addEventListener("change", calcularTotal);
-    document.getElementById("cantidad").addEventListener("input", calcularTotal);
-
-    function calcularTotal() {
-      const producto = document.getElementById("producto").value;
-      const cantidad = parseInt(document.getElementById("cantidad").value) || 0;
-      const subtotal = precios[producto] * cantidad;
-      const total = subtotal + comisionEnvio;
-      const baseImponible = (total / 1.18).toFixed(2);
-      const igv = (total - baseImponible).toFixed(2);
-      totalBox.innerHTML = `
-        Base Imponible: S/ ${baseImponible}<br>
-        IGV (18%): S/ ${igv}<br>
-        Comisión de envío: S/ ${comisionEnvio}<br>
-        <strong>Total a pagar: S/ ${total.toFixed(2)}</strong>
-      `;
-    }
-
-    calcularTotal();
-
-    form.addEventListener("submit", e => {
-      e.preventDefault();
-      mensaje.style.color = "#5a3516";
-      mensaje.textContent = "Enviando tu pedido...";
-
-      fetch(scriptURL, { method: "POST", body: new FormData(form) })
-        .then(response => {
-          if (response.ok) {
-            mensaje.style.color = "green";
-            mensaje.textContent = "✅ Pedido enviado correctamente. ¡Gracias por tu compra!";
-            form.reset();
-            calcularTotal();
-          } else {
-            throw new Error("Error en el envío");
-          }
-        })
-        .catch(() => {
-          mensaje.style.color = "red";
-          mensaje.textContent = "⚠️ Error de conexión. Intenta nuevamente.";
-        });
-    });
-  </script>
+form.addEventListener("submit",e=>{
+  e.preventDefault();
+  msg.textContent="Enviando...";
+  fetch(scriptURL,{method:"POST",body:new FormData(form)})
+  .then(r=>{
+    if(!r.ok) throw new Error("Error al enviar");
+    msg.innerHTML=`<span class="success">✅ Pedido registrado.</span><br>Gracias por tu compra...!<br>Que Dios te guíe y guarde siempre...!`;
+    form.reset();
+    totalDiv.innerHTML="";
+  })
+  .catch(()=>msg.innerHTML='<span class="error">Error de conexión.</span>');
+});
+</script>
 </body>
 </html>
