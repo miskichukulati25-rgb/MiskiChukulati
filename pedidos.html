@@ -20,11 +20,11 @@ header{
   width:70px;height:70px;
   border-radius:50%;
   box-shadow:0 0 15px rgba(212,175,55,0.5);
-  transition:transform 0.3s ease, box-shadow 0.3s ease;
+  transition:transform 0.4s ease, box-shadow 0.4s ease;
 }
 .logo:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 25px rgba(212,175,55,0.8);
+  transform:scale(1.1);
+  box-shadow:0 0 25px rgba(212,175,55,0.9);
 }
 .menu-btn{font-size:1.5em;cursor:pointer}
 nav{
@@ -41,6 +41,17 @@ nav a:hover{background:rgba(255,255,255,0.1)}
   max-width:600px;margin:36px auto;
   background:rgba(255,255,255,0.08);
   padding:24px;border-radius:12px;text-align:left;
+  box-shadow:0 0 20px rgba(0,0,0,0.2);
+}
+.logo-center{
+  display:block;margin:0 auto 15px auto;
+  width:120px;height:120px;border-radius:50%;
+  box-shadow:0 0 18px rgba(212,175,55,0.6);
+  animation:goldPulse 4s infinite ease-in-out;
+}
+@keyframes goldPulse{
+  0%,100%{box-shadow:0 0 18px rgba(212,175,55,0.6);}
+  50%{box-shadow:0 0 28px rgba(255,215,0,0.9);}
 }
 label{display:block;margin-top:10px;font-weight:600}
 input,select,textarea,button{
@@ -58,7 +69,7 @@ button{
   color:#3b2314;font-weight:700;border:none;cursor:pointer;
   transition:0.3s;
 }
-button:hover{opacity:0.9;transform:scale(1.03)}
+button:hover{opacity:0.9;transform:scale(1.05)}
 
 /* POPUP */
 .popup-overlay{
@@ -98,7 +109,7 @@ button:hover{opacity:0.9;transform:scale(1.03)}
 <body>
 
 <header>
-  <img src="ea94f829-847c-4e93-8216-1baab28ea466.png" alt="Miski Chukulati Logo" class="logo">
+  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Miski Chukulati Logo" class="logo">
   <div class="menu-btn" onclick="toggleMenu()">☰</div>
   <nav id="menuNav">
     <a href="#" onclick="showPedido()">Hacer Pedido</a>
@@ -107,7 +118,8 @@ button:hover{opacity:0.9;transform:scale(1.03)}
 </header>
 
 <div class="container" id="pedidoForm">
-  <h2>Hacer Pedido</h2>
+  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Logo Miski Chukulati" class="logo-center">
+  <h2 style="text-align:center;">Hacer Pedido</h2>
 
   <label>Nombre Completo</label>
   <input id="nombre" placeholder="Juan Pérez">
@@ -136,42 +148,12 @@ button:hover{opacity:0.9;transform:scale(1.03)}
   <label>Cantidad</label>
   <input id="cantidad" type="number" min="1" value="1" onchange="calcularTotal()">
 
-  <label>Método de Pago</label>
-  <select id="metodoPago">
-    <option value="PLIN">PLIN</option>
-    <option value="YAPE">YAPE</option>
-    <option value="Transferencia">Transferencia</option>
-    <option value="Efectivo">Efectivo</option>
-  </select>
-
-  <label>Encargado de Envío</label>
-  <select id="encargadoEnvio">
-    <option value="Courier1">Courier1</option>
-    <option value="Courier2">Courier2</option>
-    <option value="Courier3">Courier3</option>
-  </select>
-
   <label>Comentarios</label>
   <textarea id="comentarios" placeholder="Opcional"></textarea>
 
   <button onclick="mostrarPopup()">Ver Total</button>
   <button onclick="enviarPedido()">Enviar Pedido</button>
   <div id="result" class="result" style="display:none"></div>
-</div>
-
-<div class="container" id="oracionForm" style="display:none">
-  <h2>Pedido de Oración</h2>
-  <label>Nombre Completo</label>
-  <input id="nombreOracion" placeholder="Juan Pérez">
-
-  <label>Pedido de Oración</label>
-  <textarea id="pedidoOracion" placeholder="Escribe tu pedido de oración"></textarea>
-
-  <label>Orar Por</label>
-  <input id="orarPor" placeholder="Por quién deseas orar">
-
-  <button onclick="enviarOracion()">Enviar Pedido de Oración</button>
-  <div id="resultOracion" class="result" style="display:none"></div>
 </div>
 
 <!-- POPUP -->
@@ -239,8 +221,6 @@ async function enviarPedido(){
     telefono:document.getElementById('telefono').value.trim(),
     producto:document.getElementById('producto').value,
     cantidad:Number(document.getElementById('cantidad').value||1),
-    metodoPago:document.getElementById('metodoPago').value,
-    encargadoEnvio:document.getElementById('encargadoEnvio').value,
     comentarios:document.getElementById('comentarios').value.trim(),
     envio:envioFijo
   };
