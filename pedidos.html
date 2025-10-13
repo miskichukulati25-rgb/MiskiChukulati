@@ -28,7 +28,7 @@ nav a:last-child{border-bottom:none}
 nav a:hover{background:rgba(255,255,255,0.1)}
 
 .container{
-  max-width:600px;margin:30px auto;background:rgba(255,255,255,0.08);
+  max-width:650px;margin:30px auto;background:rgba(255,255,255,0.08);
   padding:24px;border-radius:12px;
 }
 .logo{
@@ -45,7 +45,7 @@ input,select,textarea{
 }
 textarea{resize:vertical}
 
-/* Toggle */
+/* Toggle Delivery */
 .toggle-container{
   display:flex;align-items:center;gap:10px;
   background:rgba(255,255,255,0.08);
@@ -65,6 +65,53 @@ textarea{resize:vertical}
 .toggle-switch.active{background:linear-gradient(90deg,#c7a86d,#e5c99c);}
 .toggle-switch.active::before{transform:translateX(25px);}
 .toggle-label{color:#f4d67b;font-weight:600}
+
+/* Riders Section */
+.riders-section{
+  margin-top:25px;
+}
+.riders-section h3{
+  color:#f4d67b;
+  font-weight:700;
+  font-size:1.2em;
+  margin-bottom:15px;
+}
+.riders-grid{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:16px;
+}
+.rider-card{
+  background:rgba(255,255,255,0.1);
+  border:2px solid transparent;
+  border-radius:15px;
+  padding:14px;
+  width:150px;
+  text-align:center;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  position:relative;
+}
+.rider-card:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 20px rgba(212,175,55,0.5);
+}
+.rider-card.selected{
+  border:2px solid #d4af37;
+  box-shadow:0 0 25px rgba(212,175,55,0.7);
+}
+.rider-img{
+  width:80px;height:80px;border-radius:50%;object-fit:cover;
+  border:2px solid #d4af37;margin-bottom:8px;
+}
+.rider-name{font-weight:600;color:#f4d67b;}
+.rider-age{font-size:0.85em;color:#e8d9b5;}
+.rider-rating{
+  font-size:1.1em;
+  color:#ffd700;
+  transition:transform 0.3s ease;
+}
+.rider-card:hover .rider-rating{
+  transform:scale(1.2);
+}
 
 /* Botón principal */
 .order-btn{
@@ -90,7 +137,7 @@ textarea{resize:vertical}
 .popup-content{
   background:#fff8e1;color:#5c4033;
   border-radius:16px;padding:30px;text-align:center;
-  max-width:320px;transform:scale(0.8);
+  max-width:340px;transform:scale(0.8);
   box-shadow:0 0 25px rgba(212,175,55,0.5);
   transition:transform 0.3s ease;
 }
@@ -177,6 +224,12 @@ footer span{color:#f4d67b;font-style:italic;}
     <span id="toggleStatus">Sin delivery</span>
   </div>
 
+  <!-- Miski Riders -->
+  <div class="riders-section">
+    <h3>Elige a tu Miski Rider 🍫</h3>
+    <div class="riders-grid" id="ridersGrid"></div>
+  </div>
+
   <div class="total-box">
     <div>Precio Producto: S/ <span id="precioProducto">0.00</span></div>
     <div>Comisión Envío: S/ <span id="comision">7.00</span></div>
@@ -184,7 +237,6 @@ footer span{color:#f4d67b;font-style:italic;}
   </div>
 
   <button id="verTotalBtn" class="order-btn" onclick="mostrarPopup()">Ver total</button>
-
   <div id="result" class="result" style="display:none"></div>
 </div>
 
@@ -194,9 +246,10 @@ footer span{color:#f4d67b;font-style:italic;}
     <h2>Confirmar Pedido</h2>
     <p><b>Producto:</b> <span id="popupProducto">-</span></p>
     <p><b>Cantidad:</b> <span id="popupCantidad">0</span></p>
-    <p>Precio del producto: <b id="precioTxt">S/ 0.00</b></p>
-    <p>Comisión de envío: <b id="envioTxt">S/ 0.00</b></p>
-    <p>Total a pagar: <b id="totalTxt">S/ 0.00</b></p>
+    <p><b>Miski Rider:</b> <span id="popupRider">-</span></p>
+    <p>Precio: <b id="precioTxt">S/ 0.00</b></p>
+    <p>Comisión envío: <b id="envioTxt">S/ 0.00</b></p>
+    <p>Total: <b id="totalTxt">S/ 0.00</b></p>
     <button onclick="enviarPedido()">Enviar Pedido</button>
   </div>
 </div>
@@ -219,6 +272,7 @@ const envioFijo=7;
 let conDelivery=false;
 let lastPdfUrl=null;
 let lastTracking=null;
+let riderSeleccionado=null;
 
 function toggleMenu(){const nav=document.getElementById('menuNav');nav.style.display=(nav.style.display==='flex')?'none':'flex';}
 
@@ -234,6 +288,32 @@ toggle.addEventListener('click',()=>{
   toggle.classList.toggle('active');
   statusText.textContent=conDelivery?"Con delivery":"Sin delivery";
   calcularTotal();
+});
+
+const riders=[
+  {nombre:"Juan Pérez",edad:29,calif:4.8,img:"https://randomuser.me/api/portraits/men/75.jpg"},
+  {nombre:"Ana Ramírez",edad:32,calif:4.7,img:"https://randomuser.me/api/portraits/women/65.jpg"},
+  {nombre:"Carlos Díaz",edad:27,calif:4.9,img:"https://randomuser.me/api/portraits/men/80.jpg"},
+  {nombre:"Sofía Morales",edad:30,calif:4.6,img:"https://randomuser.me/api/portraits/women/72.jpg"},
+  {nombre:"Diego Torres",edad:26,calif:4.8,img:"https://randomuser.me/api/portraits/men/60.jpg"}
+];
+
+const grid=document.getElementById('ridersGrid');
+riders.forEach((r,i)=>{
+  const div=document.createElement('div');
+  div.className='rider-card';
+  div.innerHTML=`
+    <img src="${r.img}" class="rider-img">
+    <div class="rider-rating">⭐ ${r.calif}</div>
+    <div class="rider-name">${r.nombre}</div>
+    <div class="rider-age">${r.edad} años</div>`;
+  div.onclick=()=>{
+    document.querySelectorAll('.rider-card').forEach(c=>c.classList.remove('selected'));
+    div.classList.add('selected');
+    riderSeleccionado=r;
+    document.getElementById('popupRider').innerText=`${r.nombre} (⭐${r.calif})`;
+  };
+  grid.appendChild(div);
 });
 
 function calcularTotal(){
@@ -268,11 +348,12 @@ async function enviarPedido(){
     producto:document.getElementById('producto').value,
     cantidad:Number(document.getElementById('cantidad').value||1),
     delivery:conDelivery?"si":"no",
-    envio:conDelivery?envioFijo:0
+    envio:conDelivery?envioFijo:0,
+    encargadoEnvio:riderSeleccionado?`${riderSeleccionado.nombre}`:"Sin asignar"
   };
+  popup.classList.remove('active');
   document.getElementById('result').style.display='block';
   document.getElementById('result').innerText='Enviando pedido...';
-  popup.classList.remove('active');
   try{
     const res=await fetch(SCRIPT_WEB_APP_URL,{method:'POST',body:JSON.stringify(data)});
     const json=await res.json();
@@ -286,11 +367,9 @@ async function enviarPedido(){
       const btn=document.getElementById('verTotalBtn');
       btn.textContent='📄 Comprobante de pedido';
       btn.onclick=()=>window.open(lastPdfUrl,'_blank');
-    }else{
-      document.getElementById('result').innerText='Error: '+json.error;
-    }
-  }catch(err){
-    console.error(err);
+    } else document.getElementById('result').innerText='Error: '+json.error;
+  }catch(e){
+    console.error(e);
     document.getElementById('result').innerText='Error al enviar pedido.';
   }
 }
@@ -298,8 +377,10 @@ async function enviarPedido(){
 function showToast(msg){
   toastMsg.innerText=msg;
   toast.classList.add('show');
-  setTimeout(()=>toast.classList.remove('show'),6000);
+  setTimeout(()=>toast.classList.remove('show'),5000);
 }
+
+calcularTotal();
 </script>
 </body>
 </html>
