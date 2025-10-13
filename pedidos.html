@@ -1,385 +1,514 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Haz tu Pedido - Miski Chukulati 🍫</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
-<style>
-body {
-  font-family:'Poppins',sans-serif;
-  background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);
-  color:#fff;margin:0;padding:0;text-align:center;
-}
-header {
-  padding:12px 24px;background:rgba(0,0,0,0.5);
-  display:flex;justify-content:space-between;align-items:center;
-}
-header h1{margin:0;font-size:1.5em}
-.menu-btn{font-size:1.5em;cursor:pointer}
-nav{
-  position:absolute;top:50px;right:0;background:rgba(0,0,0,0.85);
-  width:220px;display:none;flex-direction:column;border-radius:8px;margin:8px;
-}
-nav a{
-  padding:12px 16px;color:#fff;text-decoration:none;border-bottom:1px solid #d4c5b2;
-}
-nav a:last-child{border-bottom:none}
-nav a:hover{background:rgba(255,255,255,0.1)}
-
-.container{
-  max-width:650px;margin:30px auto;background:rgba(255,255,255,0.08);
-  padding:24px;border-radius:12px;
-}
-.logo{
-  width:120px;height:120px;border-radius:50%;
-  margin-top:20px;
-  box-shadow:0 0 20px rgba(212,175,55,0.4);
-}
-
-/* Campos */
-label{display:block;margin-top:10px;font-weight:600;text-align:left}
-input,select,textarea{
-  padding:10px;border-radius:8px;border:1px solid #d4c5b2;
-  width:100%;box-sizing:border-box;margin-top:4px;
-}
-textarea{resize:vertical}
-
-/* Toggle Delivery */
-.toggle-container{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(255,255,255,0.08);
-  padding:10px 20px;border-radius:40px;
-  justify-content:center;margin-top:15px;
-}
-.toggle-switch{
-  position:relative;width:55px;height:30px;
-  background:#a67c52;border-radius:30px;
-  cursor:pointer;transition:background 0.3s ease;
-}
-.toggle-switch::before{
-  content:"";position:absolute;top:3px;left:3px;
-  width:24px;height:24px;border-radius:50%;background:white;
-  transition:transform 0.3s ease;
-}
-.toggle-switch.active{background:linear-gradient(90deg,#c7a86d,#e5c99c);}
-.toggle-switch.active::before{transform:translateX(25px);}
-.toggle-label{color:#f4d67b;font-weight:600}
-
-/* Riders Section */
-.riders-section{
-  margin-top:25px;
-}
-.riders-section h3{
-  color:#f4d67b;
-  font-weight:700;
-  font-size:1.2em;
-  margin-bottom:15px;
-}
-.riders-grid{
-  display:flex;flex-wrap:wrap;justify-content:center;gap:16px;
-}
-.rider-card{
-  background:rgba(255,255,255,0.1);
-  border:2px solid transparent;
-  border-radius:15px;
-  padding:14px;
-  width:150px;
-  text-align:center;
-  cursor:pointer;
-  transition:all 0.3s ease;
-  position:relative;
-}
-.rider-card:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 20px rgba(212,175,55,0.5);
-}
-.rider-card.selected{
-  border:2px solid #d4af37;
-  box-shadow:0 0 25px rgba(212,175,55,0.7);
-}
-.rider-img{
-  width:80px;height:80px;border-radius:50%;object-fit:cover;
-  border:2px solid #d4af37;margin-bottom:8px;
-}
-.rider-name{font-weight:600;color:#f4d67b;}
-.rider-age{font-size:0.85em;color:#e8d9b5;}
-.rider-rating{
-  font-size:1.1em;
-  color:#ffd700;
-  transition:transform 0.3s ease;
-}
-.rider-card:hover .rider-rating{
-  transform:scale(1.2);
-}
-
-/* Botón principal */
-.order-btn{
-  margin-top:20px;
-  background:linear-gradient(90deg,#c7a86d,#e5c99c);
-  border:none;padding:12px 30px;
-  border-radius:30px;font-weight:700;
-  color:#3b2314;cursor:pointer;
-  font-size:1.1em;
-  transition:transform 0.3s ease, box-shadow 0.3s ease;
-}
-.order-btn:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(212,175,55,0.6);}
-
-/* Popup */
-.popup{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:rgba(0,0,0,0.75);
-  display:flex;justify-content:center;align-items:center;
-  visibility:hidden;opacity:0;
-  transition:visibility 0s,opacity 0.3s ease;
-}
-.popup.active{visibility:visible;opacity:1;}
-.popup-content{
-  background:#fff8e1;color:#5c4033;
-  border-radius:16px;padding:30px;text-align:center;
-  max-width:340px;transform:scale(0.8);
-  box-shadow:0 0 25px rgba(212,175,55,0.5);
-  transition:transform 0.3s ease;
-}
-.popup.active .popup-content{transform:scale(1);}
-.popup h2{color:#a67c52;}
-.popup button{
-  margin-top:18px;background:linear-gradient(90deg,#c7a86d,#e5c99c);
-  border:none;padding:10px 20px;border-radius:25px;
-  font-weight:700;color:#3b2314;cursor:pointer;
-  transition:transform 0.2s ease;
-}
-.popup button:hover{transform:scale(1.05);box-shadow:0 0 15px rgba(212,175,55,0.6);}
-
-/* Toast */
-.toast{
-  position:fixed;bottom:30px;left:50%;
-  transform:translateX(-50%);
-  background:rgba(255,255,255,0.95);
-  color:#3b2314;
-  padding:16px 24px;border-radius:30px;
-  box-shadow:0 0 25px rgba(212,175,55,0.6);
-  font-weight:600;opacity:0;
-  transition:opacity 0.5s ease, bottom 0.5s ease;
-  text-align:center;
-}
-.toast.show{opacity:1;bottom:50px;}
-.toast p{margin:0;padding:0;color:#3b2314;font-weight:700;}
-.toast button{
-  margin-top:8px;
-  background:linear-gradient(90deg,#c7a86d,#e5c99c);
-  border:none;padding:8px 18px;border-radius:20px;
-  font-weight:700;color:#3b2314;cursor:pointer;
-  transition:transform 0.2s ease;
-}
-.toast button:hover{transform:scale(1.05);box-shadow:0 0 12px rgba(212,175,55,0.6);}
-
-footer{margin:25px 0;color:#d2b48c;font-size:0.9rem;}
-footer span{color:#f4d67b;font-style:italic;}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Haz tu Pedido - Miski Chukulati 🍫</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #3b2314, #5c3b1e, #7b4c22);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      padding: 12px 24px;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .menu-btn {
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+    nav {
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: rgba(0, 0, 0, 0.85);
+      width: 220px;
+      display: none;
+      flex-direction: column;
+      border-radius: 8px;
+      margin: 8px;
+    }
+    nav a {
+      padding: 12px 16px;
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 1px solid #d4c5b2;
+    }
+    nav a:last-child {
+      border-bottom: none;
+    }
+    nav a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background: rgba(255,255,255,0.08);
+      padding: 24px;
+      border-radius: 12px;
+    }
+    .logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 20px auto;
+      display: block;
+      box-shadow: 0 0 20px rgba(212,175,55,0.4);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: 600;
+      text-align: left;
+    }
+    input, select, textarea {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #d4c5b2;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 4px;
+      background: rgba(255,255,255,0.9);
+      color: #3b2314;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.08);
+      padding: 10px 20px;
+      border-radius: 40px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 55px;
+      height: 30px;
+      background: #a67c52;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .toggle-switch::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      transition: transform 0.3s ease;
+    }
+    .toggle-switch.active {
+      background: linear-gradient(90deg, #c7a86d, #e5c99c);
+    }
+    .toggle-switch.active::before {
+      transform: translateX(25px);
+    }
+    .toggle-label {
+      color: #f4d67b;
+      font-weight: 600;
+    }
+    .riders-section {
+      margin-top: 25px;
+    }
+    .riders-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+    }
+    .rider-card {
+      background: rgba(255,255,255,0.1);
+      border: 2px solid transparent;
+      border-radius: 15px;
+      padding: 14px;
+      width: 150px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .rider-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(212,175,55,0.5);
+    }
+    .rider-card.selected {
+      border: 2px solid #d4af37;
+      box-shadow: 0 0 25px rgba(212,175,55,0.7);
+    }
+    .rider-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #d4af37;
+      margin-bottom: 8px;
+    }
+    .rider-name {
+      font-weight: 600;
+      color: #f4d67b;
+    }
+    .rider-age {
+      font-size: 0.85em;
+      color: #e8d9b5;
+    }
+    .rider-rating {
+      font-size: 1.1em;
+      color: #ffd700;
+      transition: transform 0.3s;
+    }
+    .rider-card:hover .rider-rating {
+      transform: scale(1.2);
+    }
+    .order-btn {
+      margin-top: 20px;
+      background: linear-gradient(90deg, #c7a86d, #e5c99c);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: 700;
+      color: #3b2314;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .order-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(212,175,55,0.6);
+    }
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.75);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.3s ease;
+    }
+    .popup.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .popup-content {
+      background: #fff8e1;
+      color: #5c4033;
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      max-width: 320px;
+      transform: scale(0.8);
+      box-shadow: 0 0 25px rgba(212,175,55,0.5);
+      transition: transform 0.3s;
+    }
+    .popup.active .popup-content {
+      transform: scale(1);
+    }
+    .popup h2 {
+      color: #a67c52;
+    }
+    .popup button {
+      margin-top: 18px;
+      background: linear-gradient(90deg, #c7a86d, #e5c99c);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: 700;
+      color: #3b2314;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .popup button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(212,175,55,0.6);
+    }
+    .result {
+      margin-top: 18px;
+      background: rgba(255,255,255,0.05);
+      padding: 12px;
+      border-radius: 8px;
+    }
+    footer {
+      margin: 25px 0;
+      color: #d2b48c;
+      font-size: 0.9rem;
+    }
+    footer span {
+      color: #f4d67b;
+      font-style: italic;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Miski Chukulati 🍫</h1>
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <nav id="menuNav">
+      <a href="index.html">Inicio</a>
+      <a href="pedidos.html">Hacer Pedido</a>
+      <a href="oracion.html">Pedido de Oración</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="foro.html">Foro</a>
+      <a href="galeria.html">Galería</a>
+    </nav>
+  </header>
 
-<header>
-  <h1>Miski Chukulati 🍫</h1>
-  <div class="menu-btn" onclick="toggleMenu()">☰</div>
-  <nav id="menuNav">
-    <a href="#" onclick="showPedido()">Hacer Pedido</a>
-    <a href="#" onclick="showOracion()">Pedido de Oración</a>
-  </nav>
-</header>
+  <div class="container">
+    <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" class="logo" alt="Logo Miski Chukulati">
+    <h2>Haz tu Pedido</h2>
 
-<img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Logo Miski Chukulati" class="logo">
+    <label>Nombre Completo</label>
+    <input id="nombre" placeholder="Juan Pérez">
+    <label>DNI</label>
+    <input id="dni" placeholder="8 dígitos">
+    <label>Dirección de entrega</label>
+    <input id="direccion" placeholder="Av. Ejemplo 123">
+    <label>Correo</label>
+    <input id="correo" type="email" placeholder="correo@ejemplo.com">
+    <label>Celular</label>
+    <input id="telefono" placeholder="9 dígitos">
 
-<div class="container" id="pedidoForm">
-  <h2>Hacer Pedido</h2>
+    <label>Producto</label>
+    <select id="producto" onchange="calcularTotal()">
+      <option value="">--Selecciona--</option>
+      <option>Tableta 70 % cacao</option>
+      <option>Tableta 85 % cacao</option>
+      <option>Bombones surtidos</option>
+      <option>Dark Chocolate Bar</option>
+      <option>ChocoNibs</option>
+      <option>ChocoBites</option>
+      <option>Chocolate Blanco</option>
+    </select>
 
-  <label>Nombre Completo</label>
-  <input id="nombre" placeholder="Juan Pérez">
-  <label>DNI</label>
-  <input id="dni" placeholder="8 dígitos">
-  <label>Correo</label>
-  <input id="correo" type="email" placeholder="correo@ejemplo.com">
-  <label>Celular</label>
-  <input id="telefono" placeholder="9 dígitos">
+    <label>Cantidad</label>
+    <input id="cantidad" type="number" min="1" value="1" onchange="calcularTotal()">
 
-  <label>Producto</label>
-  <select id="producto" onchange="calcularTotal()">
-    <option value="">--Selecciona--</option>
-    <option value="Tableta 70 % cacao">Tableta 70 % cacao</option>
-    <option value="Tableta 85 % cacao">Tableta 85 % cacao</option>
-    <option value="Bombones surtidos">Bombones surtidos</option>
-    <option value="Dark Chocolate Bar">Dark Chocolate Bar</option>
-    <option value="ChocoNibs">ChocoNibs</option>
-    <option value="ChocoBites">ChocoBites</option>
-    <option value="Chocolate Blanco">Chocolate Blanco</option>
-  </select>
+    <div class="toggle-container">
+      <span class="toggle-label">🚚 Con delivery / 🏠 Sin delivery</span>
+      <div id="toggleDelivery" class="toggle-switch"></div>
+      <span id="toggleStatus">Sin delivery</span>
+    </div>
 
-  <label>Cantidad</label>
-  <input id="cantidad" type="number" min="1" value="1" onchange="calcularTotal()">
+    <div id="ridersBlock" class="riders-section" style="display:none">
+      <h3>Elige a tu Miski Rider 🍫</h3>
+      <div id="ridersGrid" class="riders-grid"></div>
+    </div>
 
-  <div class="toggle-container">
-    <span class="toggle-label">Delivery</span>
-    <div id="toggleDelivery" class="toggle-switch"></div>
-    <span id="toggleStatus">Sin delivery</span>
+    <div style="margin-top:12px">
+      <div>Precio Producto: S/ <span id="precioProducto">0.00</span></div>
+      <div>Comisión Envío: S/ <span id="comision">0.00</span></div>
+      <div>Total: S/ <span id="total">0.00</span></div>
+    </div>
+
+    <button id="verTotalBtn" class="order-btn" onclick="mostrarPopup()">Ver total</button>
+
+    <div id="result" class="result" style="display:none"></div>
   </div>
 
-  <!-- Miski Riders -->
-  <div class="riders-section">
-    <h3>Elige a tu Miski Rider 🍫</h3>
-    <div class="riders-grid" id="ridersGrid"></div>
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <h2>Confirmar Pedido</h2>
+      <p><b>Producto:</b> <span id="popupProducto">-</span></p>
+      <p><b>Cantidad:</b> <span id="popupCantidad">0</span></p>
+      <p><b>Miski Rider:</b> <span id="popupRider">-</span></p>
+      <p>Precio: <b id="precioTxt">S/ 0.00</b></p>
+      <p>Comisión: <b id="envioTxt">S/ 0.00</b></p>
+      <p>Total: <b id="totalTxt">S/ 0.00</b></p>
+      <button onclick="enviarPedido()">Enviar Pedido</button>
+    </div>
   </div>
 
-  <div class="total-box">
-    <div>Precio Producto: S/ <span id="precioProducto">0.00</span></div>
-    <div>Comisión Envío: S/ <span id="comision">7.00</span></div>
-    <div>Total: S/ <span id="total">0.00</span></div>
+  <div id="toast" class="toast">
+    <p id="toastMsg"></p>
+    <button id="verPedidoBtn" style="display:none">Ver pedido</button>
   </div>
 
-  <button id="verTotalBtn" class="order-btn" onclick="mostrarPopup()">Ver total</button>
-  <div id="result" class="result" style="display:none"></div>
-</div>
-
-<!-- Popup -->
-<div id="popup" class="popup">
-  <div class="popup-content">
-    <h2>Confirmar Pedido</h2>
-    <p><b>Producto:</b> <span id="popupProducto">-</span></p>
-    <p><b>Cantidad:</b> <span id="popupCantidad">0</span></p>
-    <p><b>Miski Rider:</b> <span id="popupRider">-</span></p>
-    <p>Precio: <b id="precioTxt">S/ 0.00</b></p>
-    <p>Comisión envío: <b id="envioTxt">S/ 0.00</b></p>
-    <p>Total: <b id="totalTxt">S/ 0.00</b></p>
-    <button onclick="enviarPedido()">Enviar Pedido</button>
-  </div>
-</div>
-
-<!-- Toast -->
-<div id="toast" class="toast">
-  <p id="toastMsg"></p>
-  <button id="verPedidoBtn" style="display:none;">Ver pedido</button>
-</div>
-
-<footer>
-  <span>"Jehová te bendiga, y te guarde” – Números 6:24</span><br>
-  © Miski Chukulati - 2025
-</footer>
-
+  <footer>
+    <span>"Jehová te bendiga, y te guarde” – Números 6:24</span><br>
+    © Miski Chukulati - 2025
+  </footer>
 <script>
-const SCRIPT_WEB_APP_URL="https://script.google.com/macros/s/AKfycbypicbViQpx68de35No3yAEd2XoLHOQ5banZ8cmJjn15es3eus8K4rTM8sRtFoPaDiH/exec";
-const productosPrecios={"Tableta 70 % cacao":8,"Tableta 85 % cacao":9,"Bombones surtidos":15,"Dark Chocolate Bar":8,"ChocoNibs":5,"ChocoBites":6.5,"Chocolate Blanco":24};
-const envioFijo=7;
-let conDelivery=false;
-let lastPdfUrl=null;
-let lastTracking=null;
-let riderSeleccionado=null;
+const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbypicbViQpx68de35No3yAEd2XoLHOQ5banZ8cmJjn15es3eus8K4rTM8sRtFoPaDiH/exec"; // cambia si es necesario
+const envioFijo = 7.00;
+const precios = {
+  "Tableta 70 % cacao": 8,
+  "Tableta 85 % cacao": 9,
+  "Bombones surtidos": 15,
+  "Dark Chocolate Bar": 8,
+  "ChocoNibs": 5,
+  "ChocoBites": 6.5,
+  "Chocolate Blanco": 24
+};
 
-function toggleMenu(){const nav=document.getElementById('menuNav');nav.style.display=(nav.style.display==='flex')?'none':'flex';}
+let conDelivery = false;
+let riders = [];
+let selectedRider = null;
+let lastPdfUrl = null;
+let lastTracking = null;
 
-const toggle=document.getElementById('toggleDelivery');
-const statusText=document.getElementById('toggleStatus');
-const popup=document.getElementById('popup');
-const toast=document.getElementById('toast');
-const toastMsg=document.getElementById('toastMsg');
-const verPedidoBtn=document.getElementById('verPedidoBtn');
+const toggle = document.getElementById('toggleDelivery');
+const statusText = document.getElementById('toggleStatus');
+const ridersBlock = document.getElementById('ridersBlock');
+const ridersGrid = document.getElementById('ridersGrid');
+const popup = document.getElementById('popup');
+const resultDiv = document.getElementById('result');
+const toast = document.getElementById('toast');
+const toastMsg = document.getElementById('toastMsg');
+const verPedidoBtn = document.getElementById('verPedidoBtn');
 
-toggle.addEventListener('click',()=>{
-  conDelivery=!conDelivery;
+toggle.addEventListener('click', () => {
+  conDelivery = !conDelivery;
   toggle.classList.toggle('active');
-  statusText.textContent=conDelivery?"Con delivery":"Sin delivery";
+  statusText.textContent = conDelivery ? "Con delivery" : "Sin delivery";
+  ridersBlock.style.display = conDelivery ? "block" : "none";
   calcularTotal();
 });
 
-const riders=[
-  {nombre:"Juan Pérez",edad:29,calif:4.8,img:"https://randomuser.me/api/portraits/men/75.jpg"},
-  {nombre:"Ana Ramírez",edad:32,calif:4.7,img:"https://randomuser.me/api/portraits/women/65.jpg"},
-  {nombre:"Carlos Díaz",edad:27,calif:4.9,img:"https://randomuser.me/api/portraits/men/80.jpg"},
-  {nombre:"Sofía Morales",edad:30,calif:4.6,img:"https://randomuser.me/api/portraits/women/72.jpg"},
-  {nombre:"Diego Torres",edad:26,calif:4.8,img:"https://randomuser.me/api/portraits/men/60.jpg"}
-];
-
-const grid=document.getElementById('ridersGrid');
-riders.forEach((r,i)=>{
-  const div=document.createElement('div');
-  div.className='rider-card';
-  div.innerHTML=`
-    <img src="${r.img}" class="rider-img">
-    <div class="rider-rating">⭐ ${r.calif}</div>
-    <div class="rider-name">${r.nombre}</div>
-    <div class="rider-age">${r.edad} años</div>`;
-  div.onclick=()=>{
-    document.querySelectorAll('.rider-card').forEach(c=>c.classList.remove('selected'));
-    div.classList.add('selected');
-    riderSeleccionado=r;
-    document.getElementById('popupRider').innerText=`${r.nombre} (⭐${r.calif})`;
-  };
-  grid.appendChild(div);
-});
-
-function calcularTotal(){
-  const producto=document.getElementById('producto').value;
-  const cantidad=Number(document.getElementById('cantidad').value||1);
-  const precioUnitario=productosPrecios[producto]||0;
-  const subtotal=precioUnitario*cantidad;
-  const comision=conDelivery?envioFijo:0;
-  const total=subtotal+comision;
-  document.getElementById('precioProducto').innerText=subtotal.toFixed(2);
-  document.getElementById('comision').innerText=comision.toFixed(2);
-  document.getElementById('total').innerText=total.toFixed(2);
-  document.getElementById('popupProducto').innerText=producto||"-";
-  document.getElementById('popupCantidad').innerText=cantidad;
-  document.getElementById('precioTxt').innerText="S/ "+subtotal.toFixed(2);
-  document.getElementById('envioTxt').innerText="S/ "+comision.toFixed(2);
-  document.getElementById('totalTxt').innerText="S/ "+total.toFixed(2);
-}
-
-function mostrarPopup(){
-  calcularTotal();
-  popup.classList.add('active');
-}
-
-async function enviarPedido(){
-  const data={
-    type:"pedido",
-    nombre:document.getElementById('nombre').value.trim(),
-    dni:document.getElementById('dni').value.trim(),
-    correo:document.getElementById('correo').value.trim(),
-    telefono:document.getElementById('telefono').value.trim(),
-    producto:document.getElementById('producto').value,
-    cantidad:Number(document.getElementById('cantidad').value||1),
-    delivery:conDelivery?"si":"no",
-    envio:conDelivery?envioFijo:0,
-    encargadoEnvio:riderSeleccionado?`${riderSeleccionado.nombre}`:"Sin asignar"
-  };
-  popup.classList.remove('active');
-  document.getElementById('result').style.display='block';
-  document.getElementById('result').innerText='Enviando pedido...';
-  try{
-    const res=await fetch(SCRIPT_WEB_APP_URL,{method:'POST',body:JSON.stringify(data)});
-    const json=await res.json();
-    if(json.success){
-      lastPdfUrl=json.pdfUrl;
-      lastTracking=json.tracking;
-      document.getElementById('result').innerText='Gracias por tu compra...! Que Dios te guíe y guarde siempre...!';
-      showToast(`Pedido registrado exitosamente\nNúmero: ${lastTracking}`);
-      verPedidoBtn.style.display='inline-block';
-      verPedidoBtn.onclick=()=>window.open(`ordertracking.html?idPedido=${encodeURIComponent(lastTracking)}`,'_blank');
-      const btn=document.getElementById('verTotalBtn');
-      btn.textContent='📄 Comprobante de pedido';
-      btn.onclick=()=>window.open(lastPdfUrl,'_blank');
-    } else document.getElementById('result').innerText='Error: '+json.error;
-  }catch(e){
-    console.error(e);
-    document.getElementById('result').innerText='Error al enviar pedido.';
+async function fetchCouriers() {
+  try {
+    const res = await fetch(SCRIPT_WEB_APP_URL + "?action=getCouriers");
+    const js = await res.json();
+    if (js.success) {
+      riders = js.couriers;
+      renderRiders();
+    } else {
+      console.warn("No se cargaron couriers:", js.error);
+    }
+  } catch (e) {
+    console.error("Error al fetchCouriers:", e);
   }
 }
 
-function showToast(msg){
-  toastMsg.innerText=msg;
-  toast.classList.add('show');
-  setTimeout(()=>toast.classList.remove('show'),5000);
+function renderRiders() {
+  ridersGrid.innerHTML = "";
+  riders.forEach((r, i) => {
+    const card = document.createElement('div');
+    card.className = "rider-card";
+    card.innerHTML = `
+      <img src="${r.foto || 'https://via.placeholder.com/80'}" class="rider-img" alt="${r.nombre}">
+      <div class="rider-rating">⭐ ${Number(r.calificacion || 0).toFixed(1)}</div>
+      <div class="rider-name">${r.nombre}</div>
+      <div class="rider-age">${r.edad ? r.edad + " años" : ""}</div>
+    `;
+    card.onclick = () => {
+      document.querySelectorAll('.rider-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedRider = r;
+    };
+    ridersGrid.appendChild(card);
+  });
 }
 
+function calcularTotal() {
+  const prod = document.getElementById('producto').value;
+  const cant = Number(document.getElementById('cantidad').value || 1);
+  const precioUnitario = precios[prod] || 0;
+  const subtotal = precioUnitario * cant;
+  const com = conDelivery ? envioFijo : 0;
+  const tot = subtotal + com;
+  document.getElementById('precioProducto').innerText = subtotal.toFixed(2);
+  document.getElementById('comision').innerText = com.toFixed(2);
+  document.getElementById('total').innerText = tot.toFixed(2);
+  document.getElementById('popupProducto').innerText = prod || "-";
+  document.getElementById('popupCantidad').innerText = cant;
+  document.getElementById('precioTxt').innerText = "S/ " + subtotal.toFixed(2);
+  document.getElementById('envioTxt').innerText = "S/ " + com.toFixed(2);
+  document.getElementById('totalTxt').innerText = "S/ " + tot.toFixed(2);
+  document.getElementById('popupRider').innerText = selectedRider ? (selectedRider.nombre + " ⭐" + Number(selectedRider.calificacion||0).toFixed(1)) : (conDelivery ? "Selecciona un Miski Rider" : "Sin delivery");
+}
+
+function mostrarPopup() {
+  calcularTotal();
+  const nombre = document.getElementById('nombre').value.trim();
+  const prod = document.getElementById('producto').value;
+  if (!nombre || !prod) {
+    resultDiv.style.display = "block";
+    resultDiv.innerText = "Por favor completa tu nombre y producto.";
+    return;
+  }
+  if (conDelivery && !selectedRider) {
+    resultDiv.style.display = "block";
+    resultDiv.innerText = "Debes seleccionar un Miski Rider.";
+    return;
+  }
+  resultDiv.style.display = "none";
+  popup.classList.add('active');
+}
+
+async function enviarPedido() {
+  popup.classList.remove('active');
+  resultDiv.style.display = "block";
+  resultDiv.innerText = "Enviando pedido...";
+  const data = {
+    type: "pedido",
+    nombre: document.getElementById('nombre').value.trim(),
+    dni: document.getElementById('dni').value.trim(),
+    direccion: document.getElementById('direccion').value.trim(),
+    correo: document.getElementById('correo').value.trim(),
+    telefono: document.getElementById('telefono').value.trim(),
+    producto: document.getElementById('producto').value,
+    cantidad: Number(document.getElementById('cantidad').value || 1),
+    precioUnitario: precios[document.getElementById('producto').value] || 0,
+    envio: envioFijo,
+    delivery: conDelivery,
+    metodoPago: "",
+    encargadoEnvio: selectedRider ? selectedRider.nombre : "",
+    calificacion: selectedRider ? selectedRider.calificacion : 0
+  };
+  try {
+    const res = await fetch(SCRIPT_WEB_APP_URL, {
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+    const js = await res.json();
+    if (js.success) {
+      resultDiv.innerText = js.message;
+      lastPdfUrl = js.pdfUrl;
+      lastTracking = js.tracking;
+      const btn = document.getElementById('verTotalBtn');
+      btn.textContent = "📄 Comprobante de pedido";
+      btn.onclick = () => window.open(lastPdfUrl, "_blank");
+      toastMsg.innerText = `Pedido registrado: ${lastTracking}`;
+      toast.classList.add('show');
+      verPedidoBtn.style.display = "inline-block";
+      verPedidoBtn.onclick = () => window.open(`ordertracking.html?idPedido=${encodeURIComponent(lastTracking)}`, "_blank");
+      setTimeout(() => toast.classList.remove('show'), 7000);
+    } else {
+      resultDiv.innerText = "Error: " + (js.error || "no se pudo registrar");
+    }
+  } catch (e) {
+    console.error(e);
+    resultDiv.innerText = "Error conexión al servidor.";
+  }
+}
+
+// Cerrar popup al hacer clic fuera del contenido
+document.getElementById('popup').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('popup')) {
+    popup.classList.remove('active');
+  }
+});
+
+// Inicializaciones
+fetchCouriers();
 calcularTotal();
 </script>
 </body>
