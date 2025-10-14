@@ -78,7 +78,7 @@ footer{text-align:center;margin-top:40px;font-size:.9rem;color:#7b5b4a;}
 </footer>
 
 <script>
-const scriptURL="https://script.google.com/macros/s/AKfycbypicbViQpx68de35No3yAEd2XoLHOQ5banZ8cmJjn15es3eus8K4rTM8sRtFoPaDiH/exec";
+const scriptURL="https://script.google.com/macros/s/AKfycbw5TuK6rVuBmEisEVmJfQc0f0R5OYMTgvywBVifaiJySd4fWCmjXG1SfsCKbKqNmmZVAg/exec";
 const form=document.getElementById("pedidoForm");
 const msg=document.getElementById("msg");
 const totalDiv=document.getElementById("total");
