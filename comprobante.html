@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Comprobante - Miski Chukulati</title>
 <style>
-body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);color:#fff;text-align:center;padding:30px;}
-.comprobante{background:rgba(255,255,255,0.08);border:2px solid #d4af37;border-radius:16px;max-width:500px;margin:auto;padding:20px;box-shadow:0 0 10px gold;}
-h2{color:#f7e7ce;}
+body{font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#3b2314,#5c3b1e);color:#fff;display:flex;justify-content:center;align-items:center;height:100vh}
+.box{background:rgba(255,255,255,0.06);padding:24px;border-radius:12px;border:2px solid #d4af37;text-align:center}
+a{color:#3b2314;background:#ffdca8;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:700}
 </style>
 </head>
 <body>
-  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" width="100" style="border-radius:50%;box-shadow:0 0 10px gold;">
-  <div class="comprobante">
-    <h2>Pedido confirmado</h2>
-    <p>Gracias por tu compra 💛</p>
-    <p>Tu número de pedido: <b id="pedidoId"></b></p>
-    <p>Que Dios te guíe y guarde siempre 🙏</p>
-    <a href="tracking.html" style="color:#d4af37;text-decoration:none;">📦 Seguir mi pedido</a>
+  <div class="box">
+    <h2>Comprobante</h2>
+    <p id="msg">Cargando...</p>
+    <div id="linkWrap"></div>
   </div>
 <script>
 const params = new URLSearchParams(window.location.search);
-document.getElementById('pedidoId').textContent = params.get('id') || 'MSK-' + new Date().getFullYear() + '-' + Math.floor(Math.random()*900+100);
+const id = params.get('id');
+if (!id) { document.getElementById('msg').innerText = 'No hay ID de pedido.'; }
+else {
+  document.getElementById('msg').innerText = 'Su pedido: ' + id;
+  // link to tracking page
+  document.getElementById('linkWrap').innerHTML = `<a href="tracking.html?id=${encodeURIComponent(id)}">Ver seguimiento</a>`;
+}
 </script>
 </body>
 </html>
