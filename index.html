@@ -1,110 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Miski Chukulati 🍫</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, #3b2314, #5c3b1e, #7b4c22);
-      background-size: 400% 400%;
-      animation: bgShift 15s ease infinite;
-      color: #fff;
-      text-align: center;
-      height: 100vh;
-      overflow: hidden;
-    }
-    @keyframes bgShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .menu {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-    }
-    .menu button {
-      background: none;
-      border: 2px solid #d4af37;
-      color: #d4af37;
-      font-size: 1.6rem;
-      border-radius: 8px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-    .menu-content {
-      display: none;
-      position: absolute;
-      right: 0;
-      background: rgba(0,0,0,0.85);
-      border-radius: 8px;
-      margin-top: 10px;
-      text-align: left;
-    }
-    .menu-content a {
-      display: block;
-      padding: 10px 16px;
-      color: #fff;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-    }
-    .menu-content a:hover {background: rgba(255,255,255,0.1);}
-    .logo {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      box-shadow: 0 0 20px rgba(212,175,55,0.5);
-      margin-top: 80px;
-    }
-    h1 {font-size: 2.3rem; margin-top: 25px; color: #f7e7ce;}
-    p.slogan {font-size: 1.2rem; color: #e0c68b; margin-bottom: 40px;}
-    .order-btn {
-      background: linear-gradient(90deg, #a67c52, #d4af37, #a67c52);
-      color: #fff;
-      font-weight: 700;
-      font-size: 1.2rem;
-      padding: 14px 34px;
-      border: none;
-      border-radius: 40px;
-      text-decoration: none;
-      transition: transform 0.3s ease;
-    }
-    .order-btn:hover {transform: scale(1.05);}
-    footer {position: absolute; bottom: 15px; font-size: 0.9rem; color: #d2b48c;}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Miski Chukulati</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Montserrat, sans-serif;background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.logo{width:160px;height:160px;border-radius:50%;box-shadow:0 0 20px rgba(212,175,55,0.4)}
+h1{margin:14px 0;color:#f7e7ce}
+.slogan{color:#e0c68b;margin-bottom:22px}
+.order-btn{background:linear-gradient(90deg,#a67c52,#d4af37);padding:14px 28px;border-radius:40px;border:none;color:#fff;font-weight:700;cursor:pointer}
+footer{text-align:center;position:fixed;bottom:12px;width:100%;color:#ffd700;font-size:0.9rem;line-height:1.3; text-shadow:0 0 6px #d4af37}
+</style>
 </head>
 <body>
-  <div class="menu">
-    <button onclick="toggleMenu()">☰</button>
-    <div class="menu-content" id="menu">
-      <a href="pedidos.html">Hacer Pedido</a>
-      <a href="#">Pedido de Oración</a>
-      <a href="#">Nosotros</a>
-      <a href="#">Novedades</a>
-      <a href="tracking.html">Seguimiento</a>
-      <a href="#">Galería</a>
-    </div>
-  </div>
-
-  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" class="logo">
+  <img class="logo" src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Miski Chukulati">
   <h1>Miski Chukulati</h1>
-  <p class="slogan">El sabor que une a la familia 🍫</p>
-  <a href="pedidos.html" class="order-btn">¡Pídelo aquí!</a>
-
-  <footer>
-    “Jehová te bendiga, y te guarde” – Números 6:24 <br>
-    © Miski Chukulati - 2025
-  </footer>
-
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById('menu');
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
-  </script>
+  <div class="slogan">El sabor que une a la familia 🍫</div>
+  <a href="pedidos.html"><button class="order-btn">¡Pídelo aquí!</button></a>
+  <footer>“Jehová te bendiga, y te guarde” – Números 6:24<br>© Miski Chukulati - 2025</footer>
 </body>
 </html>
