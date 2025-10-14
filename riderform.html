@@ -70,7 +70,7 @@
       </div>
 
       <div class="full">
-        <label>Documentos obligatorios (sube archivos PDF o imagenes JPEG/PNG) *</label>
+        <label>Documentos obligatorios (sube archivos PDF o imágenes JPEG/PNG) *</label>
         <div class="files">
           <div>
             <label for="fileDNI">DNI (foto o PDF)</label>
@@ -114,8 +114,7 @@
   </div>
 
 <script>
-const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw5TuK6rVuBmEisEVmJfQc0f0R5OYMTgvywBVifaiJySd4fWCmjXG1SfsCKbKqNmmZVAg/exec";
-const adminEmail = "Miskichukulati25@gmail.com";
+const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw1JzOzIXKaHU01JvesKwb6qrQbYnASah3ZVHH9UWJzds2os1hR_c1aFrcosPZC2kEofg/exec";
 
 function resetForm(){
   document.getElementById('riderForm').reset();
@@ -129,52 +128,19 @@ async function handleSubmit(ev){
   const status = document.getElementById('status');
   const notice = document.getElementById('notice');
 
-  status.style.display='block'; status.innerText = 'Preparando archivos...';
+  status.style.display='block'; 
+  status.innerText = 'Preparando archivos...';
   notice.style.display='none';
 
-  const nombre = document.getElementById('nombre').value.trim();
-  const dni = document.getElementById('dni').value.trim();
-  const edad = document.getElementById('edad').value.trim();
-  const correo = document.getElementById('correo').value.trim();
-  const telefono = document.getElementById('telefono').value.trim();
-  const direccion = document.getElementById('direccion').value.trim();
-  const mensaje = document.getElementById('mensaje').value.trim();
-
-  // Prepare files (convert to base64)
-  const filesToRead = [
-    {id:'fileDNI', key:'dniFile'},
-    {id:'fileAntecedentes', key:'antecedentesFile'},
-    {id:'fileContrato', key:'contratoFile'},
-    {id:'fileFoto', key:'fotoFile'},
-    {id:'fileMedico', key:'medicoFile'}
-  ];
-
-  const filesPayload = [];
-
-  try {
-    for(const f of filesToRead){
-      const input = document.getElementById(f.id);
-      if(input && input.files && input.files.length>0){
-        const file = input.files[0];
-        const base64 = await fileToBase64(file);
-        filesPayload.push({
-          field: f.key,
-          filename: file.name,
-          mimeType: file.type || 'application/octet-stream',
-          base64: base64.split(',').pop() // remove data:...;base64, prefix
-        });
-      }
-    }
-  } catch(err){
-    status.innerText = 'Error leyendo archivos: ' + err.message;
-    return;
-  }
-
-  // build payload
-  const payload = {
-    type: 'rider',
-    nombre, dni, edad, correo, telefono, direccion, mensaje,
-    files: filesPayload
+  const data = {
+    nombre: form.nombre.value.trim(),
+    dni: form.dni.value.trim(),
+    edad: form.edad.value.trim(),
+    correo: form.correo.value.trim(),
+    telefono: form.telefono.value.trim(),
+    direccion: form.direccion.value.trim(),
+    mensaje: form.mensaje.value.trim(),
+    files: await gatherFiles()
   };
 
   status.innerText = 'Enviando postulación...';
@@ -182,13 +148,13 @@ async function handleSubmit(ev){
     const resp = await fetch(SCRIPT_WEB_APP_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ type: 'rider', ...data })
     });
     const json = await resp.json();
     if(json.success){
-      status.innerHTML = `¡Postulación enviada! <br>Tu número de referencia: <strong>${json.ref}</strong>`;
+      status.innerHTML = `✅ ¡Postulación enviada! <br>Tu número de referencia: <strong>${json.ref}</strong>`;
       notice.style.display='block';
-      notice.innerHTML = `Hemos notificado al equipo. Recibirás confirmación al correo: <strong>${correo}</strong>`;
+      notice.innerHTML = `Hemos notificado al equipo de Miski Chukulati. Recibirás confirmación al correo: <strong>${data.correo}</strong>`;
       form.reset();
     } else {
       status.innerText = 'Error: ' + (json.error || 'No se pudo enviar la postulación.');
@@ -198,13 +164,28 @@ async function handleSubmit(ev){
   }
 }
 
-// helper: file -> dataURL
+async function gatherFiles(){
+  const ids = ['fileDNI','fileAntecedentes','fileContrato','fileFoto','fileMedico'];
+  const arr = [];
+  for(const id of ids){
+    const input = document.getElementById(id);
+    if(input.files.length){
+      const f = input.files[0];
+      const b64 = await fileToBase64(f);
+      arr.push({
+        field:id, filename:f.name, mimeType:f.type, base64:b64.split(',').pop()
+      });
+    }
+  }
+  return arr;
+}
+
 function fileToBase64(file){
   return new Promise((resolve,reject)=>{
-    const fr = new FileReader();
-    fr.onload = ()=> resolve(fr.result);
-    fr.onerror = ()=> reject(new Error('No se pudo leer el archivo.'));
-    fr.readAsDataURL(file);
+    const reader = new FileReader();
+    reader.onload = ()=>resolve(reader.result);
+    reader.onerror = ()=>reject(new Error("No se pudo leer el archivo."));
+    reader.readAsDataURL(file);
   });
 }
 </script>
