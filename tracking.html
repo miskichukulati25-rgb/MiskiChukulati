@@ -1,60 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Seguimiento de Pedido - Miski Chukulati</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Seguimiento - Miski Chukulati</title>
 <style>
-  body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px}
-  .card{background:rgba(255,255,255,0.06);padding:20px;border-radius:12px;max-width:720px;width:100%}
-  input,button{padding:10px;border-radius:8px;border:1px solid #d4c5b2;width:100%;box-sizing:border-box;background:rgba(255,255,255,0.08);color:#fff}
-  .download-btn{display:inline-block;margin-top:12px;background:linear-gradient(90deg,#c7a86d,#e5c99c);padding:10px 18px;border-radius:24px;color:#3b2314;text-decoration:none;font-weight:700}
-  .rider-card{display:flex;align-items:center;gap:12px;margin-top:12px}
-  .rider-card img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid #d4af37}
+body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);color:#fff;padding:22px;margin:0;text-align:center;}
+.container{max-width:820px;margin:36px auto;background:rgba(255,255,255,0.08);padding:24px;border-radius:12px;}
+label{display:block;margin-top:10px;font-weight:600}
+input,button{padding:10px;border-radius:8px;border:1px solid #d4c5b2}
+.result{margin-top:18px;background:rgba(255,255,255,0.05);padding:12px;border-radius:8px;text-align:left;}
+button{background:linear-gradient(90deg,#c7a86d,#e5c99c);color:#3b2314;font-weight:bold;cursor:pointer;}
 </style>
 </head>
 <body>
-<div class="card">
+<div class="container">
   <h2>Seguimiento de Pedido</h2>
-  <p>Ingresa tu número de pedido (ej. MRK-2025-001)</p>
-  <input id="idPedido" placeholder="MRK-2025-001">
-  <div style="margin-top:12px"><button onclick="buscar()">Buscar</button></div>
-  <div id="result" style="margin-top:16px"></div>
+  <p>Busca tu pedido por <b>ID</b> o <b>DNI</b></p>
+
+  <label>ID de Pedido</label>
+  <input id="idPedido" placeholder="MSK-2025-001">
+  <label>DNI</label>
+  <input id="dni" placeholder="8 dígitos">
+  <button onclick="buscarPedido()">Buscar</button>
+  <div id="result" class="result" style="display:none"></div>
 </div>
 
 <script>
-const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw5TuK6rVuBmEisEVmJfQc0f0R5OYMTgvywBVifaiJySd4fWCmjXG1SfsCKbKqNmmZVAg/exec";
+const SCRIPT_WEB_APP_URL="https://script.google.com/macros/s/AKfycbw5TuK6rVuBmEisEVmJfQc0f0R5OYMTgvywBVifaiJySd4fWCmjXG1SfsCKbKqNmmZVAg/exec";
 
-async function buscar(){
-  const id = document.getElementById('idPedido').value.trim();
-  if(!id) { document.getElementById('result').innerText='Ingresa un ID'; return; }
-  document.getElementById('result').innerText='Buscando...';
+async function buscarPedido(){
+  const id=document.getElementById('idPedido').value.trim();
+  const dni=document.getElementById('dni').value.trim();
+  const result=document.getElementById('result');
+  result.style.display='block';
+  result.innerText='Buscando...';
   try{
-    const res = await fetch(SCRIPT_WEB_APP_URL + '?action=trackOrder&idPedido=' + encodeURIComponent(id));
-    const json = await res.json();
+    const params=new URLSearchParams({action:'trackOrder',idPedido:id,dni:dni});
+    const res=await fetch(`${SCRIPT_WEB_APP_URL}?${params.toString()}`);
+    const json=await res.json();
     if(json.success && json.order){
-      const o = json.order;
-      let html = `<p><strong>ID:</strong> ${o.idPedido}</p>
-                  <p><strong>Fecha:</strong> ${o.fecha}</p>
-                  <p><strong>Cliente:</strong> ${o.nombre}</p>
-                  <p><strong>Producto:</strong> ${o.producto} (x${o.cantidad})</p>
-                  <p><strong>Total:</strong> S/ ${o.total}</p>
-                  <p><strong>Estado:</strong> ${o.estado}</p>`;
-      if(o.pdfUrl) html += `<a class="download-btn" href="${o.pdfUrl}" target="_blank">📄 Descargar comprobante</a>`;
-      if(o.encargadoEnvio){
-        html += `<div class="rider-card"><img src="${o.fotoRider||'https://via.placeholder.com/80'}" alt="Rider"><div><strong>${o.encargadoEnvio}</strong><br>⭐ ${o.calificacion||'—'}</div></div>`;
-      }
-      document.getElementById('result').innerHTML = html;
-    } else {
-      document.getElementById('result').innerText = 'Pedido no encontrado.';
-    }
-  } catch(err){
-    console.error(err);
-    document.getElementById('result').innerText = 'Error conexión.';
-  }
+      const o=json.order;
+      result.innerHTML=`<b>ID:</b> ${o.idPedido}<br><b>Estado:</b> ${o.estado}<br><b>Producto:</b> ${o.producto} (x${o.cantidad})<br><b>Total:</b> S/ ${o.total}`;
+    } else result.innerText='Pedido no encontrado.';
+  }catch(e){result.innerText='Error de conexión.';}
 }
 </script>
 </body>
 </html>
-
-
