@@ -2,57 +2,37 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Seguimiento de Pedido - Miski Chukulati</title>
+<title>Comprobante - Miski Chukulati</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px}
-  .card{background:rgba(255,255,255,0.06);padding:20px;border-radius:12px;max-width:720px;width:100%}
-  input,button{padding:10px;border-radius:8px;border:1px solid #d4c5b2;width:100%;box-sizing:border-box;background:rgba(255,255,255,0.08);color:#fff}
-  .download-btn{display:inline-block;margin-top:12px;background:linear-gradient(90deg,#c7a86d,#e5c99c);padding:10px 18px;border-radius:24px;color:#3b2314;text-decoration:none;font-weight:700}
-  .rider-card{display:flex;align-items:center;gap:12px;margin-top:12px}
-  .rider-card img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid #d4af37}
+  body{font-family:'Poppins',sans-serif;background:#fff8f0;padding:28px}
+  .card{max-width:800px;margin:0 auto;border-radius:16px;border:6px solid #f7ecd0;padding:22px;position:relative}
+  .logo{width:110px;height:110px;border-radius:50%;position:absolute;right:24px;top:-56px;box-shadow:0 8px 20px rgba(212,175,55,0.3)}
+  h1{margin:0;color:#5c4033}
+  .table{width:100%;margin-top:12px;border-collapse:collapse}
+  .table td{padding:8px;border:1px solid rgba(0,0,0,0.06)}
+  .footer{margin-top:16px;color:#7b5b4a}
 </style>
 </head>
 <body>
 <div class="card">
-  <h2>Seguimiento de Pedido</h2>
-  <p>Ingresa tu número de pedido (ej. MRK-2025-001)</p>
-  <input id="idPedido" placeholder="MRK-2025-001">
-  <div style="margin-top:12px"><button onclick="buscar()">Buscar</button></div>
-  <div id="result" style="margin-top:16px"></div>
+  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" class="logo" alt="logo">
+  <h1>COMPROBANTE DE PEDIDO</h1>
+  <p><strong>ID:</strong> MRK-2025-001 &nbsp; <strong>Fecha:</strong> 01/01/2025 12:00</p>
+
+  <table class="table">
+    <tr><td><strong>Cliente</strong></td><td>Juan Pérez</td></tr>
+    <tr><td><strong>DNI</strong></td><td>74285931</td></tr>
+    <tr><td><strong>Dirección</strong></td><td>Av. Cacao 123</td></tr>
+  </table>
+
+  <h3>Detalle</h3>
+  <table class="table">
+    <tr><td>Producto</td><td>Cantidad</td><td>Precio Unit.</td><td>Comisión</td><td>Total</td></tr>
+    <tr><td>Tableta 70 % cacao</td><td>2</td><td>S/ 8.00</td><td>S/ 7.00</td><td>S/ 23.00</td></tr>
+  </table>
+
+  <div class="footer">El equipo Miski Chukulati • “Jehová te bendiga, y te guarde”</div>
 </div>
-
-<script>
-const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycby9sgS1B-bNrCmdFkSWvuQdTdxYw_gBWvECGpTDth8wwEdIgTBjBuXZBoIyb5gDsEtcUw/exec";
-
-async function buscar(){
-  const id = document.getElementById('idPedido').value.trim();
-  if(!id) { document.getElementById('result').innerText='Ingresa un ID'; return; }
-  document.getElementById('result').innerText='Buscando...';
-  try{
-    const res = await fetch(SCRIPT_WEB_APP_URL + '?action=trackOrder&idPedido=' + encodeURIComponent(id));
-    const json = await res.json();
-    if(json.success && json.order){
-      const o = json.order;
-      let html = `<p><strong>ID:</strong> ${o.idPedido}</p>
-                  <p><strong>Fecha:</strong> ${o.fecha}</p>
-                  <p><strong>Cliente:</strong> ${o.nombre}</p>
-                  <p><strong>Producto:</strong> ${o.producto} (x${o.cantidad})</p>
-                  <p><strong>Total:</strong> S/ ${o.total}</p>
-                  <p><strong>Estado:</strong> ${o.estado}</p>`;
-      if(o.pdfUrl) html += `<a class="download-btn" href="${o.pdfUrl}" target="_blank">📄 Descargar comprobante</a>`;
-      if(o.encargadoEnvio){
-        html += `<div class="rider-card"><img src="${o.fotoRider||'https://via.placeholder.com/80'}" alt="Rider"><div><strong>${o.encargadoEnvio}</strong><br>⭐ ${o.calificacion||'—'}</div></div>`;
-      }
-      document.getElementById('result').innerHTML = html;
-    } else {
-      document.getElementById('result').innerText = 'Pedido no encontrado.';
-    }
-  } catch(err){
-    console.error(err);
-    document.getElementById('result').innerText = 'Error conexión.';
-  }
-}
-</script>
 </body>
 </html>
