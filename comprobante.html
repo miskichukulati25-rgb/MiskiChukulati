@@ -1,38 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Comprobante - Miski Chukulati</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  body{font-family:'Poppins',sans-serif;background:#fff8f0;padding:28px}
-  .card{max-width:800px;margin:0 auto;border-radius:16px;border:6px solid #f7ecd0;padding:22px;position:relative}
-  .logo{width:110px;height:110px;border-radius:50%;position:absolute;right:24px;top:-56px;box-shadow:0 8px 20px rgba(212,175,55,0.3)}
-  h1{margin:0;color:#5c4033}
-  .table{width:100%;margin-top:12px;border-collapse:collapse}
-  .table td{padding:8px;border:1px solid rgba(0,0,0,0.06)}
-  .footer{margin-top:16px;color:#7b5b4a}
+body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);color:#fff;text-align:center;padding:30px;}
+.comprobante{background:rgba(255,255,255,0.08);border:2px solid #d4af37;border-radius:16px;max-width:500px;margin:auto;padding:20px;box-shadow:0 0 10px gold;}
+h2{color:#f7e7ce;}
 </style>
 </head>
 <body>
-<div class="card">
-  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" class="logo" alt="logo">
-  <h1>COMPROBANTE DE PEDIDO</h1>
-  <p><strong>ID:</strong> MRK-2025-001 &nbsp; <strong>Fecha:</strong> 01/01/2025 12:00</p>
-
-  <table class="table">
-    <tr><td><strong>Cliente</strong></td><td>Juan Pérez</td></tr>
-    <tr><td><strong>DNI</strong></td><td>74285931</td></tr>
-    <tr><td><strong>Dirección</strong></td><td>Av. Cacao 123</td></tr>
-  </table>
-
-  <h3>Detalle</h3>
-  <table class="table">
-    <tr><td>Producto</td><td>Cantidad</td><td>Precio Unit.</td><td>Comisión</td><td>Total</td></tr>
-    <tr><td>Tableta 70 % cacao</td><td>2</td><td>S/ 8.00</td><td>S/ 7.00</td><td>S/ 23.00</td></tr>
-  </table>
-
-  <div class="footer">El equipo Miski Chukulati • “Jehová te bendiga, y te guarde”</div>
-</div>
+  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" width="100" style="border-radius:50%;box-shadow:0 0 10px gold;">
+  <div class="comprobante">
+    <h2>Pedido confirmado</h2>
+    <p>Gracias por tu compra 💛</p>
+    <p>Tu número de pedido: <b id="pedidoId"></b></p>
+    <p>Que Dios te guíe y guarde siempre 🙏</p>
+    <a href="tracking.html" style="color:#d4af37;text-decoration:none;">📦 Seguir mi pedido</a>
+  </div>
+<script>
+const params = new URLSearchParams(window.location.search);
+document.getElementById('pedidoId').textContent = params.get('id') || 'MSK-' + new Date().getFullYear() + '-' + Math.floor(Math.random()*900+100);
+</script>
 </body>
 </html>
