@@ -14,16 +14,13 @@
       animation: bgShift 15s ease infinite;
       color: #fff;
       text-align: center;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      height: 100vh;
+      overflow: hidden;
     }
     @keyframes bgShift {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     .menu {
       position: absolute;
@@ -61,6 +58,7 @@
       height: 160px;
       border-radius: 50%;
       box-shadow: 0 0 20px rgba(212,175,55,0.5);
+      margin-top: 80px;
     }
     h1 {font-size: 2.3rem; margin-top: 25px; color: #f7e7ce;}
     p.slogan {font-size: 1.2rem; color: #e0c68b; margin-bottom: 40px;}
@@ -87,7 +85,7 @@
       <a href="#">Pedido de Oración</a>
       <a href="#">Nosotros</a>
       <a href="#">Novedades</a>
-      <a href="#">Foro</a>
+      <a href="tracking.html">Seguimiento</a>
       <a href="#">Galería</a>
     </div>
   </div>
@@ -98,7 +96,7 @@
   <a href="pedidos.html" class="order-btn">¡Pídelo aquí!</a>
 
   <footer>
-    "Jehová te bendiga, y te guarde” – Números 6:24 <br>
+    “Jehová te bendiga, y te guarde” – Números 6:24 <br>
     © Miski Chukulati - 2025
   </footer>
 
