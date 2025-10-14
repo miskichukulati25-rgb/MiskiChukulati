@@ -11,7 +11,7 @@
       font-family: 'Montserrat', sans-serif;
       background: linear-gradient(135deg, #3b2314, #5c3b1e, #7b4c22);
       background-size: 400% 400%;
-      animation: backgroundShift 15s ease infinite;
+      animation: bgShift 15s ease infinite;
       color: #fff;
       text-align: center;
       min-height: 100vh;
@@ -20,10 +20,10 @@
       justify-content: center;
       align-items: center;
     }
-    @keyframes backgroundShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    @keyframes bgShift {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
     .menu {
       position: absolute;
@@ -34,7 +34,7 @@
       background: none;
       border: 2px solid #d4af37;
       color: #d4af37;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       border-radius: 8px;
       padding: 5px 10px;
       cursor: pointer;
@@ -55,25 +55,28 @@
       text-decoration: none;
       border-bottom: 1px solid rgba(255,255,255,0.2);
     }
-    .menu-content a:hover {
-      background: rgba(255,255,255,0.1);
-    }
+    .menu-content a:hover {background: rgba(255,255,255,0.1);}
     .logo {
       width: 160px;
       height: 160px;
       border-radius: 50%;
-      box-shadow: 0 0 20px rgba(212,175,55,0.4);
+      box-shadow: 0 0 20px rgba(212,175,55,0.5);
     }
-    h1 { font-size: 2.3rem; margin-top: 25px; color: #f7e7ce; }
-    p.slogan { font-size: 1.2rem; color: #e0c68b; margin-bottom: 40px; }
+    h1 {font-size: 2.3rem; margin-top: 25px; color: #f7e7ce;}
+    p.slogan {font-size: 1.2rem; color: #e0c68b; margin-bottom: 40px;}
     .order-btn {
       background: linear-gradient(90deg, #a67c52, #d4af37, #a67c52);
-      color: #fff; font-weight: 700; font-size: 1.2rem;
-      padding: 14px 34px; border: none; border-radius: 40px;
-      text-decoration: none; transition: transform 0.3s ease;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 14px 34px;
+      border: none;
+      border-radius: 40px;
+      text-decoration: none;
+      transition: transform 0.3s ease;
     }
-    .order-btn:hover { transform: scale(1.05); }
-    footer { position: absolute; bottom: 15px; font-size: 0.9rem; color: #d2b48c; }
+    .order-btn:hover {transform: scale(1.05);}
+    footer {position: absolute; bottom: 15px; font-size: 0.9rem; color: #d2b48c;}
   </style>
 </head>
 <body>
@@ -85,17 +88,17 @@
       <a href="#">Nosotros</a>
       <a href="#">Novedades</a>
       <a href="#">Foro</a>
-      <a href="#">Galería de Imágenes</a>
+      <a href="#">Galería</a>
     </div>
   </div>
 
-  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" class="logo" alt="Miski Logo">
+  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" class="logo">
   <h1>Miski Chukulati</h1>
   <p class="slogan">El sabor que une a la familia 🍫</p>
   <a href="pedidos.html" class="order-btn">¡Pídelo aquí!</a>
 
   <footer>
-    <span>"Jehová te bendiga, y te guarde” – Números 6:24</span><br>
+    "Jehová te bendiga, y te guarde” – Números 6:24 <br>
     © Miski Chukulati - 2025
   </footer>
 
