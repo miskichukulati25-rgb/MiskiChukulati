@@ -1,202 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seguimiento de Pedido - Miski Chukulati 🍫</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Seguimiento de Pedido - Miski Chukulati</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #3b2314, #5c3b1e, #7b4c22);
-  color: #fff;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  min-height: 100vh;
-}
-
-header {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 14px;
-  font-weight: 600;
-  color: #f4d67b;
-  letter-spacing: 1px;
-}
-
-.container {
-  max-width: 750px;
-  margin: 30px auto;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 0 25px rgba(212,175,55,0.3);
-}
-
-.logo {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  margin-bottom: 15px;
-  box-shadow: 0 0 20px rgba(212,175,55,0.5);
-}
-
-h2 {
-  color: #f7e7ce;
-  margin-bottom: 10px;
-}
-
-.info-box {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: left;
-  color: #fff8dc;
-}
-
-.info-box strong {
-  color: #f4d67b;
-}
-
-.status {
-  font-weight: 700;
-  color: #f4d67b;
-}
-
-.rider-card {
-  background: rgba(255,255,255,0.12);
-  border-radius: 15px;
-  padding: 15px;
-  text-align: center;
-  margin-top: 20px;
-  box-shadow: 0 0 15px rgba(212,175,55,0.4);
-}
-
-.rider-card img {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  border: 2px solid #d4af37;
-  object-fit: cover;
-}
-
-.rider-name {
-  font-weight: 600;
-  color: #f4d67b;
-  margin-top: 8px;
-}
-
-.rider-rating {
-  font-size: 1.2em;
-  color: #ffd700;
-  transition: transform 0.3s ease;
-}
-
-.rider-card:hover .rider-rating {
-  transform: scale(1.2);
-}
-
-.download-btn {
-  display: inline-block;
-  margin-top: 25px;
-  background: linear-gradient(90deg, #c7a86d, #e5c99c);
-  padding: 12px 28px;
-  border-radius: 30px;
-  text-decoration: none;
-  font-weight: 700;
-  color: #3b2314;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-.download-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(212,175,55,0.6);
-}
-
-footer {
-  margin-top: 35px;
-  color: #e0c68b;
-  font-size: 0.9rem;
-}
-footer span {
-  color: #f4d67b;
-  font-style: italic;
-}
+  body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px}
+  .card{background:rgba(255,255,255,0.06);padding:20px;border-radius:12px;max-width:720px;width:100%}
+  input,button{padding:10px;border-radius:8px;border:1px solid #d4c5b2;width:100%;box-sizing:border-box;background:rgba(255,255,255,0.08);color:#fff}
+  .download-btn{display:inline-block;margin-top:12px;background:linear-gradient(90deg,#c7a86d,#e5c99c);padding:10px 18px;border-radius:24px;color:#3b2314;text-decoration:none;font-weight:700}
+  .rider-card{display:flex;align-items:center;gap:12px;margin-top:12px}
+  .rider-card img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid #d4af37}
 </style>
 </head>
 <body>
-<header>Seguimiento de Pedido</header>
-
-<div class="container">
-  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="Logo Miski Chukulati" class="logo">
-  <h2>Estado de tu Pedido</h2>
-  <div id="orderDetails" class="info-box">Cargando información...</div>
-
-  <div id="riderInfo" class="rider-card" style="display:none">
-    <img id="riderPhoto" src="" alt="Rider">
-    <div class="rider-name" id="riderName"></div>
-    <div class="rider-rating" id="riderRating"></div>
-  </div>
-
-  <a id="pdfLink" class="download-btn" href="#" target="_blank" style="display:none;">📄 Descargar Comprobante</a>
+<div class="card">
+  <h2>Seguimiento de Pedido</h2>
+  <p>Ingresa tu número de pedido (ej. MRK-2025-001)</p>
+  <input id="idPedido" placeholder="MRK-2025-001">
+  <div style="margin-top:12px"><button onclick="buscar()">Buscar</button></div>
+  <div id="result" style="margin-top:16px"></div>
 </div>
 
-<footer>
-  <span>"Jehová te bendiga, y te guarde” – Números 6:24</span><br>
-  © Miski Chukulati - 2025
-</footer>
-
 <script>
-const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbypicbViQpx68de35No3yAEd2XoLHOQ5banZ8cmJjn15es3eus8K4rTM8sRtFoPaDiH/exec";
+const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycby9sgS1B-bNrCmdFkSWvuQdTdxYw_gBWvECGpTDth8wwEdIgTBjBuXZBoIyb5gDsEtcUw/exec";
 
-async function loadOrder() {
-  const params = new URLSearchParams(window.location.search);
-  const idPedido = params.get("idPedido");
-  if (!idPedido) {
-    document.getElementById('orderDetails').innerHTML = "❌ No se proporcionó un número de pedido.";
-    return;
-  }
-
-  try {
-    const res = await fetch(`${SCRIPT_WEB_APP_URL}?action=trackOrder&idPedido=${encodeURIComponent(idPedido)}`);
-    const data = await res.json();
-
-    if (data.success && data.order) {
-      const o = data.order;
-      let html = `
-        <p><strong>Número de Pedido:</strong> ${o.idPedido}</p>
-        <p><strong>Fecha/Hora:</strong> ${o.fecha}</p>
-        <p><strong>Cliente:</strong> ${o.nombre}</p>
-        <p><strong>Producto:</strong> ${o.producto} (x${o.cantidad})</p>
-        <p><strong>Total:</strong> S/ ${o.total}</p>
-        <p><strong>Estado:</strong> <span class="status">${o.estado}</span></p>
-      `;
-      document.getElementById("orderDetails").innerHTML = html;
-
-      if (o.pdfUrl) {
-        const link = document.getElementById("pdfLink");
-        link.href = o.pdfUrl;
-        link.style.display = "inline-block";
+async function buscar(){
+  const id = document.getElementById('idPedido').value.trim();
+  if(!id) { document.getElementById('result').innerText='Ingresa un ID'; return; }
+  document.getElementById('result').innerText='Buscando...';
+  try{
+    const res = await fetch(SCRIPT_WEB_APP_URL + '?action=trackOrder&idPedido=' + encodeURIComponent(id));
+    const json = await res.json();
+    if(json.success && json.order){
+      const o = json.order;
+      let html = `<p><strong>ID:</strong> ${o.idPedido}</p>
+                  <p><strong>Fecha:</strong> ${o.fecha}</p>
+                  <p><strong>Cliente:</strong> ${o.nombre}</p>
+                  <p><strong>Producto:</strong> ${o.producto} (x${o.cantidad})</p>
+                  <p><strong>Total:</strong> S/ ${o.total}</p>
+                  <p><strong>Estado:</strong> ${o.estado}</p>`;
+      if(o.pdfUrl) html += `<a class="download-btn" href="${o.pdfUrl}" target="_blank">📄 Descargar comprobante</a>`;
+      if(o.encargadoEnvio){
+        html += `<div class="rider-card"><img src="${o.fotoRider||'https://via.placeholder.com/80'}" alt="Rider"><div><strong>${o.encargadoEnvio}</strong><br>⭐ ${o.calificacion||'—'}</div></div>`;
       }
-
-      if (o.encargadoEnvio) {
-        const riderCard = document.getElementById("riderInfo");
-        document.getElementById("riderName").textContent = o.encargadoEnvio;
-        document.getElementById("riderPhoto").src = o.fotoRider || "https://via.placeholder.com/90";
-        document.getElementById("riderRating").textContent = `⭐ ${o.calificacion || 5}`;
-        riderCard.style.display = "block";
-      }
-
+      document.getElementById('result').innerHTML = html;
     } else {
-      document.getElementById('orderDetails').innerHTML = "❌ Pedido no encontrado. Verifica el número de pedido.";
+      document.getElementById('result').innerText = 'Pedido no encontrado.';
     }
-  } catch (err) {
+  } catch(err){
     console.error(err);
-    document.getElementById('orderDetails').innerHTML = "⚠️ Error al cargar los datos del pedido.";
+    document.getElementById('result').innerText = 'Error conexión.';
   }
 }
-
-loadOrder();
 </script>
 </body>
 </html>
