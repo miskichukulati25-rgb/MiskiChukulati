@@ -85,6 +85,7 @@ function mostrarPopup(){
 
 async function enviarPedido(){
   const data={
+    type:'pedido',
     nombre:document.getElementById('nombre').value.trim(),
     dni:document.getElementById('dni').value.trim(),
     correo:document.getElementById('correo').value.trim(),
@@ -99,11 +100,10 @@ async function enviarPedido(){
     const json=await res.json();
     if(json.success){
       alert("Pedido confirmado. Gracias por elegirnos!");
-      window.location.href="comprobante.html";
+      window.location.href="comprobante.html?id="+json.idPedido;
     }else alert("Error: "+json.error);
   }catch(e){alert("Error de conexión. Intenta nuevamente.");}
 }
 </script>
-
 </body>
 </html>
