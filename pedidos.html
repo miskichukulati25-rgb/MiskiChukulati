@@ -4,150 +4,182 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Haz tu Pedido - Miski Chukulati</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--brown:#3b2314;--gold:#d4af37}
-body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--brown),#5c3b1e);color:#fff;min-height:100vh}
-.header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:rgba(0,0,0,0.45)}
-.header img{height:48px;border-radius:50%}
-.container{max-width:760px;margin:28px auto;background:rgba(255,255,255,0.04);padding:22px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,0.4)}
-label{display:block;margin-top:10px;font-weight:600}
-input,select,textarea,button{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(212,197,178,0.12);background:transparent;color:#fff;box-sizing:border-box;margin-top:6px}
-.button-primary{background:linear-gradient(90deg,#a67c52,#d4af37);color:#3b2314;font-weight:700;border:none;padding:12px;border-radius:12px;cursor:pointer}
-.toggle{display:flex;gap:10px;margin-top:12px}
-.toggle button{flex:1;padding:10px;border-radius:10px;border:2px solid var(--gold);background:transparent;color:#fff;cursor:pointer}
-.toggle button.active{background:var(--gold);color:#3b2314}
-.couriers{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:14px}
-.courier-card{background:rgba(255,255,255,0.06);padding:10px;border-radius:10px;text-align:center;cursor:pointer;transition:transform .15s}
-.courier-card:hover{transform:scale(1.03);box-shadow:0 8px 24px rgba(212,175,55,0.18)}
-.courier-card img{width:84px;height:84px;border-radius:50%;border:3px solid var(--gold);object-fit:cover}
-.stars{color:gold;font-size:1.1rem}
-.popup{position:fixed;left:0;top:0;width:100%;height:100%;display:none;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;z-index:50}
-.popup .box{background:#fffdf8;color:#3b2314;padding:20px;border-radius:14px;border:3px solid var(--gold);width:320px;text-align:center;box-shadow:0 10px 30px rgba(212,175,55,0.3)}
-.footer{margin-top:30px;text-align:center;color:#ffd700;padding:14px}
-@media(max-width:720px){.container{margin:12px}}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg,#3b2314,#5c3b1e,#7b4c22);
+  color:#fff; margin:0; padding:0; text-align:center;
+}
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: rgba(255,255,255,0.08);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 0 15px rgba(212,175,55,0.3);
+}
+input, select, textarea {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d4c5b2;
+  font-size: 1rem;
+}
+button {
+  background: linear-gradient(90deg,#a67c52,#d4af37,#a67c52);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: transform .3s, box-shadow .3s;
+}
+button:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(212,175,55,0.5); }
+
+footer {
+  margin-top: 40px;
+  color: #f7e7ce;
+  font-size: 0.9rem;
+  text-align: center;
+}
+footer span {
+  color: #f4d67b;
+  font-style: italic;
+}
+
+/* POP-UP */
+.popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.popup-content {
+  background: #fff;
+  color: #3b2314;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  border: 2px solid #d4af37;
+  box-shadow: 0 0 20px rgba(212,175,55,0.5);
+  animation: fadeIn .4s ease-in-out;
+}
+@keyframes fadeIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
 </style>
 </head>
 <body>
-<header class="header">
-  <img src="https://github.com/miskichukulati25-rgb/MiskiChukulati/blob/main/logo.png?raw=true" alt="logo">
-  <div><a href="index.html" style="color:#ffdca8;text-decoration:none;font-weight:700">Volver</a></div>
-</header>
 
-<div class="container">
-  <h2>Haz tu Pedido</h2>
+<div class="container" id="pedidoForm">
+  <h2>Haz tu pedido 🍫</h2>
 
-  <label>Nombre completo</label><input id="nombre">
-  <label>DNI</label><input id="dni" maxlength="8">
-  <label>Correo</label><input id="correo" type="email">
-  <label>Celular</label><input id="telefono" maxlength="9">
-  <label>Dirección de entrega</label><input id="direccion">
+  <label>Nombre Completo</label>
+  <input id="nombre" placeholder="Juan Pérez">
+
+  <label>DNI</label>
+  <input id="dni" placeholder="8 dígitos">
+
+  <label>Correo</label>
+  <input id="correo" type="email" placeholder="correo@ejemplo.com">
+
+  <label>Celular</label>
+  <input id="telefono" placeholder="9 dígitos">
+
+  <label>Dirección de entrega</label>
+  <input id="direccion" placeholder="Av. Los Olivos 123">
 
   <label>Producto</label>
   <select id="producto" onchange="calcularTotal()">
     <option value="">--Selecciona--</option>
-    <option>Tableta 70 % cacao</option>
-    <option>Tableta 85 % cacao</option>
-    <option>Bombones surtidos</option>
-    <option>Dark Chocolate Bar</option>
-    <option>ChocoNibs</option>
-    <option>ChocoBites</option>
-    <option>Chocolate Blanco</option>
+    <option value="Tableta 70 % cacao">Tableta 70 % cacao</option>
+    <option value="Tableta 85 % cacao">Tableta 85 % cacao</option>
+    <option value="Bombones surtidos">Bombones surtidos</option>
+    <option value="Dark Chocolate Bar">Dark Chocolate Bar</option>
+    <option value="ChocoNibs">ChocoNibs</option>
+    <option value="ChocoBites">ChocoBites</option>
+    <option value="Chocolate Blanco">Chocolate Blanco</option>
   </select>
 
-  <label>Cantidad</label><input id="cantidad" type="number" min="1" value="1" onchange="calcularTotal()">
+  <label>Cantidad</label>
+  <input id="cantidad" type="number" min="1" value="1" onchange="calcularTotal()">
 
   <label>Método de pago</label>
-  <select id="metodoPago"><option>PLIN</option><option>YAPE</option><option>Transferencia</option><option>Efectivo</option></select>
+  <select id="metodoPago">
+    <option value="PLIN">PLIN</option>
+    <option value="YAPE">YAPE</option>
+    <option value="Transferencia">Transferencia</option>
+    <option value="Efectivo">Efectivo</option>
+  </select>
 
-  <div class="toggle">
-    <button id="btnSin" class="active" onclick="setDelivery(false)">Sin delivery</button>
-    <button id="btnCon" onclick="setDelivery(true)">Con delivery</button>
+  <div style="margin-top:15px;">
+    <label><input type="checkbox" id="toggleDelivery" onchange="calcularTotal()"> 🚚 Con delivery</label>
   </div>
 
-  <div id="couriers" class="couriers" style="display:none"></div>
-
-  <div style="margin-top:14px">
-    <button class="button-primary" onclick="showPopup()">Ver total</button>
-  </div>
+  <button onclick="mostrarPopup()">Ver total</button>
 </div>
 
-<div class="popup" id="popup" role="dialog" aria-hidden="true">
-  <div class="box">
+<!-- POP-UP de confirmación -->
+<div class="popup" id="popup">
+  <div class="popup-content">
     <h3>Resumen del pedido</h3>
-    <p>Precio producto: S/ <span id="precioProd">0.00</span></p>
-    <p>Comisión envío: S/ <span id="comision">0.00</span></p>
-    <hr>
-    <p><b>Total a pagar: S/ <span id="pTotal">0.00</span></b></p>
-    <div style="margin-top:12px">
-      <button class="button-primary" onclick="enviarPedido()">Enviar pedido</button>
-    </div>
-    <div style="margin-top:8px">
-      <button onclick="closePopup()" style="background:transparent;border:none;color:#444">Cancelar</button>
-    </div>
+    <p id="resumen"></p>
+    <button onclick="enviarPedido()">Enviar pedido</button>
+    <button onclick="cerrarPopup()" style="background:#999;color:#fff;margin-left:10px;">Cancelar</button>
   </div>
 </div>
 
-<div class="footer">“Jehová te bendiga, y te guarde” – Números 6:24<br>© Miski Chukulati - 2025</div>
+<footer>
+  <span>"Jehová te bendiga, y te guarde” – Números 6:24</span><br>
+  © Miski Chukulati - 2025
+</footer>
 
 <script>
 const SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxISyjwQMZSoQ6XMR7JsUv3kG58WQwwizvFqeGUl203UuVWncDSYaKt02zVCw12Q-zgJg/exec";
-const precios = {"Tableta 70 % cacao":8,"Tableta 85 % cacao":9,"Bombones surtidos":15,"Dark Chocolate Bar":8,"ChocoNibs":5,"ChocoBites":6.5,"Chocolate Blanco":24};
-let conDelivery = false, base = 0, com = 0, total = 0;
-let couriers = [], selectedCourier = null;
+const productosPrecios = {
+  "Tableta 70 % cacao": 8.00,
+  "Tableta 85 % cacao": 9.00,
+  "Bombones surtidos": 15.00,
+  "Dark Chocolate Bar": 8.00,
+  "ChocoNibs": 5.00,
+  "ChocoBites": 6.50,
+  "Chocolate Blanco": 24.00
+};
+const envioFijo = 7;
 
-function setDelivery(v){
-  conDelivery = v;
-  document.getElementById('btnCon').classList.toggle('active', v);
-  document.getElementById('btnSin').classList.toggle('active', !v);
-  document.getElementById('couriers').style.display = v ? 'grid' : 'none';
-  calcularTotal();
-  if (v) loadCouriers();
-}
-
-function calcularTotal(){
+function calcularTotal() {
   const producto = document.getElementById('producto').value;
   const cantidad = Number(document.getElementById('cantidad').value || 1);
-  const precioUnit = precios[producto] || 0;
-  base = precioUnit * cantidad;
-  com = conDelivery ? 7 : 0;
-  total = parseFloat((base + com).toFixed(2));
+  const precioUnitario = productosPrecios[producto] || 0;
+  const delivery = document.getElementById('toggleDelivery').checked;
+  const envio = delivery ? envioFijo : 0;
+  const total = (precioUnitario * cantidad) + envio;
+
+  document.getElementById('resumen').innerHTML =
+    `Precio producto: S/ ${precioUnitario.toFixed(2)}<br>` +
+    `Comisión envío: S/ ${envio.toFixed(2)}<br><hr>` +
+    `<strong>Total a pagar: S/ ${total.toFixed(2)}</strong>`;
 }
 
-function showPopup(){
+function mostrarPopup() {
   calcularTotal();
-  document.getElementById('precioProd').innerText = base.toFixed(2);
-  document.getElementById('comision').innerText = com.toFixed(2);
-  document.getElementById('pTotal').innerText = total.toFixed(2);
   document.getElementById('popup').style.display = 'flex';
 }
-
-function closePopup(){ document.getElementById('popup').style.display = 'none'; }
-
-async function loadCouriers(){
-  try {
-    const res = await fetch(SCRIPT_WEB_APP_URL + "?action=getCouriers");
-    couriers = await res.json();
-    const container = document.getElementById('couriers');
-    container.innerHTML = couriers.map((c,i)=>`
-      <div class="courier-card" onclick="selectCourier(${i})">
-        <img src="${c.foto||'https://via.placeholder.com/80'}" alt="${c.nombre}">
-        <div style="margin-top:8px;font-weight:700">${c.nombre} ${c.apellido||''}</div>
-        <div>${c.edad ? c.edad+' años' : ''}</div>
-        <div class="stars">${'⭐'.repeat(Math.round(c.puntuacion||5))}</div>
-        <div style="font-size:.85rem;color:#ffdca8">${(Number(c.puntuacion)||5).toFixed(1)}</div>
-      </div>`).join('');
-  } catch(e) {
-    console.error("No se cargaron couriers", e);
-  }
+function cerrarPopup() {
+  document.getElementById('popup').style.display = 'none';
 }
 
-function selectCourier(i){
-  selectedCourier = couriers[i];
-  document.querySelectorAll('.courier-card').forEach((el,idx)=> el.style.border = idx===i ? '3px solid #ffd700' : 'none');
-}
-
-async function enviarPedido(){
+async function enviarPedido() {
   const data = {
     type: "pedido",
     nombre: document.getElementById('nombre').value.trim(),
@@ -156,33 +188,35 @@ async function enviarPedido(){
     telefono: document.getElementById('telefono').value.trim(),
     direccion: document.getElementById('direccion').value.trim(),
     producto: document.getElementById('producto').value,
-    cantidad: Number(document.getElementById('cantidad').value||1),
+    cantidad: Number(document.getElementById('cantidad').value || 1),
     metodoPago: document.getElementById('metodoPago').value,
-    courier: selectedCourier ? selectedCourier.nombre + " " + (selectedCourier.apellido||'') : "",
-    calificacion: selectedCourier ? selectedCourier.puntuacion : "",
-    conDelivery: conDelivery,
-    envio: com
+    delivery: document.getElementById('toggleDelivery').checked
   };
+
   try {
     const resp = await fetch(SCRIPT_WEB_APP_URL, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(data)
     });
-    const json = await resp.json();
+
+    const text = await resp.text();
+    console.log("Respuesta del servidor:", text);
+
+    let json;
+    try { json = JSON.parse(text); }
+    catch (e) { throw new Error("Respuesta no válida: " + text); }
+
     if (json.success) {
-      alert('Pedido registrado: ' + json.idPedido + '\nSe abrió tu comprobante.');
-      window.open(json.pdfUrl, '_blank');
-      closePopup();
-      // reset (opcional)
-      document.getElementById('producto').value = '';
-      document.getElementById('cantidad').value = 1;
+      alert("✅ Pedido enviado correctamente. ¡Gracias por elegir Miski Chukulati!");
+      document.getElementById('pedidoForm').reset();
+      cerrarPopup();
     } else {
-      alert('Error: '+ (json.error||'No se pudo procesar'));
+      alert("⚠️ Error: " + (json.error || "No se pudo registrar el pedido."));
     }
-  } catch(e) {
-    console.error(e);
-    alert('Error de conexión. Intenta nuevamente.');
+  } catch (err) {
+    console.error("Error en fetch:", err);
+    alert("❌ Error de conexión. Intenta nuevamente.");
   }
 }
 </script>
